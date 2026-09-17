@@ -12,3 +12,6 @@ Este proyecto corresponde al análisis de datos y machine learning enfocado en e
 
 ## Cómo trabajar con KNIME y Git
 **Cada workflow de KNIME lo edita una sola persona a la vez. Antes de abrir un workflow, correr `git pull`. No editar el mismo workflow simultáneamente entre dos personas — KNIME no resuelve conflictos de merge como el código normal.**
+
+## Recordar
+KNIME no mergea bien como el código normal: si dos personas editan el mismo workflow al mismo tiempo, Git no puede resolver el conflicto automáticamente. La regla práctica: cada modelo (clustering, predicción, limpieza) va en un workflow separado y una sola persona lo edita a la vez; antes de tocar un workflow, hacer `git pull` primero.
