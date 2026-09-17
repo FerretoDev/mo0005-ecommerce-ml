@@ -5,31 +5,25 @@
 [![Storage](https://img.shields.io/badge/Storage-Snowflake%20%2F%20PostgreSQL-blue)](https://www.snowflake.com/)
 [![Dataset](https://img.shields.io/badge/Dataset-Olist%20Kaggle-20BEFF?logo=kaggle&logoColor=white)](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)
 
-## 📌 Contexto del Proyecto
-Este repositorio contiene el proyecto semestral del curso **MO-0005: Análisis de Algoritmos** en la Universidad de Costa Rica. 
 
-Como estudiantes, nuestra base principal está en el diseño de algoritmos y estructuras de datos; sin embargo, en este proyecto nos estamos enfrentando a un terreno nuevo y emocionante: **el análisis de datos del mundo real y machine learning**. Trabajamos en un equipo de 4 personas con el objetivo de aprender a transformar datos crudos y dispersos en conocimiento útil para la toma de decisiones.
-
-## 📖 Descripción
+## Descripción
 Este proyecto corresponde al análisis de datos y machine learning sobre clientes de e-commerce (utilizando el dataset público de Olist), integrando KNIME, Snowflake / PostgreSQL y Power BI. 
 
 A través de este flujo aprendemos a abordar el ciclo completo de vida de los datos: desde la extracción, limpieza e integración de múltiples fuentes, hasta la aplicación de modelos predictivos y de segmentación algorítmica, culminando en la visualización interactiva de indicadores de negocio.
 
 ---
 
-## 🛠️ Tecnologías y Qué Rol Cumplen para Nosotros
-Al ser un área nueva para el equipo, organizamos las herramientas de acuerdo a cada etapa del aprendizaje:
+## Tecnologías y Herramientas
 
-- **KNIME Analytics Platform:** Nuestra plataforma principal para diseñar flujos de ETL y entrenar modelos de Machine Learning. Al trabajar con nodos visuales en lugar de scripts desde cero, nos facilita ver cómo se transforman los datos paso a paso en cada etapa del pipeline.
-- **Bases de Datos (Snowflake / PostgreSQL):** Nos permite aplicar conceptos de bases de datos relacionales para almacenar, conectar y consultar de manera eficiente las tablas del negocio.
-- **Power BI:** La herramienta para la capa final de visualización, donde convertimos los resultados de nuestros modelos y cálculos en tableros y gráficas comprensibles para cualquier persona de negocio.
-- **Git / GitHub:** Control de versiones del equipo, aprendiendo a colaborar de forma ordenada sobre archivos de datos y flujos visuales.
+- **KNIME Analytics Platform:** Plataforma principal para diseñar flujos de ETL y entrenar modelos de Machine Learning. Al trabajar con nodos visuales en lugar de scripts desde cero, facilita ver cómo se transforman los datos paso a paso en cada etapa del pipeline.
+
+- **Bases de Datos (Snowflake / PostgreSQL):** Permite aplicar conceptos de bases de datos relacionales para almacenar, conectar y consultar de manera eficiente las tablas del negocio.
+- **Power BI:** La herramienta para la capa final de visualización, donde se convierte los resultados de los modelos y cálculos en tableros y gráficas comprensibles para cualquier persona de negocio.
+- **Git / GitHub:** Control de versiones, para colaborar de forma ordenada sobre archivos de datos y flujos visuales.
 
 ---
 
-## 📂 Estructura del Repositorio
-
-Para no enredarnos entre nosotros al trabajar en paralelo, dividimos el repositorio de la siguiente manera:
+## Estructura del Repositorio
 
 ```text
 mo0005-ecommerce-ml/
@@ -53,7 +47,7 @@ mo0005-ecommerce-ml/
 ---
 
 ## 📊 Dataset (Olist E-Commerce)
-Utilizamos el dataset público **Brazilian E-Commerce Public Dataset by Olist**, disponible en [Kaggle](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce). Contiene información real de aproximadamente 100 000 pedidos realizados entre 2016 y 2018 en Brasil.
+El proyecto utiliza el dataset público **Brazilian E-Commerce Public Dataset by Olist**, disponible en [Kaggle](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce). Contiene información real de aproximadamente 100 000 pedidos realizados entre 2016 y 2018 en Brasil.
 
 Los archivos que componen el dataset están en `/datos`:
 - `olist_customers_dataset.csv`: Clientes y sus ubicaciones (ciudades/estados).
@@ -90,10 +84,11 @@ Como estamos acostumbrados a programar en lenguajes como Python, C++ o Java, Git
 3. **Resetear nodos antes de guardar:** En KNIME, haz clic derecho y selecciona *Reset* en los nodos con tablas muy grandes si no es indispensable guardarlos ejecutados. Esto evita que el repositorio se vuelva pesado e infle el historial de Git.
 4. **Al terminar tu parte:** Guarda en KNIME, cierra el workflow, haz tu commit con un mensaje claro (por ejemplo `feat(knime): agregar filtro de valores nulos en ETL`) y corre `git push origin main`.
 5. **No forzar archivos temporales:** El `.gitignore` ya está configurado para excluir archivos de bloqueo (`.knimeLock`), memorias temporales (`.metadata/`) y documentos de Word (`.docx`). No uses `git add -f` para forzarlos.
+6. **Guía de commits y comandos:** Consulta [CLAUDE.md](CLAUDE.md) para ver la guía completa de commits atómicos, tipos de cambios y comandos frecuentes de Git.
 
 ---
 
-## 👥 Equipo de Trabajo (Grupo MO-0005)
+## Equipo de Trabajo (Grupo MO-0005)
 - Marcos Ferreto Estrada
 - *(Compañero 2)*
 - *(Compañero 3)*
