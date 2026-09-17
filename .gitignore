@@ -4,4 +4,5 @@
 *.knwf
 .knimeLock
 knime/Example Workflows/
-documento-mo0005-ecommerce-ml.docx
+*.docx
+~$*.docx
