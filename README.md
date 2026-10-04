@@ -93,3 +93,11 @@ Como estamos acostumbrados a programar en lenguajes como Python, C++ o Java, Git
 - *(Compañero 2)*
 - *(Compañero 3)*
 - *(Compañero 4)*
+
+
+
+# Recordar usar 
+
+git pull   Es para traer los cambios (esto es lo primero que deben hacer antes de inicial)
+
+git push  Esto es para enviar los cambios (esto es lo ultimo que deben de hacer al terminal)
