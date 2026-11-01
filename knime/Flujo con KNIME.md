@@ -258,6 +258,153 @@ Si haces eso, todo el proyecto te va a empezar a tener sentido.
 | Flujo | Objetivo | Tipo de resultado |
 |---|---|---|
 | 01-ETL | Limpiar y unir datos | Base analítica lista |
+| 02-Clustering | Agrupar clientes y pedidos | Segmentos y perfiles |
+| 03-Prediccion | Predecir eventos | Modelos y scores |
+| 04-KPIs | Medir negocio | Indicadores y dashboards |
+
+---
+
+# Plan concreto para el flujo 01-ETL en KNIME
+
+## Objetivo
+
+El flujo 01-ETL tiene una misión clara: convertir los datos crudos de Olist en una tabla analítica lista para clustering y predicción. En otras palabras, el ETL no solo limpia, sino que construye la base del análisis.
+
+## Orden práctico para montar el flujo
+
+### 1. Conexión a PostgreSQL
+
+Usa nodos como:
+
+- DB Connector
+- DB Table Selector
+- DB Query Reader
+
+Se lee el esquema `olist` y sus tablas principales:
+
+- `customers`
+- `orders`
+- `order_items`
+- `order_payments`
+- `order_reviews`
+- `products`
+- `sellers`
+- `geolocation`
+- `product_category_name_translation`
+
+### 2. Validación inicial de la base
+
+Antes de transformar, revisa:
+
+- cuántos registros tiene cada tabla,
+- si hay IDs vacíos,
+- si existen fechas nulas,
+- si los estados de pedido son consistentes.
+
+Nodos útiles:
+
+- Table View
+- Row Filter
+- Missing Value
+- GroupBy
+
+### 3. Limpieza y filtros
+
+Aplica filtros básicos:
+
+- mantener solo `order_status = delivered`
+- eliminar registros con fechas nulas
+- filtrar valores no válidos
+
+Nodos sugeridos:
+
+- Row Filter
+- Missing Value
+- Column Filter
+
+### 4. Join de tablas transaccionales
+
+La unidad central es el pedido, así que hay que unir:
+
+- `orders` con `customers`
+- `orders` con `order_items`
+- `order_items` con `products`
+- `order_items` con `sellers`
+- `orders` con `order_payments`
+- `orders` con `order_reviews`
+
+Nodos clave:
+
+- Joiner
+- Duplicate Row Filter
+- GroupBy
+
+### 5. Crear variables derivadas
+
+Estas columnas son esenciales para la siguiente etapa:
+
+- `dias_entrega`
+- `plazo_estimado_dias`
+- `dias_retraso`
+- `es_tardio`
+- `mismo_estado`
+- `num_items`
+- `valor_items`
+- `flete_total`
+- `relacion_precio_flete`
+- `review_score_pedido`
+- `peso_g`
+- `volumen_cm3`
+
+Nodos recomendados:
+
+- Date&Time Difference
+- Math Formula
+- Rule Engine
+- String Manipulation
+
+### 6. Agregación por pedido
+
+Se debe dejar una tabla a nivel de `order_id` con una fila por pedido. Eso será la base final del análisis.
+
+### 7. Filtro final del ETL
+
+Define la población base del proyecto, normalmente:
+
+- pedidos entregados
+- fechas de entrega en el intervalo analítico
+- sin registros corruptos
+
+### 8. Guardar la tabla del ETL
+
+Antes de pasar a clustering, guarda la tabla lista.
+
+Puedes usar:
+
+- Table Writer
+- CSV Writer
+- DB Writer
+
+## Validación mínima antes de pasar al siguiente flujo
+
+Antes de cerrar el ETL, verifica:
+
+1. que el número de pedidos fue consistente,
+2. que `es_tardio` tenga solo 0 y 1,
+3. que no existan IDs nulos,
+4. que las fechas tengan sentido cronológico,
+5. que cada pedido aparezca una sola vez en la tabla final.
+
+## Siguiente paso real
+
+El próximo paso concreto es:
+
+1. conectar con PostgreSQL,
+2. leer `orders`, `customers`, `order_items`, `payments`, `reviews`, `products`, `sellers`,
+3. crear la tabla analítica de pedido,
+4. guardar la salida final en la base o como CSV.
+
+Ese es el flujo 01-ETL que luego alimentará a 02-Clustering.
 | 02-Clustering | Agrupar comportamientos | Segmentos / perfiles |
 | 03-Prediccion | Predecir eventos | Modelos y scores |
 | 04-KPIs | Medir desempeño | Indicadores de negocio |
