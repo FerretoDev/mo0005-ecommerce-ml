@@ -6,3 +6,4 @@
 knime/Example Workflows/
 *.docx
 ~$*.docx
+/documento/plantilla-entregable.md
