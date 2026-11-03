@@ -1,5 +1,7 @@
 -- views.sql: dataset analitico a nivel de pedido y de cliente
 
+SET search_path TO olist;
+
 -- Poblacion base: pedidos entregados con fecha de entrega
 -- entre enero de 2017 y agosto de 2018.
 -- dias_retraso es negativo si el pedido llego antes de lo estimado.

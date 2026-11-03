@@ -1,5 +1,7 @@
 -- kpis.sql: valores de los 11 KPI (poblacion indicada en cada caso)
 
+SET search_path TO olist;
+
 -- KPI 1. % de entregas tardias (v_pedidos_base)
 SELECT ROUND(100.0 * AVG(es_tardio), 2) AS pct_tardias FROM v_pedidos_base;
 

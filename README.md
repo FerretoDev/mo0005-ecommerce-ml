@@ -2,12 +2,12 @@
 
 [![KNIME](https://img.shields.io/badge/KNIME-Analytics%20Platform-orange?logo=knime&logoColor=white)](https://www.knime.com/)
 [![Power BI](https://img.shields.io/badge/Power%20BI-Dashboard-F2C811?logo=powerbi&logoColor=black)](https://powerbi.microsoft.com/)
-[![Storage](https://img.shields.io/badge/Storage-Snowflake%20%2F%20PostgreSQL-blue)](https://www.snowflake.com/)
+[![Storage](https://img.shields.io/badge/Storage-PostgreSQL%20(Docker)-blue?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![Dataset](https://img.shields.io/badge/Dataset-Olist%20Kaggle-20BEFF?logo=kaggle&logoColor=white)](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)
 
 
 ## Descripción
-Este proyecto corresponde al análisis de datos y machine learning sobre clientes de e-commerce (utilizando el dataset público de Olist), integrando KNIME, Snowflake / PostgreSQL y Power BI. 
+Este proyecto corresponde al análisis de datos y machine learning sobre clientes de e-commerce (utilizando el dataset público de Olist), integrando KNIME, PostgreSQL (Docker) y Power BI. 
 
 A través de este flujo aprendemos a abordar el ciclo completo de vida de los datos: desde la extracción, limpieza e integración de múltiples fuentes, hasta la aplicación de modelos predictivos y de segmentación algorítmica, culminando en la visualización interactiva de indicadores de negocio.
 
@@ -17,7 +17,7 @@ A través de este flujo aprendemos a abordar el ciclo completo de vida de los da
 
 - **KNIME Analytics Platform:** Plataforma principal para diseñar flujos de ETL y entrenar modelos de Machine Learning. Al trabajar con nodos visuales en lugar de scripts desde cero, facilita ver cómo se transforman los datos paso a paso en cada etapa del pipeline.
 
-- **Bases de Datos (Snowflake / PostgreSQL):** Permite aplicar conceptos de bases de datos relacionales para almacenar, conectar y consultar de manera eficiente las tablas del negocio.
+- **Base de datos (PostgreSQL en Docker):** Permite aplicar conceptos de bases de datos relacionales para almacenar, conectar y consultar de manera eficiente las tablas del negocio. Se eligió PostgreSQL local en lugar de Snowflake por reproducibilidad: cualquier integrante levanta la misma base con un solo comando.
 - **Power BI:** La herramienta para la capa final de visualización, donde se convierte los resultados de los modelos y cálculos en tableros y gráficas comprensibles para cualquier persona de negocio.
 - **Git / GitHub:** Control de versiones, para colaborar de forma ordenada sobre archivos de datos y flujos visuales.
 
@@ -27,21 +27,23 @@ A través de este flujo aprendemos a abordar el ciclo completo de vida de los da
 
 ```text
 mo0005-ecommerce-ml/
-├── datos/                # Archivos CSV crudos de Olist y documentación del origen
-├── documento/            # Enlaces y entregables del informe académico escrito
+├── docker-compose.yml    # Servicio PostgreSQL (olist-db)
+├── cargar.sh             # Levanta la base, carga los CSV y valida conteos
+├── datos/                # CSV de Olist, schema.sql, views.sql y resultados_kpis.txt
+├── documento/            # Enlaces del informe académico (el .docx vive en OneDrive)
 ├── knime/                # Workflows de KNIME organizados por módulos
 │   ├── 01-ETL/           # Limpieza inicial, cruces (joins) y preparación de datos
-│   ├── 02-Clustering/    # Modelos de segmentación de clientes (aprendizaje no supervisado)
-│   ├── 03-Prediccion/    # Modelos supervisados (predicción de comportamiento y scoring)
+│   ├── 02-Clustering/    # Segmentación (aprendizaje no supervisado)
+│   ├── 03-Prediccion/    # Modelos supervisados (predicción y scoring)
 │   └── 04-KPIs/          # Cálculo y agregación de métricas para Power BI
-├── kpis/                 # Definición de fórmulas, lógica y documentación de los KPIs
-└── diagrama-er/          # Diagramas entidad-relación del modelo relacional
+├── kpis/                 # kpis.sql y definición de los 11 KPI
+└── diagrama-er/          # Diagrama entidad-relación del modelo relacional
 ```
 
-- `/datos`: Almacenamiento de archivos de datos crudos, procesados o muestras necesarias para el proyecto.
+- `/datos`: Datos crudos (CSV), scripts SQL del esquema y las vistas (`schema.sql`, `views.sql`) y resultados de los KPI.
 - `/knime`: Workflows, componentes y configuraciones de análisis y modelado de KNIME Analytics Platform.
 - `/documento`: Documentación formal, informes técnicos y entregables académicos del proyecto.
-- `/kpis`: Métricas clave de rendimiento (KPIs), fórmulas de cálculo y documentación de negocio.
+- `/kpis`: Consultas SQL (`kpis.sql`), fórmulas de cálculo y documentación de los KPI.
 - `/diagrama-er`: Diagramas entidad-relación (ER) y especificación del modelo de datos relacional.
 
 ---
@@ -59,6 +61,34 @@ Los archivos que componen el dataset están en `/datos`:
 - `olist_sellers_dataset.csv`: Vendedores y sus regiones geográficas.
 - `olist_geolocation_dataset.csv`: Coordenadas de latitud y longitud por código postal.
 - `product_category_name_translation.csv`: Tabla de apoyo para traducir categorías de portugués a inglés.
+
+---
+
+## 🗄️ Cómo levantar la base de datos
+
+Requisitos: Docker con Docker Compose.
+
+```bash
+git clone https://github.com/FerretoDev/mo0005-ecommerce-ml.git
+cd mo0005-ecommerce-ml
+./cargar.sh            # levanta PostgreSQL, crea el esquema, carga los 9 CSV y valida conteos
+./cargar.sh --kpis     # lo anterior + ejecuta kpis/kpis.sql y guarda datos/resultados_kpis.txt
+```
+
+`cargar.sh` es idempotente: cada ejecución recrea el esquema `olist` desde cero, sin duplicar filas, y termina con error si algún conteo no coincide con lo esperado.
+
+**Datos de conexión (KNIME y Power BI):**
+
+| Parámetro | Valor |
+| :--- | :--- |
+| Host | `localhost` |
+| Puerto | `5432` |
+| Usuario | `postgres` |
+| Contraseña | `postgres` (solo uso local) |
+| Base de datos | `postgres` |
+| Esquema | `olist` |
+
+En KNIME se usa el nodo *PostgreSQL Connector* con estos datos; en Power BI, el conector *PostgreSQL database*. Las tablas analíticas están en las vistas `olist.v_pedidos_base` y `olist.v_clientes`.
 
 ---
 
