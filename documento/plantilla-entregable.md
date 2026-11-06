@@ -406,7 +406,8 @@ Se perfilaron los datos (nulos, duplicados, rangos y consistencia de fechas) y s
 | Cobertura temporal desigual | orders | Se trabaja con pedidos entregados, con fecha de entrega entre enero de 2017 y agosto de 2018 (96 144 pedidos). | Baja cobertura de 2016 y de septiembre y octubre de 2018. |
 | Más de una reseña por pedido | order_reviews | Se usa una calificación por pedido: el promedio cuando hay más de una. | Evitar duplicar pedidos al integrar tablas. |
 | Códigos postales con ceros a la izquierda | customers, sellers, geolocation | Se leen como texto (String) y no como número. | Un prefijo como `01037` leído como entero pasa a `1037` y no coincidiría en los cruces por código postal. |
-| Pedidos entregados sin fecha de entrega | orders | 8 pedidos con `order_status = delivered` no tienen `order_delivered_customer_date`; su `dias_entrega` y `dias_retraso` quedan vacíos y se excluyen del cálculo de KPI de entrega. | No se puede medir la puntualidad sin fecha real de entrega. |
+| Pedidos entregados sin fecha de entrega | orders | 8 pedidos con `order_status = delivered` no tienen `order_delivered_customer_date`; la ventana de fechas de entrega los excluye. | No se puede medir la puntualidad sin fecha real de entrega. |
+| Categoría de producto sin traducción | products, traducción | 1 376 pedidos (1.43 %) quedan sin `product_category_name_english`; un nodo Missing Value los rellena con «desconocida». | Conservar los pedidos sin perder registros. |
 | Atributos de producto ausentes | products | Se tratan como categoría «desconocida». | Conservar los pedidos sin perder registros. |
 | Valores atípicos e inconsistencias | Varias tablas | Se documentan, limitan o excluyen según el caso. | Mantener la calidad analítica sin perder la población del estudio. |
 
@@ -435,7 +436,9 @@ Se integraron las tablas a nivel de pedido y se crearon las siguientes variables
 
 La vista base mantiene una fila por pedido, con agregación del valor total y del flete, y con una única referencia de vendedor y producto basada en el primer ítem del pedido. Esta decisión evita duplicar el pedido al integrar las tablas de items, pagos y reseñas.
 
-**Implementación en KNIME (workflow 01-ETL, versión base).** Los nueve CSV se leen con nodos CSV Reader. Items, pagos y reseñas se agregan por `order_id` con GroupBy (suma de precio y flete y máximo de `order_item_id` como número de ítems; suma de pagos y máximo de cuotas; promedio de calificación). Luego cuatro Joiner unen orders con customers y con esas tres agregaciones (Left Outer, para no perder pedidos). Un Row Filter conserva los pedidos `delivered`, un Column Renamer deja nombres claros, String to Date&Time convierte las fechas y dos nodos Date&Time Difference calculan `dias_entrega` y `dias_retraso`. El resultado se escribe en `knime/datos/ordenes_etl.csv` para los workflows 02 y 03.
+**Implementación en KNIME (workflow 01-ETL, 39 nodos).** Los nueve CSV se leen con nodos CSV Reader, con los códigos postales como texto. Items, pagos y reseñas se agregan por `order_id` con GroupBy (suma de precio y flete y máximo de `order_item_id` como número de ítems; suma de pagos y máximo de cuotas; promedio de calificación). Cuatro Joiner unen orders con customers y con esas tres agregaciones (Left Outer, para no perder pedidos) y un Row Filter conserva los pedidos `delivered`. Una rama aparte toma el primer ítem de cada pedido (`order_item_id = 1`) y lo une con sellers, products y la traducción de categorías para obtener `seller_state`, el peso, las medidas y la categoría; esa rama se une al flujo principal por `order_id`.
+
+Las variables derivadas se calculan así: un Rule Engine crea `mismo_estado` (1 si `customer_state = seller_state`); String to Date&Time convierte las fechas conservando la hora; un Row Filter aplica la ventana de entrega (enero de 2017 a agosto de 2018); tres nodos Date&Time Difference miden en segundos el plazo estimado, el tiempo de entrega y el retraso, y tres Math Formula los pasan a días con decimales (`plazo_estimado_dias`, `dias_entrega`, `dias_retraso`); un Rule Engine crea `es_tardio` (1 si el retraso en segundos es mayor que 0) y dos Math Formula calculan `relacion_precio_flete` y `volumen_cm3`. Se mide en segundos porque los Date&Time Difference solo permiten decimales con granularidad de tiempo, no con días, y así un pedido entregado el día estimado, pero después de las 00:00, cuenta como tardío. Un Column Filter deja 29 columnas, un Missing Value rellena la categoría ausente con «desconocida», un nodo Statistics resume la tabla final y un CSV Writer la guarda en `knime/datos/ordenes_etl.csv` para los workflows 02 y 03.
 
 | Columna del ETL en KNIME | Equivale a |
 | --- | --- |
@@ -443,9 +446,12 @@ La vista base mantiene una fila por pedido, con agregación del valor total y de
 | num_items | num_items |
 | total_pagado, max_cuotas | valor_pagado, cuotas |
 | review_promedio | review_score_pedido |
-| dias_entrega, dias_retraso | dias_entrega, dias_retraso |
+| dias_entrega, dias_retraso, plazo_estimado_dias | dias_entrega, dias_retraso, plazo_estimado_dias |
+| es_tardio, mismo_estado, relacion_precio_flete | es_tardio, mismo_estado, relacion_precio_flete |
+| volumen_cm3, product_weight_g | volumen_cm3, peso_g |
+| product_category_name_english | categoria |
 
-Esta versión base aún no aplica la ventana de fechas de entrega (enero de 2017 a agosto de 2018), por lo que produce 96 478 pedidos entregados frente a los 96 144 de v_pedidos_base. Tampoco incluye todavía es_tardio, plazo_estimado_dias, mismo_estado, relacion_precio_flete, peso, volumen ni la categoría del producto; se agregarán uniendo products, sellers y la traducción de categorías. [Pendiente: completar y verificar que los conteos coincidan con v_pedidos_base.]
+El peso, el volumen y la categoría se toman del primer ítem del pedido, igual que en v_pedidos_base. Quedan fuera de la tabla final las columnas intermedias (identificadores del ítem, segundos, ciudad del vendedor y atributos del producto que no se usan).
 
 ## 3.4 Modelo 1 — No supervisado: segmentación con k-means
 
@@ -497,7 +503,7 @@ No se incorporaron integraciones con terceros. El análisis se basa en variables
 
 La evidencia del flujo requiere mostrar que la cadena completa corre de manera coherente desde la lectura de datos hasta la validación de resultados. En el proyecto, la prueba de ejecución se apoya en la propia validación relacional de tablas, las vistas analíticas y los resultados del cálculo de KPI, que son consistentes con la población de análisis y la lógica de negocio definida.
 
-**Ejecución del workflow 01-ETL (versión base).** El flujo se ejecutó completo en KNIME con los 16 nodos de lectura, agregación y unión en estado ejecutado. Tras los cuatro Joiner la tabla tiene 99 441 filas (una por pedido, igual que orders, sin duplicados) y, tras el filtro de pedidos entregados, 96 478 filas, que se escriben en ordenes_etl.csv. De ellas, 6 534 (6.8 %) llegaron después de la fecha estimada; este porcentaje difiere del 8.07 % de v_pedidos_base porque la versión base aún no aplica la ventana de fechas. [Pendiente: capturas de pantalla del flujo ejecutado.]
+**Ejecución del workflow 01-ETL.** El flujo se ejecutó completo en KNIME con sus 39 nodos. Tras los cuatro Joiner la tabla tiene 99 441 filas (una por pedido, igual que orders, sin duplicados). Después del filtro de pedidos entregados y de la ventana de fechas de entrega quedan 96 144 filas, que coincide con el conteo de v_pedidos_base, y `order_id` no se repite. El promedio de `es_tardio` es 0.0807 (8.07 %), igual al KPI 1. En la tabla final solo faltan valores en `review_promedio` (642 pedidos sin reseña), en peso y medidas (16 pedidos), en `order_approved_at` (14) y en `order_delivered_carrier_date` (1). El nodo Statistics advierte que no calcula frecuencias de las columnas con más de 1 000 valores distintos, como los identificadores y las fechas, lo que no afecta a las columnas analíticas. [Pendiente: capturas de pantalla del flujo ejecutado.]
 
 ---
 
