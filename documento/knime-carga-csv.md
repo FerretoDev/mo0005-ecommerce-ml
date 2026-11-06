@@ -36,7 +36,7 @@ Cadena principal: `CSV Readers → GroupBy / Joiner (pedido + cliente + items + 
 | 42 | Column Filter | Deja 29 columnas |
 | 43 | Missing Value | Categoría ausente a «desconocida» (1 376 pedidos) |
 | 44 | Statistics | Resumen de la tabla final (avisa por columnas con más de 1 000 valores distintos) |
-| 24 | CSV Writer | Escribe `knime/datos/ordenes_etl.csv` (ignorado en Git, se regenera) |
+| 24 | CSV Writer | Escribe `knime/datos/ordenes_etl.csv` (versionado en Git, unos 33 MB; regenerar y subir si cambia el ETL) |
 
 Los Date&Time Difference miden en segundos porque con granularidad Day KNIME no ofrece decimales. Se divide entre 86 400 y así un pedido entregado el día estimado, pero tras las 00:00, cuenta como tardío.
 

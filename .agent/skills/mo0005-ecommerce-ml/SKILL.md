@@ -46,7 +46,7 @@ mo0005-ecommerce-ml/
 ├── datos/                             # Scripts SQL (schema, views, kpis) y resultados de KPIs
 ├── documento/                         # Enlace oficial al documento en OneDrive (Word)
 ├── knime/                             # Workflows abiertos de KNIME Analytics Platform
-│   ├── datos/                         # CSV crudos de Olist (versionados) + ordenes_etl.csv (generado, ignorado)
+│   ├── datos/                         # CSV crudos de Olist (versionados) + ordenes_etl.csv (salida del ETL, versionada)
 │   ├── 01-ETL/                        # Ingesta, limpieza y preparación de datos
 │   ├── 02-Clustering/                 # Segmentación algorítmica de clientes
 │   ├── 03-Prediccion/                 # Modelos predictivos y scoring
@@ -81,7 +81,7 @@ El dataset base consta de 9 archivos CSV en `knime/datos/` (KNIME no permite rut
 ## 🚦 Estado Actual
 
 - **`01-ETL` (hecho, 39 nodos):** 9 CSV Reader → GroupBy por `order_id` (items, pagos, reseñas) → Joiners → Row Filter `delivered` → rama del primer ítem (sellers, products, traducción) → `mismo_estado` → fechas Date&Time → ventana de entrega 2017-01 a 2018-08 → Date&Time Difference en segundos + Math Formula `/86400` → `es_tardio` → `relacion_precio_flete`, `volumen_cm3` → Column Filter → Missing Value → CSV Writer `knime/datos/ordenes_etl.csv` (**96 144 filas, 29 columnas, `es_tardio` = 0,0807**, igual que `datos/views.sql`).
-- **Aún no hay:** `02-Clustering`, `03-Prediccion`, `04-KPIs`. La salida del ETL es un CSV ignorado en Git; hay que ejecutar `01-ETL` para generarlo.
+- **Aún no hay:** `02-Clustering`, `03-Prediccion`, `04-KPIs`. La salida del ETL, `knime/datos/ordenes_etl.csv`, está versionada (~33 MB): 02 y 03 la leen directamente. Si cambia el ETL, regenerarla y subirla con `core.autocrlf=false`.
 - **Trampas conocidas:** los códigos postales deben ser String; los Date&Time Difference con granularidad Day no dan decimales (medir en segundos y dividir entre 86 400); mover CSV con `core.autocrlf=false`; resetear nodos antes de guardar (el `.gitignore` ya ignora `port_*/` e `internal/`).
 
 ---

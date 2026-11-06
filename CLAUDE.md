@@ -90,7 +90,7 @@ El archivo `.gitignore` ya está configurado para protegerte, pero ten presente 
 ## 📂 ¿Dónde colocar cada cosa?
 
 - **/datos:** Scripts SQL de PostgreSQL (`schema.sql`, `views.sql`), `resultados_kpis.txt` y notas del origen de los datos.
-- **/knime/datos:** Datasets `.csv` de Olist (versionados). Van dentro de `knime/` porque KNIME no permite rutas relativas fuera de su workspace. La salida `ordenes_etl.csv` se genera al ejecutar `01-ETL` y está en `.gitignore`.
+- **/knime/datos:** Datasets `.csv` de Olist (versionados). Van dentro de `knime/` porque KNIME no permite rutas relativas fuera de su workspace. La salida `ordenes_etl.csv` (96 144 pedidos, unos 33 MB) también está versionada para que 02-Clustering y 03-Prediccion la lean sin correr el ETL; si cambia el ETL, regenerarla y commitearla con `git -c core.autocrlf=false add` para que Git no reescriba los finales de línea.
 - **/knime/01-ETL:** Flujos de limpieza, cruces y preprocesamiento (ver `documento/knime-carga-csv.md`).
 - **/knime/02-Clustering:** Modelos no supervisados (segmentación RFM, K-Means, etc.).
 - **/knime/03-Prediccion:** Modelos supervisados de predicción y scoring.

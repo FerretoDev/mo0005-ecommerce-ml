@@ -130,7 +130,7 @@ Tabla auxiliar para traducción de nombres de categoría.
 
 ## 📤 Salida del ETL: `knime/datos/ordenes_etl.csv`
 
-Una fila por pedido `delivered` con fecha de entrega entre 2017-01-01 y 2018-08-31 (**96 144 filas**, 29 columnas). Lo genera `01-ETL`; está ignorado en Git y se regenera ejecutando el flujo. Equivale a `v_pedidos_base` de `datos/views.sql`.
+Una fila por pedido `delivered` con fecha de entrega entre 2017-01-01 y 2018-08-31 (**96 144 filas**, 29 columnas). Lo genera `01-ETL` y está versionado en Git (~33 MB); se regenera ejecutando el flujo. Equivale a `v_pedidos_base` de `datos/views.sql`.
 
 | Columna | Origen |
 | :--- | :--- |
