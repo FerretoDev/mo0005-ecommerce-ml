@@ -32,7 +32,7 @@ mo0005-ecommerce-ml/
 ├── datos/                # Scripts SQL (schema.sql, views.sql) y resultados_kpis.txt
 ├── documento/            # Enlaces del informe académico (el .docx vive en OneDrive)
 ├── knime/                # Workflows de KNIME organizados por módulos
-│   ├── datos/            # CSV crudos de Olist (los lee KNIME) y salida del ETL (ordenes_etl.csv, ignorada)
+│   ├── datos/            # CSV crudos de Olist (los lee KNIME) y salida del ETL (ordenes_etl.csv, versionada)
 │   ├── 01-ETL/           # Limpieza inicial, cruces (joins) y preparación de datos
 │   ├── 02-Clustering/    # Segmentación (aprendizaje no supervisado)
 │   ├── 03-Prediccion/    # Modelos supervisados (predicción y scoring)
@@ -77,7 +77,7 @@ Los archivos que componen el dataset están en `knime/datos/` (versionados en Gi
 
 KNIME puede leer los CSV directamente (como hace hoy el `01-ETL`) o conectarse a la base PostgreSQL que se levanta con Docker (sección siguiente).
 
-**Para replicar el ETL:** `git pull origin main`, abrir `knime/01-ETL` en KNIME (workspace = carpeta `knime/`), ejecutar todo (Shift+F7) y se genera `knime/datos/ordenes_etl.csv`.
+**Para replicar el ETL:** `git pull origin main`, abrir `knime/01-ETL` en KNIME (workspace = carpeta `knime/`), ejecutar todo (Shift+F7) y se regenera `knime/datos/ordenes_etl.csv`. Para trabajar en 02 y 03 no hace falta correr el ETL: `ordenes_etl.csv` ya viene en el repo (unos 33 MB).
 
 ## 🗄️ Cómo levantar la base de datos
 
