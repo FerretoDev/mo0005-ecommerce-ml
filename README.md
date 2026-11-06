@@ -27,9 +27,10 @@ A través de este flujo aprendemos a abordar el ciclo completo de vida de los da
 
 ```text
 mo0005-ecommerce-ml/
-├── datos/                # Archivos CSV crudos de Olist y documentación del origen
+├── datos/                # Scripts SQL (PostgreSQL), resultados de KPIs y notas del origen de los datos
 ├── documento/            # Enlaces y entregables del informe académico escrito
 ├── knime/                # Workflows de KNIME organizados por módulos
+│   ├── datos/            # CSV crudos de Olist (los lee KNIME) y salida del ETL (ordenes_etl.csv, ignorada)
 │   ├── 01-ETL/           # Limpieza inicial, cruces (joins) y preparación de datos
 │   ├── 02-Clustering/    # Modelos de segmentación de clientes (aprendizaje no supervisado)
 │   ├── 03-Prediccion/    # Modelos supervisados (predicción de comportamiento y scoring)
@@ -38,8 +39,9 @@ mo0005-ecommerce-ml/
 └── diagrama-er/          # Diagramas entidad-relación del modelo relacional
 ```
 
-- `/datos`: Almacenamiento de archivos de datos crudos, procesados o muestras necesarias para el proyecto.
-- `/knime`: Workflows, componentes y configuraciones de análisis y modelado de KNIME Analytics Platform.
+- `/datos`: Scripts SQL (`schema.sql`, `views.sql`, `kpis.sql`), `resultados_kpis.txt` y notas del origen de los datos.
+- `/knime`: Workflows, componentes y configuraciones de KNIME Analytics Platform. Incluye `knime/datos/` con los CSV crudos de Olist.
+  KNIME no permite rutas relativas fuera de su workspace (`knime/`), por eso los CSV viven ahí.
 - `/documento`: Documentación formal, informes técnicos y entregables académicos del proyecto.
 - `/kpis`: Métricas clave de rendimiento (KPIs), fórmulas de cálculo y documentación de negocio.
 - `/diagrama-er`: Diagramas entidad-relación (ER) y especificación del modelo de datos relacional.
@@ -49,7 +51,7 @@ mo0005-ecommerce-ml/
 ## 📊 Dataset (Olist E-Commerce)
 El proyecto utiliza el dataset público **Brazilian E-Commerce Public Dataset by Olist**, disponible en [Kaggle](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce). Contiene información real de aproximadamente 100 000 pedidos realizados entre 2016 y 2018 en Brasil.
 
-Los archivos que componen el dataset están en `/datos`:
+Los archivos que componen el dataset están en `knime/datos/` (versionados en Git; no hace falta descargarlos de Kaggle):
 - `olist_customers_dataset.csv`: Clientes y sus ubicaciones (ciudades/estados).
 - `olist_orders_dataset.csv`: Historial de pedidos y sus estados de envío.
 - `olist_order_items_dataset.csv`: Artículos dentro de cada pedido, precios y costos de flete.
@@ -59,6 +61,21 @@ Los archivos que componen el dataset están en `/datos`:
 - `olist_sellers_dataset.csv`: Vendedores y sus regiones geográficas.
 - `olist_geolocation_dataset.csv`: Coordenadas de latitud y longitud por código postal.
 - `product_category_name_translation.csv`: Tabla de apoyo para traducir categorías de portugués a inglés.
+
+---
+
+## 🚦 Estado del Proyecto
+
+| Workflow | Estado |
+| :--- | :--- |
+| `01-ETL` | Versión base hecha: lee los 9 CSV, une orders + customers + items + pagos + reseñas, filtra `delivered`, calcula `dias_entrega` y `dias_retraso` y exporta `knime/datos/ordenes_etl.csv` (96 478 órdenes). Guía en [documento/knime-carga-csv.md](documento/knime-carga-csv.md). |
+| `02-Clustering` | Pendiente (RFM por `customer_unique_id`). |
+| `03-Prediccion` | Pendiente. |
+| `04-KPIs` | Pendiente. |
+
+Por ahora no se usa base de datos: KNIME lee los CSV directamente. Los scripts de `/datos/*.sql` quedan listos para PostgreSQL cuando se monte.
+
+**Para replicar el ETL:** `git pull origin main`, abrir `knime/01-ETL` en KNIME (workspace = carpeta `knime/`), ejecutar todo (Shift+F7) y se genera `knime/datos/ordenes_etl.csv`.
 
 ---
 
