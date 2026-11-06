@@ -71,8 +71,8 @@ Los archivos que componen el dataset están en `knime/datos/` (versionados en Gi
 | Workflow | Estado |
 | :--- | :--- |
 | `01-ETL` | Hecho: lee los 9 CSV, une pedido + cliente + items + pagos + reseñas + vendedor/producto, filtra `delivered` y la ventana de entrega (2017-01 a 2018-08), calcula las variables derivadas (`es_tardio`, `dias_entrega`, `dias_retraso`, `mismo_estado`, etc.) y exporta `knime/datos/ordenes_etl.csv` (96 144 pedidos, 29 columnas; `es_tardio` = 8,07 %). Guía en [documento/knime-carga-csv.md](documento/knime-carga-csv.md). |
-| `02-Clustering` | Pendiente (RFM por `customer_unique_id`). |
-| `03-Prediccion` | Pendiente. |
+| `02-Clustering` | Pendiente (Marcos). Modelo 1: k-means sobre pedidos con 6 variables de compra y entrega; k = 4 según silueta y codo. Guía y números de referencia en [documento/guia-modelo1-knime.md](documento/guia-modelo1-knime.md). |
+| `03-Prediccion` | Pendiente. Modelo 2: predicción de `es_tardio` al comprar, con regresión logística y Random Forest frente a dos líneas base; partición temporal (corte 2018-04-01). Guía y números de referencia en [documento/guia-modelo2-knime.md](documento/guia-modelo2-knime.md). |
 | `04-KPIs` | Pendiente. |
 
 KNIME puede leer los CSV directamente (como hace hoy el `01-ETL`) o conectarse a la base PostgreSQL que se levanta con Docker (sección siguiente).
