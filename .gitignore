@@ -9,3 +9,7 @@ knime/Example Workflows/
 /documento/plantilla-entregable.md
 # salida generada por el ETL (se regenera ejecutando 01-ETL)
 /knime/datos/ordenes_etl.csv
+
+# datos de ejecucion de nodos KNIME (se generan al ejecutar; resetear antes de guardar)
+knime/**/port_*/
+knime/**/internal/
