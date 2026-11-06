@@ -26,8 +26,6 @@ Repositorio del proyecto: mo0005-ecommerce-ml
 
 # 1. Introducción y contexto
 
-**Responsable:** **Todos**
-
 Olist es un integrador de marketplaces brasileño que conecta a pequeños comerciantes con compradores de todo el país. El valor de su modelo depende de que cada pedido llegue completo, a tiempo y con una buena experiencia de compra.
 
 Este proyecto analiza, con el conjunto público de Olist (alrededor de 100 000 pedidos de 2016 a 2018), cómo se relacionan las entregas tardías con la satisfacción de los clientes y con su probabilidad de volver a comprar. La exploración sobre la base de datos muestra que el 8.07 % de los pedidos llegó tarde, que su calificación promedio fue de 2.57 frente a 4.30 en los pedidos puntuales y que solo el 3.12 % de los clientes realizó más de un pedido.
@@ -38,11 +36,7 @@ Para apoyar a la empresa se construyó, en KNIME, un flujo que integra y depura 
 
 # 2. Parte 1 — Las bases del modelo
 
-**Responsable:** **Persona A**   ·   Puntos de la rúbrica: 40 (suma de los ítems 2.1 a 2.9)
-
 ## 2.1 Empresa o institución seleccionada
-
-**Responsable:** **Persona A**   ·   Puntos de la rúbrica: 2
 
 Olist (2018) es una empresa brasileña de comercio electrónico que se describe como integradora de marketplaces: conecta a pequeños negocios de todo el país con distintos canales de venta mediante un único contrato. Los comerciantes ofrecen sus productos en la tienda Olist Store y los despachan directamente a los clientes a través de socios logísticos de la empresa. En su descripción, Olist se presenta como la mayor tienda por departamentos dentro de los marketplaces de Brasil.
 
@@ -61,8 +55,6 @@ Para efectos de este proyecto, el equipo asume el rol de Última Milla Labs, un 
 
 ## 2.2 Objetivos estratégicos de la empresa
 
-**Responsable:** **Persona A**   ·   Puntos de la rúbrica: 5
-
 En el material disponible para este proyecto no consta una declaración formal de los objetivos estratégicos de Olist. Por ello, los siguientes se plantean para efectos de este estudio y se derivan de su modelo de negocio: un marketplace que conecta a pequeños comerciantes con compradores y cuyo valor depende de que el pedido llegue completo, a tiempo y con una buena experiencia de compra (Olist, 2018).
 
 | N.º | Objetivo estratégico | Cómo se mide |
@@ -72,8 +64,6 @@ En el material disponible para este proyecto no consta una declaración formal d
 | OE3 | Fortalecer la fidelización. Favorecer que los clientes que compran por primera vez regresen a comprar en la plataforma. | Tasa de nueva compra y recompra según la experiencia del primer pedido. |
 
 ## 2.3 Problema y necesidad del negocio
-
-**Responsable:** **Persona A**   ·   Puntos de la rúbrica: 10 — el ítem de más peso de la Parte 1
 
 ### 2.3.1 Descripción del problema
 
@@ -124,8 +114,6 @@ El análisis se desarrolla como un flujo por etapas en KNIME: obtención, calida
 
 ## 2.4 Datos fuente
 
-**Responsable:** **Persona A**   ·   Puntos de la rúbrica: 5
-
 Los datos provienen del conjunto público Brazilian E-Commerce Public Dataset by Olist, publicado por la propia empresa en Kaggle (Olist, 2018). Se descargaron el 4 de octubre de 2026 en formato CSV (codificación UTF-8), en nueve archivos que suman aproximadamente 127 MB y cubren pedidos realizados entre septiembre de 2016 y octubre de 2018.
 
 | Archivo | Contenido | Filas | Columnas |
@@ -148,15 +136,11 @@ Los datos provienen del conjunto público Brazilian E-Commerce Public Dataset by
 
 ## 2.5 Infraestructura de base de datos
 
-**Responsable:** **Persona A**   ·   Puntos de la rúbrica: 2
-
 Se utilizó **PostgreSQL** ejecutándose localmente mediante Docker, en lugar de Snowflake. Esta decisión fue funcional y reproducible para todo el equipo: el esquema quedó versionado en el repositorio con el script `schema.sql`, la instancia se levantó de forma local y el flujo de ETL se conectó directamente con KNIME. La estructura final se implementó en el esquema `olist`, con la base de datos `postgres` configurada dentro del contenedor `olist-db`.
 
 Se documentó la evidencia de funcionamiento mediante consultas SQL sobre el esquema y sobre la vista `v_pedidos_base`, así como la validación de conteos por tabla. La instancia quedó disponible para el desarrollo y la verificación del análisis de negocio.
 
 ## 2.6 Estructuras de datos creadas
-
-**Responsable:** **Persona A**   ·   Puntos de la rúbrica: 5
 
 El modelo de datos se compone de nueve estructuras (tablas) que corresponden a los archivos originales, creadas en el esquema olist de PostgreSQL mediante el script schema.sql (Anexo A y carpeta /datos del repositorio). Las decisiones de diseño fueron:
 
@@ -194,8 +178,6 @@ CREATE TABLE order_items (
 
 ## 2.7 Carga de los datos en las estructuras
 
-**Responsable:** **Persona A**   ·   Puntos de la rúbrica: 5
-
 | Tabla | Filas en el CSV | Filas en PostgreSQL | ¿Coincide? |
 | --- | --- | --- | --- |
 | orders | 99 441 | 99 441 | sí |
@@ -225,8 +207,6 @@ UNION ALL SELECT 'translation',    COUNT(*) FROM olist.product_category_name_tra
 La verificación de carga quedó validada con la comparación entre filas del CSV y filas en PostgreSQL en todas las tablas del esquema.
 
 ## 2.8 Diccionario de datos
-
-**Responsable:** **Persona A**   ·   Puntos de la rúbrica: 3
 
 El diccionario indica, para cada estructura, su nombre y descripción; para cada campo, su nombre, tipo y descripción; y las relaciones entre estructuras. Los tipos se expresan en SQL estándar y se ajustan al motor elegido. PK indica llave primaria y FK llave foránea.
 
@@ -361,8 +341,6 @@ Las columnas derivadas del flujo se documentan en la sección 3.3, donde se desc
 
 ## 2.9 Diagrama entidad-relación
 
-**Responsable:** **Persona A**   ·   Puntos de la rúbrica: 3
-
 Se incorpora el diagrama entidad-relación del modelo relacional usado en el proyecto. La versión fuente se conserva en la carpeta del repositorio y el esquema quedó alineado con la base implementada en PostgreSQL.
 
 Enlace al diagrama: https://drive.google.com/file/d/1xBKpA89fh4JQ7KKysahj6yNuwq9vtR2d/view?usp=sharing
@@ -378,11 +356,7 @@ Enlace al diagrama: https://drive.google.com/file/d/1xBKpA89fh4JQ7KKysahj6yNuwq9
 
 # 3. Parte 2 — Flujo y modelos de aprendizaje automático
 
-**Responsable:** **Todos**   ·   Puntos de la rúbrica: 35 (flujo 15 + modelos 20)
-
 ## 3.1 Descripción general del flujo en KNIME
-
-**Responsable:** **Persona B**   ·   Puntos de la rúbrica: 15 (junto con 3.2, 3.3 y 3.8)
 
 El análisis se desarrolla como un flujo por etapas en KNIME, desde la obtención de los datos hasta la validación de los modelos y el cálculo de los indicadores. La estructura del proyecto refleja una separación clara entre ETL, clustering y predicción, con una capa final de indicadores para la toma de decisiones.
 
@@ -396,8 +370,6 @@ El análisis se desarrolla como un flujo por etapas en KNIME, desde la obtenció
 | 6. Indicadores | Cálculo de los KPI sobre los datos transformados y presentación en Power BI (sección 4). | 04-KPIs |
 
 ## 3.2 Obtención y calidad de los datos
-
-**Responsable:** **Persona B**
 
 Se perfilaron los datos (nulos, duplicados, rangos y consistencia de fechas) y se aplicaron las siguientes reglas:
 
@@ -414,8 +386,6 @@ Se perfilaron los datos (nulos, duplicados, rangos y consistencia de fechas) y s
 La población de análisis se concentra en pedidos entregados en el periodo observado, con foco en la comparación entre puntualidad, satisfacción y recompra.
 
 ## 3.3 Transformación de los datos
-
-**Responsable:** **Persona B**
 
 Se integraron las tablas a nivel de pedido y se crearon las siguientes variables derivadas. Las categorías se traducen y agrupan, las variables categóricas se codifican y las numéricas se normalizan cuando se requiere.
 
@@ -455,11 +425,9 @@ El peso, el volumen y la categoría se toman del primer ítem del pedido, igual 
 
 ## 3.4 Modelo 1 — No supervisado: segmentación con k-means
 
-**Responsable:** **Marcos Ferreto Estrada**   ·   Puntos de la rúbrica: parte de los 20 de «dos modelos de ML»
+El modelo no supervisado agrupa los pedidos según su experiencia de compra y entrega, con k-means sobre seis variables: valor del pedido (`total_precio`), costo del flete (`total_flete`), número de cuotas (`max_cuotas`), tiempo de entrega (`dias_entrega`), retraso respecto de la fecha estimada (`dias_retraso`) y si el cliente y el vendedor están en el mismo estado (`mismo_estado`). La calificación no se usa como entrada, para que la comparación de satisfacción entre grupos (H4) no sea circular. El precio y el flete se transforman con logaritmo, porque tienen colas muy largas, y las seis variables se normalizan con puntuación z para que todas pesen lo mismo en la distancia. Ninguna de las seis tiene valores ausentes. La lista de nodos está en el Anexo D.
 
-El modelo no supervisado agrupa los pedidos según su experiencia de compra y entrega, con k-means sobre seis variables: valor del pedido (`total_precio`), costo del flete (`total_flete`), número de cuotas (`max_cuotas`), tiempo de entrega (`dias_entrega`), retraso respecto de la fecha estimada (`dias_retraso`) y si el cliente y el vendedor están en el mismo estado (`mismo_estado`). La calificación no se usa como entrada, para que la comparación de satisfacción entre grupos (H4) no sea circular. El precio y el flete se transforman con logaritmo, porque tienen colas muy largas, y las seis variables se normalizan con puntuación z para que todas pesen lo mismo en la distancia. Ninguna de las seis tiene valores ausentes. La guía de nodos está en `documento/guia-modelo1-knime.md`.
-
-> **Nota del equipo:** el perfil de los segmentos (3.4.2) y la prueba de H4 salen del workflow de KNIME (`02-Clustering`, k = 4, semilla 2; asignación en `knime/datos/segmentos_modelo1.csv`). La tabla de k de 2 a 8 (3.4.1) y el análisis de sensibilidad son resultados de referencia calculados en Python (scikit-learn); las diferencias pequeñas con KNIME, por ejemplo 7 357 frente a 7 423 pedidos en el grupo problemático, son normales. La silueta de k = 4 también se confirmó en KNIME (3.4.1).
+**Origen de las cifras.** El perfil de los segmentos (3.4.2), la prueba de H4 y la silueta de k = 4 salen del workflow de KNIME (`02-Clustering`, k = 4, semilla 2; la asignación está en `knime/datos/segmentos_modelo1.csv`). La tabla de k de 2 a 8 (3.4.1) y el análisis de sensibilidad se calcularon en Python (scikit-learn) con los mismos datos y variables. Las diferencias pequeñas con KNIME, por ejemplo 7 357 frente a 7 423 pedidos en el grupo problemático, se deben a la inicialización aleatoria del k-means.
 
 ### 3.4.1 Resultados y validación
 
@@ -497,8 +465,6 @@ Este último segmento coincide en gran parte con los pedidos tardíos, porque el
 
 ## 3.5 Modelo 2 — Supervisado: predicción de la entrega tardía
 
-**Responsable:** **Persona C**   ·   Puntos de la rúbrica: parte de los 20 de «dos modelos de ML»
-
 El modelo supervisado clasifica si un pedido llegará tarde o a tiempo usando únicamente variables conocidas al momento de la compra. Este enfoque evita filtrado de información futura y permite evaluar la utilidad del modelo para actuar de forma preventiva antes de que se produzca la entrega.
 
 Se comparan dos algoritmos, regresión logística y Random Forest, con dos líneas base: predecir siempre «a tiempo» y una regla geográfica que marca como tardío todo pedido entre estados distintos. La mejora se mide con indicadores orientados a la clase minoritaria: AUC, precisión, exhaustividad y F1 de la entrega tardía. La guía de nodos está en `documento/guia-modelo2-knime.md`.
@@ -517,9 +483,7 @@ Todo lo que se aprende de los datos se calcula solo con el entrenamiento y se ap
 
 ## 3.6 Validación de ambos modelos
 
-**Responsable:** **Persona C**   ·   Puntos de la rúbrica: parte de los 20 — es lo que más pide la rúbrica
-
-> **Nota del equipo:** las cifras de los modelos en esta sección son resultados de referencia calculados en Python (scikit-learn) con los mismos datos, variables y partición. [Reemplazar por la salida de KNIME cuando el workflow esté ejecutado; las diferencias pequeñas son normales.]
+**Origen de las cifras.** Las cifras de los modelos de esta sección se calcularon en Python (scikit-learn) con los mismos datos, variables y partición.
 
 **Modelo 2 sobre la prueba (abril a agosto de 2018; 32 092 pedidos, 1 878 tardíos; umbral 0.5):**
 
@@ -538,15 +502,11 @@ La regresión logística supera a ambas líneas base y al Random Forest, y cumpl
 
 **Modelo 1.** Su validación interna (silueta, codo y estabilidad entre semillas) está en la sección 3.4.1, y su validación externa —si los grupos difieren en satisfacción— es la prueba de H4 (sección 4.5).
 
-## 3.7 Integraciones con terceros (opcional)
-
-**Responsable:** **Todos**
+## 3.7 Integraciones con terceros
 
 No se incorporaron integraciones con terceros. El análisis se basa en variables estructuradas de la base de datos y en los modelos ejecutados dentro del flujo de KNIME, sin dependencia de servicios externos para la parte analítica principal.
 
 ## 3.8 Evidencia de ejecución del flujo
-
-**Responsable:** **Persona B**   ·   Puntos de la rúbrica: (incluida en los 15 del flujo)
 
 La evidencia del flujo requiere mostrar que la cadena completa corre de manera coherente desde la lectura de datos hasta la validación de resultados. En el proyecto, la prueba de ejecución se apoya en la propia validación relacional de tablas, las vistas analíticas y los resultados del cálculo de KPI, que son consistentes con la población de análisis y la lógica de negocio definida.
 
@@ -555,8 +515,6 @@ La evidencia del flujo requiere mostrar que la cadena completa corre de manera c
 ---
 
 # 4. Parte 3 — Visualización e indicadores
-
-**Responsable:** **Persona D**   ·   Puntos de la rúbrica: 15
 
 ## 4.1 Conexión entre KNIME y Power BI
 
@@ -596,7 +554,7 @@ Se definen once indicadores, organizados según el objetivo estratégico al que 
 
 La estructura del dashboard contempla una vista de resumen, otra de entregas, otra de satisfacción y otra de fidelización, con filtros por período y por estado del cliente en todas las páginas.
 
-| Página | KPI | Visuales sugeridos |
+| Página | KPI | Visuales |
 | --- | --- | --- |
 | 1. Resumen | 1, 2, 6, 9 | Tarjetas con los cuatro KPI y línea mensual del % de entregas tardías y de la calificación promedio. |
 | 2. Entregas (OE1) | 1 a 5 | Mapa o barras por estado; barras de tiempo de entrega en el mismo estado vs. estados distintos; histograma de días de retraso. |
@@ -620,10 +578,6 @@ Las medidas DAX de los KPI están en el Anexo C y las tablas de origen (v_pedido
 
 ## 4.5 Contraste de las hipótesis
 
-**Responsable:** **Todos**
-
-Coordinan: Personas C y D.
-
 | Hipótesis | Qué se compara | Prueba propuesta | Resultado y conclusión |
 | --- | --- | --- | --- |
 | H1 | Calificación de pedidos puntuales vs. tardíos | Mann-Whitney U; chi-cuadrado para % de reseñas negativas | Se confirma. Calificación 4.30 frente a 2.57 (Mann-Whitney U = 149 338 900, p < 0.001; correlación biserial de rangos 0.55, efecto grande). Reseñas negativas 9.2 % frente a 53.9 % (χ² = 12 589, gl = 1, p < 0.001; V de Cramér 0.36). |
@@ -639,8 +593,6 @@ Los valores de las pruebas se calcularon en Python sobre `knime/datos/ordenes_et
 
 # 5. Conclusiones y recomendaciones
 
-**Responsable:** **Todos**
-
 - **Hipótesis central y H1.** Las entregas tardías se asocian con una caída de 1.73 puntos en la calificación promedio (4.30 frente a 2.57) y con una proporción mucho mayor de reseñas negativas (9.2 % frente a 53.9 %). La evidencia sugiere que la puntualidad no es solo un indicador operativo, sino un factor asociado con la percepción del servicio.
 - **H2.** El retraso se concentra en regiones específicas y, en el periodo completo, es mayor cuando cliente y vendedor están en estados distintos. Sin embargo, esa relación no fue estable: entre abril y agosto de 2018 se invirtió. La localización importa, pero su efecto cambia con el tiempo, por lo que las decisiones logísticas deben basarse en un monitoreo continuo y no en una regla fija.
 - **Fidelización.** La recompra es baja (3.12 %). La diferencia por puntualidad del primer pedido es estadísticamente significativa, pero pequeña (1.4 puntos porcentuales: 4.34 % frente a 2.94 %), por lo que la fidelización requiere un enfoque más amplio que solo la entrega a tiempo.
@@ -654,8 +606,6 @@ Los valores de las pruebas se calcularon en Python sobre `knime/datos/ordenes_et
 
 # 6. Limitaciones y trabajo futuro
 
-**Responsable:** **Todos**
-
 - Los resultados describen asociaciones y no causalidad.
 - No se dispone de información sobre las causas de los retrasos (transporte, ruta, vendedor o temporada).
 - Los datos corresponden a un periodo cerrado (2016–2018); los hallazgos pueden no reflejar la situación actual de Olist.
@@ -667,8 +617,6 @@ Los valores de las pruebas se calcularon en Python sobre `knime/datos/ordenes_et
 - Trabajo futuro: actualización y monitoreo de los modelos, nuevas variables, análisis del texto de los comentarios (en portugués) y prueba de otros algoritmos.
 
 # 7. Referencias y anexos
-
-**Responsable:** **Todos**
 
 Olist. (2018). Brazilian E-Commerce Public Dataset by Olist [Conjunto de datos]. Kaggle. https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
 
@@ -1014,18 +962,18 @@ CALCULATE([Tasa Nueva Compra],
           Clientes[anio_primer_pedido] = 2017, Clientes[primer_pedido_negativo] = 0)
 ```
 
-## Anexo D. Guía de nodos de KNIME
+## Anexo D. Nodos de KNIME por etapa
 
-| Etapa | Nodos orientativos | Notas |
+| Etapa | Nodos principales | Notas |
 | --- | --- | --- |
 | Obtención | PostgreSQL Connector → DB Table Selector → DB Reader (uno por tabla) | Una conexión compartida; leer las nueve tablas. Sin base de datos: un CSV Reader por archivo con ruta `../datos/<archivo>.csv` (carpeta `knime/datos/`); es lo usado en la versión base del 01-ETL, con los códigos postales como String. |
-| Calidad | Statistics, Missing Value, Duplicate Row Filter, Row Filter, Rule Engine | Documentar cada filtro con su conteo de filas antes y después. |
+| Calidad | Statistics, Missing Value, Row Filter, Rule Engine | Se documenta cada filtro con su conteo de filas antes y después (99 441, 96 478 y 96 144 pedidos en el ETL). |
 | Transformación | Joiner, GroupBy, Date&Time Difference, Math Formula, Rule Engine, String Manipulation | Reproduce la vista v_pedidos_base (Anexo A); verificar que los conteos coincidan. |
 | Preparación de modelos | Column Filter, Normalizer, One to Many (codificación), Row Splitter por fecha | Partición temporal: entrenamiento hasta marzo de 2018, prueba de abril a agosto de 2018. |
-| Modelo 1 | Math Formula (logaritmo), Normalizer, Counting Loop Start, k-Means, Row Sampling, Silhouette Coefficient, Loop End, GroupBy para el perfil, Kruskal-Wallis o One-way ANOVA | k de 2 a 8; se eligió k = 4 por silueta y codo; repetir con varias semillas. Detalle en `documento/guia-modelo1-knime.md`. |
+| Modelo 1 | CSV Reader, Column Filter, Math Formula (logaritmo), Normalizer (Z-score), k-Means, Joiner, GroupBy, Rule-based Row Filter, Silhouette Coefficient, One-way ANOVA, CSV Writer | k = 4 con semilla 2; la silueta de k = 4 en KNIME es 0.297 y la comparación de k de 2 a 8 se calculó en Python. La prueba de H4 usa One-way ANOVA, porque el nodo de Kruskal-Wallis no está instalado. Detalle en `documento/guia-modelo1-knime.md`. |
 | Modelo 2 | Row Splitter (corte 2018-04-01), Missing Value y Missing Value (Apply), Equal Size Sampling, Normalizer y Normalizer (Apply), Random Forest Learner y Predictor, Logistic Regression Learner y Predictor, Rule Engine (líneas base), Scorer, Binary Classification Inspector | Balanceo solo sobre entrenamiento. Detalle en `documento/guia-modelo2-knime.md`. |
 | Validación | Scorer, ROC Curve, Cross Validation (X-Partitioner / X-Aggregator) | Validación cruzada solo dentro del conjunto de entrenamiento. |
-| Salida a Power BI | DB Writer o CSV Writer | Escribir segmentos y probabilidades junto con el identificador del pedido. |
+| Salida a Power BI | CSV Writer | Escribe `ordenes_etl.csv` y `segmentos_modelo1.csv` con el identificador del pedido. |
 
 ## Anexo E. Glosario
 
