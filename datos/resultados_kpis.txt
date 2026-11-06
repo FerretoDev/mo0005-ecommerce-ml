@@ -1,0 +1,101 @@
+SET
+CREATE VIEW
+CREATE VIEW
+ pct_tardias 
+-------------
+        8.07
+(1 row)
+
+ dias_entrega_prom 
+-------------------
+              12.5
+(1 row)
+
+ retraso_prom 
+--------------
+          9.4
+(1 row)
+
+ mismo_estado | pedidos | dias_entrega_prom 
+--------------+---------+-------------------
+            0 |   61541 |              15.1
+            1 |   34603 |               7.9
+(2 rows)
+
+ pct_no_concretados 
+--------------------
+               1.24
+(1 row)
+
+ calificacion_prom 
+-------------------
+              4.16
+(1 row)
+
+ pct_negativas 
+---------------
+         12.73
+(1 row)
+
+ es_tardio | pedidos | calificacion_prom | pct_negativas 
+-----------+---------+-------------------+---------------
+         0 |   87902 |              4.30 |           9.2
+         1 |    7600 |              2.57 |          53.9
+(2 rows)
+
+ clientes | pct_recompra 
+----------+--------------
+    96096 |         3.12
+(1 row)
+
+ primer_pedido_tardio | clientes | pct_recompra 
+----------------------+----------+--------------
+                    0 |    39283 |         4.34
+                    1 |     2793 |         2.94
+(2 rows)
+
+ primer_pedido_negativo | clientes | pct_recompra 
+------------------------+----------+--------------
+                      0 |    36716 |         4.32
+                      1 |     5045 |         3.71
+(2 rows)
+
+ customer_state | pedidos | pct_tardias 
+----------------+---------+-------------
+ AL             |     395 |        23.8
+ MA             |     713 |        19.6
+ PI             |     475 |        16.0
+ SE             |     332 |        15.4
+ CE             |    1272 |        15.3
+ BA             |    3250 |        14.0
+ RJ             |   12298 |        13.4
+ TO             |     274 |        12.8
+ RR             |      40 |        12.5
+ PA             |     941 |        12.3
+ ES             |    1990 |        12.2
+ MS             |     700 |        11.4
+ RN             |     470 |        10.9
+ PB             |     515 |        10.9
+ PE             |    1583 |        10.6
+ SC             |    3537 |         9.8
+ GO             |    1949 |         8.2
+ RS             |    5324 |         7.1
+ DF             |    2073 |         7.0
+ MT             |     885 |         6.8
+ SP             |   40379 |         5.9
+ MG             |   11313 |         5.6
+ PR             |    4901 |         5.0
+ AP             |      67 |         4.5
+ AM             |     145 |         4.1
+ AC             |      80 |         3.8
+ RO             |     243 |         2.9
+(27 rows)
+
+    retraso    | pedidos | pct_negativas 
+---------------+---------+---------------
+ 1 a 3 dias    |    2635 |          19.1
+ 4 a 7 dias    |    1766 |          61.2
+ a tiempo      |   87902 |           9.2
+ mas de 7 dias |    3199 |          78.5
+(4 rows)
+

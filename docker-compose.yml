@@ -1,0 +1,22 @@
+# Base de datos local del proyecto MO-0005 (PostgreSQL en Docker).
+# La contraseña es solo para uso local; no reutilizar en servidores expuestos.
+services:
+  olist-db:
+    image: postgres:16
+    container_name: olist-db
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - olist_pgdata:/var/lib/postgresql/data
+      - ./datos:/datos:ro
+      - ./knime/datos:/csv:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  olist_pgdata:
