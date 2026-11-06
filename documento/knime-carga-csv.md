@@ -36,6 +36,7 @@ Cadena principal: `CSV Readers → GroupBy / Joiner (pedido + cliente + items + 
 | 42 | Column Filter | Deja 29 columnas |
 | 43 | Missing Value | Categoría ausente a «desconocida» (1 376 pedidos) |
 | 44 | Statistics | Resumen de la tabla final (avisa por columnas con más de 1 000 valores distintos) |
+| 45 | Date&Time to String | Las 5 fechas a texto con formato fijo `yyyy-MM-dd HH:mm:ss` (reemplaza la columna) |
 | 24 | CSV Writer | Escribe `knime/datos/ordenes_etl.csv` (versionado en Git, unos 33 MB; regenerar y subir si cambia el ETL) |
 
 Los Date&Time Difference miden en segundos porque con granularidad Day KNIME no ofrece decimales. Se divide entre 86 400 y así un pedido entregado el día estimado, pero tras las 00:00, cuenta como tardío.
@@ -57,7 +58,7 @@ Los Date&Time Difference miden en segundos porque con granularidad Day KNIME no 
 - Si se mide solo con fecha (granularidad Day, sin hora), `es_tardio` sale en 6,73 % y no en 8,07 %.
 
 ## Formato de las fechas en `ordenes_etl.csv`
-KNIME escribe las fechas sin los segundos cuando valen cero: `2018-06-11T21:17` en lugar de `2018-06-11T21:17:00`. Por eso conviven dos formatos en una misma columna: 1 559 filas de `order_purchase_timestamp`, 889 de `order_approved_at`, 28 519 de `order_delivered_carrier_date` y 1 563 de `order_delivered_customer_date` salen así, y las 96 144 de `order_estimated_delivery_date` (siempre a las 00:00). KNIME y la mayoría de los lectores las leen bien, pero un script con formato fijo falla. Si Power BI u otra herramienta da problema, convertir esas columnas a texto con formato fijo `yyyy-MM-dd HH:mm:ss` antes del CSV Writer (nodo *Date&Time to String*).
+KNIME escribe las fechas sin los segundos cuando valen cero (`2018-06-11T21:17` en lugar de `2018-06-11T21:17:00`), y en `order_delivered_carrier_date` eso ocurría en 28 519 filas. Para que cualquier lector (Power BI, Python) las interprete igual, un nodo **Date&Time to String** (#45) convierte las 5 columnas de fecha a texto con formato fijo `yyyy-MM-dd HH:mm:ss`, antes del CSV Writer. Comprobado: las 5 columnas cumplen ese formato en todas sus filas no vacías. Ejemplo: `2017-09-13 08:59:02`; la fecha estimada sale siempre a las `00:00:00`.
 
 ## Antes de guardar y commitear
 Reset (F8) a todos los nodos (con los datos guardados `knime/01-ETL` pesa cientos de MB; reseteado, menos de 1 MB), guardar, cerrar KNIME y:

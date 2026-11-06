@@ -135,7 +135,7 @@ Una fila por pedido `delivered` con fecha de entrega entre 2017-01-01 y 2018-08-
 | Columna | Origen |
 | :--- | :--- |
 | `order_id` | orders |
-| `order_purchase_timestamp`, `order_approved_at`, `order_delivered_carrier_date`, `order_delivered_customer_date`, `order_estimated_delivery_date` | orders (Date&Time) |
+| `order_purchase_timestamp`, `order_approved_at`, `order_delivered_carrier_date`, `order_delivered_customer_date`, `order_estimated_delivery_date` | orders (texto con formato fijo `yyyy-MM-dd HH:mm:ss`) |
 | `customer_unique_id`, `customer_zip_code_prefix` (String), `customer_city`, `customer_state` | customers |
 | `total_precio`, `total_flete`, `num_items` | order_items agregado (suma, suma, máximo de `order_item_id`) |
 | `total_pagado`, `max_cuotas` | order_payments agregado (suma, máximo) |
