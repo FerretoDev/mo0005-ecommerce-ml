@@ -119,6 +119,10 @@ Para responder preguntas como:
 
 Es decir, este flujo ayuda a describir patrones y perfiles, no necesariamente a predecir un evento puntual.
 
+### Lo que se decidió (Modelo 1)
+
+k-means sobre pedidos con 6 variables: precio, flete, cuotas, días de entrega, retraso y mismo estado. Precio y flete van en logaritmo y todo se normaliza con z-score. La calificación no entra al modelo; se usa después para comparar los grupos (H4). Con k = 4 salen cuatro segmentos: compras grandes a plazos, estándar entre estados, locales rápidas y entregas problemáticas. Paso a paso y números de referencia en `documento/guia-modelo1-knime.md`.
+
 ---
 
 ## 03-Prediccion
@@ -158,6 +162,10 @@ El flujo 03-Prediccion normalmente toma la base ya preparada por ETL y arma un d
    - AUC o accuracy
 
 5. Guardar el mejor modelo o la salida con score por pedido / cliente.
+
+### Lo que se decidió (Modelo 2)
+
+Objetivo: `es_tardio`, prediciéndolo con información disponible al momento de la compra. Partición temporal: entrenamiento con compras hasta marzo de 2018 y prueba de abril a agosto de 2018. Se comparan regresión logística y Random Forest contra dos líneas base (siempre a tiempo; estados distintos = tardío). En las pruebas de referencia ganó la regresión logística (AUC 0.72). Paso a paso y números de referencia en `documento/guia-modelo2-knime.md`.
 
 ### ¿Qué se busca?
 
