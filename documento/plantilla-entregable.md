@@ -455,17 +455,45 @@ El peso, el volumen y la categoría se toman del primer ítem del pedido, igual 
 
 ## 3.4 Modelo 1 — No supervisado: segmentación con k-means
 
-**Responsable:** **Persona B**   ·   Puntos de la rúbrica: parte de los 20 de «dos modelos de ML»
+**Responsable:** **Marcos Ferreto Estrada**   ·   Puntos de la rúbrica: parte de los 20 de «dos modelos de ML»
 
-El modelo no supervisado se construyó con variables de valor, costo logístico, ubicación y tiempo de entrega, con el objetivo de distinguir perfiles de pedidos según su experiencia de servicio. La segmentación permite contrastar si los grupos diferencian el comportamiento de satisfacción y puntualidad en lugar de limitarse a la media global del conjunto.
+El modelo no supervisado agrupa los pedidos según su experiencia de compra y entrega, con k-means sobre seis variables: valor del pedido (`total_precio`), costo del flete (`total_flete`), número de cuotas (`max_cuotas`), tiempo de entrega (`dias_entrega`), retraso respecto de la fecha estimada (`dias_retraso`) y si el cliente y el vendedor están en el mismo estado (`mismo_estado`). La calificación no se usa como entrada, para que la comparación de satisfacción entre grupos (H4) no sea circular. El precio y el flete se transforman con logaritmo, porque tienen colas muy largas, y las seis variables se normalizan con puntuación z para que todas pesen lo mismo en la distancia. Ninguna de las seis tiene valores ausentes. La guía de nodos está en `documento/guia-modelo1-knime.md`.
+
+> **Nota del equipo:** las cifras de los modelos en esta sección son resultados de referencia calculados en Python (scikit-learn) con los mismos datos, variables y partición. [Reemplazar por la salida de KNIME cuando el workflow esté ejecutado; las diferencias pequeñas son normales.]
 
 ### 3.4.1 Resultados y validación
 
-Se evaluaron varios valores de k y se eligió el equilibrio entre compacidad y separación, con atención a la estabilidad del clustering y a la interpretabilidad del perfil empresarial. La validación no se limita a la métrica interna: los grupos deben ofrecer perfiles útiles para la toma de decisiones de logística y servicio al cliente.
+Se probaron valores de k entre 2 y 8 y se compararon con dos criterios: la inercia (método del codo) y el coeficiente de silueta, calculado sobre una muestra aleatoria de 10 000 pedidos.
+
+| k | Inercia | Silueta |
+| ---: | ---: | ---: |
+| 2 | 444 062 | 0.272 |
+| 3 | 368 642 | 0.287 |
+| **4** | **301 593** | **0.305** |
+| 5 | 273 977 | 0.272 |
+| 6 | 253 415 | 0.231 |
+| 7 | 240 525 | 0.230 |
+| 8 | 222 060 | 0.221 |
+
+Se eligió **k = 4**: tiene la silueta más alta y coincide con el codo, porque de 4 a 5 grupos la inercia baja mucho menos que de 3 a 4. El agrupamiento es estable: con cinco semillas distintas se obtiene prácticamente la misma asignación (índice de Rand ajustado de 0.999 o más). Una silueta de 0.30 indica una estructura moderada: los grupos existen, pero sus fronteras no son nítidas, por lo que se usan para describir y priorizar, no como categorías rígidas.
+
+**Análisis de sensibilidad.** Como `dias_entrega` y `dias_retraso` solo se conocen después de la entrega, se repitió el modelo con las cuatro variables disponibles al momento de la compra (precio, flete, cuotas y mismo estado). En ese caso el mejor valor es k = 3 (silueta 0.391), pero las calificaciones de los grupos apenas varían, entre 4.00 y 4.29. Es decir, la segmentación comercial casi no distingue la satisfacción; lo que la distingue es la experiencia de entrega.
 
 ### 3.4.2 Perfil e interpretación de los segmentos
 
-Los segmentos se interpretan a partir del valor del pedido, la gravedad del retraso y la calificación promedio resultante. El análisis permite distinguir perfiles de alta exigencia, pedidos de bajo riesgo y pedidos con mayor probabilidad de mala experiencia, reforzando la lógica de acción para Olist.
+| Segmento | Pedidos | Precio (mediana, BRL) | Cuotas (prom.) | Entrega (días) | Mismo estado | Entregas tardías | Calificación | Reseñas negativas |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Compras grandes a plazos | 16 805 (17.5 %) | 219.00 | 7.1 | 12.4 | 22 % | 2.6 % | 4.16 | 12.6 % |
+| Estándar entre estados | 41 538 (43.2 %) | 69.90 | 1.9 | 12.4 | 0 % | 0.7 % | 4.31 | 8.6 % |
+| Locales rápidas | 30 519 (31.7 %) | 64.99 | 2.1 | 7.3 | 99 % | 4.5 % | 4.32 | 8.9 % |
+| Entregas problemáticas | 7 282 (7.6 %) | 98.00 | 2.8 | 35.2 | 9 % | 78.0 % | 2.58 | 53.2 % |
+
+- **Compras grandes a plazos:** pedidos de mayor valor pagados en muchas cuotas; casi siempre llegan a tiempo, pero su calificación es algo menor que la de los pedidos baratos, lo que sugiere expectativas más altas.
+- **Estándar entre estados:** el grupo más grande; pedidos baratos entre estados distintos que, pese a tardar unos 12 días, casi nunca llegan después de la fecha estimada.
+- **Locales rápidas:** cliente y vendedor en el mismo estado; la entrega más rápida y la mejor calificación.
+- **Entregas problemáticas:** 7.6 % de los pedidos, con 35 días de entrega en promedio, 78 % de entregas tardías y más de la mitad de reseñas negativas. Es el segmento donde se concentra la mala experiencia.
+
+Este último segmento coincide en gran parte con los pedidos tardíos, porque el retraso es una de las variables de entrada. Por eso el modelo debe leerse como una segmentación de la experiencia de entrega: confirma y dimensiona el patrón de H1, más que descubrir un factor nuevo.
 
 ## 3.5 Modelo 2 — Supervisado: predicción de la entrega tardía
 
@@ -473,7 +501,9 @@ Los segmentos se interpretan a partir del valor del pedido, la gravedad del retr
 
 El modelo supervisado clasifica si un pedido llegará tarde o a tiempo usando únicamente variables conocidas al momento de la compra. Este enfoque evita filtrado de información futura y permite evaluar la utilidad del modelo para actuar de forma preventiva antes de que se produzca la entrega.
 
-La comparación se basa en una línea base simple (predecir siempre a tiempo) y en una regla geográfica que usa la diferencia entre estados del cliente y del vendedor. La mejora del modelo se mide con indicadores de clasificación orientados a la clase minoritaria, especialmente AUC, precisión, exhaustividad y F1 para la entrega tardía.
+Se comparan dos algoritmos, regresión logística y Random Forest, con dos líneas base: predecir siempre «a tiempo» y una regla geográfica que marca como tardío todo pedido entre estados distintos. La mejora se mide con indicadores orientados a la clase minoritaria: AUC, precisión, exhaustividad y F1 de la entrega tardía. La guía de nodos está en `documento/guia-modelo2-knime.md`.
+
+**Variables de entrada (13):** `total_precio`, `total_flete`, `num_items`, `max_cuotas`, `relacion_precio_flete`, `product_weight_g`, `volumen_cm3`, `plazo_estimado_dias`, `mismo_estado`, `customer_state`, `seller_state`, `product_category_name_english` y el día de la semana de la compra. Se excluyen todas las variables que solo se conocen después de la compra (fechas de aprobación, despacho y entrega, días de entrega, retraso y calificación). También se excluyó el mes de compra: con solo 20 meses de datos, el modelo aprendía los picos de retraso de un único año (en las pruebas era la variable más importante del Random Forest), un patrón que no se puede asumir que se repita.
 
 ### 3.5.1 Datos de entrenamiento y de prueba
 
@@ -481,17 +511,32 @@ La partición se define en forma temporal para evitar fuga de información: el c
 
 Con un corte en el 1 de abril de 2018 sobre la fecha de compra, el entrenamiento reúne 64 052 pedidos con 9.19 % de entregas tardías y la prueba 32 092 con 5.85 %. La tasa de la prueba es menor porque el porcentaje de retrasos varió mucho entre meses: noviembre de 2017 (14.31 %), febrero de 2018 (15.97 %) y marzo de 2018 (21.36 %) fueron meses atípicos y quedan en el entrenamiento, mientras que desde abril de 2018 baja a niveles cercanos al 5 % al 10 %. Por eso el AUC y las líneas base se evalúan sobre una clase tardía menos frecuente que en el entrenamiento, y las métricas de la prueba no son directamente comparables con las del entrenamiento. La partición no es inválida, pero esta diferencia se tiene en cuenta al interpretar los resultados.
 
-### 3.5.2 Parámetros e hiperparámetros
+### 3.5.2 Preparación, parámetros e hiperparámetros
 
-Se eligieron los hiperparámetros con validación cruzada dentro del conjunto de entrenamiento, manteniendo la comparación entre modelos consistente y evitando un ajuste que dependa del conjunto final de prueba.
+Todo lo que se aprende de los datos se calcula solo con el entrenamiento y se aplica después a la prueba: la imputación de los 16 valores ausentes de peso y volumen (mediana), la normalización de las variables numéricas para la regresión logística (puntuación z) y el balanceo de clases (muestreo de igual tamaño de tardíos y puntuales, solo en entrenamiento). En los resultados de referencia, el Random Forest usó 200 árboles y un tamaño mínimo de hoja de 20, y el desbalance se trató con ponderación de clases. [Pendiente: elegir el tamaño mínimo de hoja con validación cruzada de 5 particiones estratificadas dentro del entrenamiento (comparar 10, 20 y 50) y anotar aquí el valor elegido y su AUC promedio.] La prueba temporal se usa una sola vez, al final.
 
 ## 3.6 Validación de ambos modelos
 
 **Responsable:** **Persona C**   ·   Puntos de la rúbrica: parte de los 20 — es lo que más pide la rúbrica
 
-La validación debe mostrar si los modelos aportan valor real sobre la referencia simple. En este tipo de problema, el análisis de errores es tan importante como la métrica agregada, porque un falso negativo puede dejar pasar un pedido de alto riesgo y un falso positivo puede generar alertas innecesarias.
+> **Nota del equipo:** las cifras de los modelos en esta sección son resultados de referencia calculados en Python (scikit-learn) con los mismos datos, variables y partición. [Reemplazar por la salida de KNIME cuando el workflow esté ejecutado; las diferencias pequeñas son normales.]
 
-La interpretación de los resultados se centra en la utilidad operativa para Olist: detectar pedidos con riesgo de retraso con tiempo suficiente para actuar antes de la entrega, y distinguir perfiles de clientes y pedidos con mayor probabilidad de mala experiencia.
+**Modelo 2 sobre la prueba (abril a agosto de 2018; 32 092 pedidos, 1 878 tardíos; umbral 0.5):**
+
+| Modelo | AUC | Precisión | Exhaustividad | F1 |
+| --- | ---: | ---: | ---: | ---: |
+| Línea base 1: siempre a tiempo | 0.500 | 0.000 | 0.000 | 0.000 |
+| Línea base 2: estados distintos | 0.472 | 0.053 | 0.545 | 0.097 |
+| Random Forest | 0.625 | 0.078 | 0.444 | 0.132 |
+| **Regresión logística** | **0.721** | **0.100** | **0.782** | **0.177** |
+
+La regresión logística supera a ambas líneas base y al Random Forest, y cumple el criterio propuesto para H3 (AUC mayor que 0.60 y mejor que las líneas base). Que un modelo lineal gane a uno de árboles es poco común, pero ocurre cuando la señal es débil y casi lineal, como aquí. Las variables más importantes del Random Forest fueron el plazo estimado, el costo del flete, el estado del cliente (Río de Janeiro y São Paulo), si cliente y vendedor están en el mismo estado y el precio.
+
+**Análisis de errores.** La regresión logística detecta 78 de cada 100 pedidos tardíos, pero de cada 10 pedidos que marca como tardíos solo 1 lo es (1 469 aciertos y 13 084 falsas alarmas). Un falso negativo deja pasar un pedido de riesgo y un falso positivo genera una alerta innecesaria; con esta precisión el modelo sirve para priorizar el seguimiento de pedidos, no para tomar decisiones automáticas sobre cada uno. Si se cambia el umbral, debe elegirse con la validación cruzada del entrenamiento y nunca mirando la prueba.
+
+**La regla geográfica falla en la prueba.** En el entrenamiento, los pedidos entre estados distintos llegaron tarde mucho más que los del mismo estado (11.0 % frente a 5.7 %); en la prueba la relación se invierte (5.3 % frente a 6.6 %). Por eso la línea base 2 queda por debajo del azar (AUC 0.47). La relación entre geografía y retraso no es estable en el tiempo (ver H2 en la sección 4.5).
+
+**Modelo 1.** Su validación interna (silueta, codo y estabilidad entre semillas) está en la sección 3.4.1, y su validación externa —si los grupos difieren en satisfacción— es la prueba de H4 (sección 4.5).
 
 ## 3.7 Integraciones con terceros (opcional)
 
@@ -569,7 +614,9 @@ Las medidas DAX de los KPI están en el Anexo C y las tablas de origen (v_pedido
 | 2 | El retraso se concentra en pocos estados: 23.8 % de entregas tardías en Alagoas y 19.6 % en Maranhão frente a 5.9 % en São Paulo. | KPI 1 por estado. | Revisar socios logísticos y plazos prometidos en los estados críticos. |
 | 3 | Entre estados distintos la entrega tarda casi el doble: 15.1 frente a 7.9 días. | KPI 4. | Ajustar el plazo mostrado al cliente en rutas entre estados; fomentar vendedores cercanos. |
 | 4 | La recompra es baja (3.12 %) y la diferencia según la puntualidad del primer pedido es pequeña (4.34 % vs. 2.94 %); según la reseña es aún menor (4.32 % vs. 3.71 %). | KPI 9 y 10. | Verificar si la diferencia es significativa antes de atribuirla al retraso; explorar otros factores. |
-| 5 | [Pendiente: hallazgos de los modelos (perfiles del Modelo 1 y variables más importantes del Modelo 2).] | Modelos no supervisado y supervisado. | Priorizar seguimiento y atención a pedidos con riesgo de retraso y mala experiencia. |
+| 5 | El 7.6 % de los pedidos forma un segmento de «entregas problemáticas» (35 días de entrega, 78 % tardías, calificación 2.58); la segmentación comercial, sin variables de entrega, casi no distingue la satisfacción. | Modelo 1 (sección 3.4). | Enfocar la atención al cliente en la experiencia logística más que en el tipo de compra. |
+| 6 | Con información disponible al comprar, la regresión logística anticipa el retraso mejor que las líneas base (AUC 0.72), pero con baja precisión. El plazo estimado y el flete son las señales más fuertes. | Modelo 2 (sección 3.6). | Usar la probabilidad de retraso para priorizar el seguimiento, no para decisiones automáticas. |
+| 7 | La relación entre geografía y retraso cambió en 2018: entre abril y agosto, los pedidos del mismo estado llegaron tarde más que los de estados distintos. | Sección 3.6; partición temporal. | Monitorear los KPI por región cada mes y reentrenar el modelo de forma periódica. |
 
 ## 4.5 Contraste de las hipótesis
 
@@ -579,10 +626,14 @@ Coordinan: Personas C y D.
 
 | Hipótesis | Qué se compara | Prueba propuesta | Resultado y conclusión |
 | --- | --- | --- | --- |
-| H1 | Calificación de pedidos puntuales vs. tardíos | Mann-Whitney U; chi-cuadrado para % de reseñas negativas | La diferencia descriptiva (4.30 frente a 2.57; 9.2 % frente a 53.9 % de reseñas negativas) es consistente con H1. [Agregar el valor p de la prueba.] |
-| H2 | % de entregas tardías por región y por mismo estado / estados distintos | Chi-cuadrado de independencia | El patrón descriptivo (23.8 % en Alagoas frente a 5.0 % en Paraná; 15.1 frente a 7.9 días) es consistente con H2. [Agregar el valor p de la prueba.] |
-| H3 | Desempeño del modelo vs. línea base | AUC, precisión, exhaustividad y F1 de la clase tardía | [Pendiente: resultados del Modelo 2 frente a las dos líneas base.] |
-| H4 | Calificación promedio entre los grupos del Modelo 1 | Kruskal-Wallis o ANOVA | [Pendiente: calificación promedio por grupo del Modelo 1 y resultado de la prueba.] |
+| H1 | Calificación de pedidos puntuales vs. tardíos | Mann-Whitney U; chi-cuadrado para % de reseñas negativas | Se confirma. Calificación 4.30 frente a 2.57 (Mann-Whitney U = 149 338 900, p < 0.001; correlación biserial de rangos 0.55, efecto grande). Reseñas negativas 9.2 % frente a 53.9 % (χ² = 12 589, gl = 1, p < 0.001; V de Cramér 0.36). |
+| H2 | % de entregas tardías por región y por mismo estado / estados distintos | Chi-cuadrado de independencia | Se confirma para el periodo completo, con un matiz temporal. Por estado del cliente: χ² = 1 621, gl = 26, p < 0.001 (V = 0.13). Mismo estado frente a distinto: 6.0 % frente a 9.2 % de tardíos (χ² = 301, gl = 1, p < 0.001; V = 0.06, efecto pequeño). La dirección no es estable: hasta marzo de 2018, 5.7 % frente a 11.0 %; de abril a agosto de 2018 se invierte, 6.6 % frente a 5.3 % (χ² = 22.8, p < 0.001). |
+| H3 | Desempeño del modelo vs. línea base | AUC, precisión, exhaustividad y F1 de la clase tardía | Se confirma. La regresión logística obtiene AUC 0.72 en la prueba temporal, frente a 0.50 y 0.47 de las líneas base, y supera el umbral de 0.60. Su precisión es baja (0.10). [Confirmar con la salida de KNIME.] |
+| H4 | Calificación promedio entre los grupos del Modelo 1 | Kruskal-Wallis o ANOVA | Se confirma, con una advertencia. Las calificaciones de los cuatro grupos van de 2.58 a 4.32 (Kruskal-Wallis H = 7 789, p < 0.001). La diferencia se debe sobre todo al grupo de entregas problemáticas, que se forma con las variables de retraso; con solo las variables de compra la diferencia es pequeña (de 4.00 a 4.29; H = 507). [Confirmar con la salida de KNIME.] |
+
+Los valores de las pruebas se calcularon en Python sobre `knime/datos/ordenes_etl.csv`, excluyendo los 642 pedidos sin reseña en las pruebas de calificación.
+
+**Recompra (KPI 10 y 11).** La diferencia de recompra según la puntualidad del primer pedido (4.34 % frente a 2.94 %) es estadísticamente significativa (χ² ≈ 12.3, p < 0.001), pero pequeña: 1.4 puntos porcentuales. Según la reseña del primer pedido (4.32 % frente a 3.71 %), apenas alcanza significancia (χ² ≈ 3.9, p ≈ 0.047). Ambas pruebas se calcularon a partir de los conteos y porcentajes de `datos/resultados_kpis.txt`, por lo que el valor es aproximado.
 
 **Dos cuidados al interpretar.** (1) Con muestras grandes casi cualquier diferencia resulta estadísticamente significativa; además del valor p hay que reportar el tamaño de la diferencia (puntos porcentuales o puntos de calificación) y si importa para el negocio. (2) Las entregas tardías se concentran en ciertas regiones; para H1 y para los KPI 10 y 11 conviene comparar también dentro de cada región, para no atribuir al retraso lo que podría deberse a la región.
 
@@ -591,9 +642,9 @@ Coordinan: Personas C y D.
 **Responsable:** **Todos**
 
 - **Hipótesis central y H1.** Las entregas tardías se asocian con una caída de 1.73 puntos en la calificación promedio (4.30 frente a 2.57) y con una proporción mucho mayor de reseñas negativas (9.2 % frente a 53.9 %). La evidencia sugiere que la puntualidad no es solo un indicador operativo, sino un factor asociado con la percepción del servicio.
-- **H2.** El retraso se concentra en regiones específicas y aumenta cuando cliente y vendedor están en estados distintos. Esa diferencia sugiere que la localización y la logística entre estados son un factor importante del problema.
-- **Fidelización.** La recompra es baja y la diferencia por puntualidad del primer pedido es pequeña (1.4 puntos porcentuales: 4.34 % frente a 2.94 %) y debe contrastarse estadísticamente antes de atribuirla al retraso, por lo que la fidelización requiere un enfoque más amplio que solo la entrega a tiempo.
-- **Modelos (H3 y H4).** Los modelos deben interpretarse como herramientas de apoyo para priorizar la atención y la intervención logística. La segmentación y la predicción permiten distinguir perfiles y pedidos con riesgo, aunque la causalidad aún requiere análisis adicional y datos más ricos.
+- **H2.** El retraso se concentra en regiones específicas y, en el periodo completo, es mayor cuando cliente y vendedor están en estados distintos. Sin embargo, esa relación no fue estable: entre abril y agosto de 2018 se invirtió. La localización importa, pero su efecto cambia con el tiempo, por lo que las decisiones logísticas deben basarse en un monitoreo continuo y no en una regla fija.
+- **Fidelización.** La recompra es baja (3.12 %). La diferencia por puntualidad del primer pedido es estadísticamente significativa, pero pequeña (1.4 puntos porcentuales: 4.34 % frente a 2.94 %), por lo que la fidelización requiere un enfoque más amplio que solo la entrega a tiempo.
+- **Modelos (H3 y H4).** La regresión logística anticipa el retraso al momento de la compra mejor que las líneas base (AUC 0.72), aunque con baja precisión, por lo que sirve para priorizar seguimiento y no para decisiones automáticas. La segmentación identifica un 7.6 % de pedidos con muy mala experiencia de entrega; la satisfacción depende sobre todo de la logística, no del tipo de compra. Ninguno de los dos modelos establece causalidad.
 
 **Recomendaciones para Olist:**
 
@@ -971,8 +1022,8 @@ CALCULATE([Tasa Nueva Compra],
 | Calidad | Statistics, Missing Value, Duplicate Row Filter, Row Filter, Rule Engine | Documentar cada filtro con su conteo de filas antes y después. |
 | Transformación | Joiner, GroupBy, Date&Time Difference, Math Formula, Rule Engine, String Manipulation | Reproduce la vista v_pedidos_base (Anexo A); verificar que los conteos coincidan. |
 | Preparación de modelos | Column Filter, Normalizer, One to Many (codificación), Row Splitter por fecha | Partición temporal: entrenamiento hasta marzo de 2018, prueba de abril a agosto de 2018. |
-| Modelo 1 | k-Means (varios valores de k en un ciclo), Silhouette Coefficient, Cluster Assigner, GroupBy para el perfil | Elegir k con codo y silueta; repetir con varias semillas. |
-| Modelo 2 | Random Forest Learner y Predictor, Logistic Regression Learner y Predictor, Scorer, ROC Curve | Para el desbalance, probar ponderación de clases o el nodo SMOTE solo sobre entrenamiento. |
+| Modelo 1 | Math Formula (logaritmo), Normalizer, Counting Loop Start, k-Means, Row Sampling, Silhouette Coefficient, Loop End, GroupBy para el perfil, Kruskal-Wallis o One-way ANOVA | k de 2 a 8; se eligió k = 4 por silueta y codo; repetir con varias semillas. Detalle en `documento/guia-modelo1-knime.md`. |
+| Modelo 2 | Row Splitter (corte 2018-04-01), Missing Value y Missing Value (Apply), Equal Size Sampling, Normalizer y Normalizer (Apply), Random Forest Learner y Predictor, Logistic Regression Learner y Predictor, Rule Engine (líneas base), Scorer, Binary Classification Inspector | Balanceo solo sobre entrenamiento. Detalle en `documento/guia-modelo2-knime.md`. |
 | Validación | Scorer, ROC Curve, Cross Validation (X-Partitioner / X-Aggregator) | Validación cruzada solo dentro del conjunto de entrenamiento. |
 | Salida a Power BI | DB Writer o CSV Writer | Escribir segmentos y probabilidades junto con el identificador del pedido. |
 
