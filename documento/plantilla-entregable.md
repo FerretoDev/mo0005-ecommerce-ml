@@ -479,6 +479,8 @@ La comparación se basa en una línea base simple (predecir siempre a tiempo) y 
 
 La partición se define en forma temporal para evitar fuga de información: el conjunto de entrenamiento cubre el período inicial y la prueba cubre el período más reciente. La clase tardía se mantiene minoritaria, por lo que se prioriza la evaluación basada en sensibilidad y AUC sobre la exactitud.
 
+Con un corte en el 1 de abril de 2018 sobre la fecha de compra, el entrenamiento reúne 64 052 pedidos con 9.19 % de entregas tardías y la prueba 32 092 con 5.85 %. La tasa de la prueba es menor porque el porcentaje de retrasos varió mucho entre meses: noviembre de 2017 (14.31 %), febrero de 2018 (15.97 %) y marzo de 2018 (21.36 %) fueron meses atípicos y quedan en el entrenamiento, mientras que desde abril de 2018 baja a niveles cercanos al 5 % al 10 %. Por eso el AUC y las líneas base se evalúan sobre una clase tardía menos frecuente que en el entrenamiento, y las métricas de la prueba no son directamente comparables con las del entrenamiento. La partición no es inválida, pero esta diferencia se tiene en cuenta al interpretar los resultados.
+
 ### 3.5.2 Parámetros e hiperparámetros
 
 Se eligieron los hiperparámetros con validación cruzada dentro del conjunto de entrenamiento, manteniendo la comparación entre modelos consistente y evitando un ajuste que dependa del conjunto final de prueba.
