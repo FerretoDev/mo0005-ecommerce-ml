@@ -150,3 +150,16 @@ Una fila por pedido `delivered` con fecha de entrega entre 2017-01-01 y 2018-08-
 | `volumen_cm3` | largo x alto x ancho |
 
 Nulos que quedan: `review_promedio` 642, peso, medidas y `volumen_cm3` 16 cada uno, `order_approved_at` 14 y `order_delivered_carrier_date` 1.
+
+---
+
+## 📤 Salida del Modelo 1: `knime/datos/segmentos_modelo1.csv`
+
+Una fila por pedido de `ordenes_etl.csv` (**96 144 filas**, 2 columnas, ~4,6 MB). Lo genera `02-Clustering` y está versionado en Git.
+
+| Columna | Descripción |
+| :--- | :--- |
+| `order_id` | Pedido (llave para unir con `ordenes_etl.csv`) |
+| `Cluster` | Grupo del k-means (k = 4): `cluster_0` a `cluster_3` |
+
+Con la semilla 2 de KNIME, la asignación es: `cluster_0` 41 511 pedidos (estándar entre estados), `cluster_1` 7 357 (entregas problemáticas: 35 días, 77 % tardías, calificación 2,6), `cluster_2` 30 509 (locales rápidas) y `cluster_3` 16 767 (compras grandes a plazos). Los números de grupo pueden cambiar si se cambia la semilla; el perfil de cada grupo no.

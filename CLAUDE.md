@@ -92,7 +92,7 @@ El archivo `.gitignore` ya está configurado para protegerte, pero ten presente 
 - **/datos:** Scripts SQL de PostgreSQL (`schema.sql`, `views.sql`), `resultados_kpis.txt` y notas del origen de los datos.
 - **/knime/datos:** Datasets `.csv` de Olist (versionados). Van dentro de `knime/` porque KNIME no permite rutas relativas fuera de su workspace. La salida `ordenes_etl.csv` (96 144 pedidos, unos 33 MB) también está versionada para que 02-Clustering y 03-Prediccion la lean sin correr el ETL; si cambia el ETL, regenerarla y commitearla con `git -c core.autocrlf=false add` para que Git no reescriba los finales de línea.
 - **/knime/01-ETL:** Flujos de limpieza, cruces y preprocesamiento (ver `documento/knime-carga-csv.md`).
-- **/knime/02-Clustering:** Modelo 1, no supervisado: k-means sobre pedidos (ver `documento/guia-modelo1-knime.md`).
+- **/knime/02-Clustering:** Modelo 1, no supervisado: k-means sobre pedidos (ver `documento/guia-modelo1-knime.md`). Salida: `knime/datos/segmentos_modelo1.csv`, versionada.
 - **/knime/03-Prediccion:** Modelo 2, supervisado: predicción de entrega tardía (ver `documento/guia-modelo2-knime.md`).
 - **/knime/04-KPIs:** Automatización de métricas de negocio para Power BI.
 - **/kpis:** Documentos de texto o tablas con las fórmulas matemáticas y lógica de negocio.
@@ -122,3 +122,8 @@ El archivo `.gitignore` ya está configurado para protegerte, pero ten presente 
 - **Códigos postales siempre como String:** `customer_zip_code_prefix`, `seller_zip_code_prefix` y `geolocation_zip_code_prefix` se leen como **String** para no perder ceros a la izquierda (`01037`). Si KNIME los vuelve a adivinar como Integer, se corrige en la sección *Transformation* del CSV Reader.
 - **Mover o renombrar los CSV con Git:** usar `git -c core.autocrlf=false add -A ...` y `git -c core.autocrlf=false commit`. Con `autocrlf=true` Git convierte CRLF a LF y reescribe los 125 MB en vez de registrar un renombrado.
 - **Antes de guardar en KNIME:** Reset (F8) a todos los nodos y cerrar KNIME. Si se edita el XML de un workflow desde fuera de KNIME, KNIME debe estar cerrado.
+- **Column Filter y Normalizer: la lista de excluidas manda.** Con la opción *EnforceExclusion* y la lista de excluidas vacía, el nodo deja pasar **todas** las columnas y la lista de incluidas no filtra nada. Al armar o editar estos nodos a mano, poner explícitamente en excluidas todo lo que no se quiere.
+- **Math Formula, bandera de reemplazo (archivo del nodo):** `append_column = true` significa **reemplazar** la columna indicada y `append_column = false` significa **añadir una columna nueva** con ese nombre. Parece al revés; si se ve una columna extra al final de la tabla, es esto.
+- **Date&Time Difference no da decimales con granularidad Day.** Medir en `Second` y dividir entre 86 400 con un Math Formula.
+- **Los datos de ejecución no se suben:** el `.gitignore` ya ignora `knime/**/port_*/` e `internal/`, pero igual hay que hacer Reset (F8) antes de guardar; con los datos, una carpeta de workflow pesa cientos de MB.
+- **Nodos escritos a mano:** los nombres de las opciones salen de las clases de KNIME y pueden fallar al cargar (ejemplos reales: el modo del Normalizer es `Z_SCORE`, no `ZSCORE`; un Row Filter nuevo sin `filterValueParameters` no ejecuta). Si un nodo sale en rojo, el mensaje está en `knime/.metadata/knime/knime.log`.

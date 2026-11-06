@@ -60,6 +60,9 @@ Los Date&Time Difference miden en segundos porque con granularidad Day KNIME no 
 ## Formato de las fechas en `ordenes_etl.csv`
 KNIME escribe las fechas sin los segundos cuando valen cero (`2018-06-11T21:17` en lugar de `2018-06-11T21:17:00`), y en `order_delivered_carrier_date` eso ocurría en 28 519 filas. Para que cualquier lector (Power BI, Python) las interprete igual, un nodo **Date&Time to String** (#45) convierte las 5 columnas de fecha a texto con formato fijo `yyyy-MM-dd HH:mm:ss`, antes del CSV Writer. Comprobado: las 5 columnas cumplen ese formato en todas sus filas no vacías. Ejemplo: `2017-09-13 08:59:02`; la fecha estimada sale siempre a las `00:00:00`.
 
+## Siguiente workflow: `02-Clustering`
+Lee `knime/datos/ordenes_etl.csv` (la salida de este ETL) y escribe `knime/datos/segmentos_modelo1.csv`. Nodos, resultados y errores comunes en [guia-modelo1-knime.md](guia-modelo1-knime.md), sección 7.
+
 ## Antes de guardar y commitear
 Reset (F8) a todos los nodos (con los datos guardados `knime/01-ETL` pesa cientos de MB; reseteado, menos de 1 MB), guardar, cerrar KNIME y:
 ```bash
