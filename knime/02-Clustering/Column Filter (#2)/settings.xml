@@ -22,7 +22,26 @@
                 <entry key="9" type="xstring" value="customer_state"/>
             </config>
             <config key="excluded_names">
-                <entry key="array-size" type="xint" value="0"/>
+                <entry key="array-size" type="xint" value="19"/>
+                <entry key="0" type="xstring" value="order_purchase_timestamp"/>
+                <entry key="1" type="xstring" value="order_approved_at"/>
+                <entry key="2" type="xstring" value="order_delivered_carrier_date"/>
+                <entry key="3" type="xstring" value="order_delivered_customer_date"/>
+                <entry key="4" type="xstring" value="order_estimated_delivery_date"/>
+                <entry key="5" type="xstring" value="customer_unique_id"/>
+                <entry key="6" type="xstring" value="customer_zip_code_prefix"/>
+                <entry key="7" type="xstring" value="customer_city"/>
+                <entry key="8" type="xstring" value="num_items"/>
+                <entry key="9" type="xstring" value="total_pagado"/>
+                <entry key="10" type="xstring" value="seller_state"/>
+                <entry key="11" type="xstring" value="product_weight_g"/>
+                <entry key="12" type="xstring" value="product_length_cm"/>
+                <entry key="13" type="xstring" value="product_height_cm"/>
+                <entry key="14" type="xstring" value="product_width_cm"/>
+                <entry key="15" type="xstring" value="product_category_name_english"/>
+                <entry key="16" type="xstring" value="plazo_estimado_dias"/>
+                <entry key="17" type="xstring" value="relacion_precio_flete"/>
+                <entry key="18" type="xstring" value="volumen_cm3"/>
             </config>
             <entry key="enforce_option" type="xstring" value="EnforceExclusion"/>
             <config key="name_pattern">
