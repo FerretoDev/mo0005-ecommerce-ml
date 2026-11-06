@@ -459,7 +459,7 @@ El peso, el volumen y la categoría se toman del primer ítem del pedido, igual 
 
 El modelo no supervisado agrupa los pedidos según su experiencia de compra y entrega, con k-means sobre seis variables: valor del pedido (`total_precio`), costo del flete (`total_flete`), número de cuotas (`max_cuotas`), tiempo de entrega (`dias_entrega`), retraso respecto de la fecha estimada (`dias_retraso`) y si el cliente y el vendedor están en el mismo estado (`mismo_estado`). La calificación no se usa como entrada, para que la comparación de satisfacción entre grupos (H4) no sea circular. El precio y el flete se transforman con logaritmo, porque tienen colas muy largas, y las seis variables se normalizan con puntuación z para que todas pesen lo mismo en la distancia. Ninguna de las seis tiene valores ausentes. La guía de nodos está en `documento/guia-modelo1-knime.md`.
 
-> **Nota del equipo:** las cifras de los modelos en esta sección son resultados de referencia calculados en Python (scikit-learn) con los mismos datos, variables y partición. [Reemplazar por la salida de KNIME cuando el workflow esté ejecutado; las diferencias pequeñas son normales.]
+> **Nota del equipo:** el perfil de los segmentos (3.4.2) y la prueba de H4 salen del workflow de KNIME (`02-Clustering`, k = 4, semilla 2; asignación en `knime/datos/segmentos_modelo1.csv`). La tabla de k de 2 a 8 (3.4.1) y el análisis de sensibilidad son resultados de referencia calculados en Python (scikit-learn); las diferencias pequeñas con KNIME, por ejemplo 7 357 frente a 7 423 pedidos en el grupo problemático, son normales. La silueta de k = 4 también se confirmó en KNIME (3.4.1).
 
 ### 3.4.1 Resultados y validación
 
@@ -475,7 +475,7 @@ Se probaron valores de k entre 2 y 8 y se compararon con dos criterios: la inerc
 | 7 | 240 525 | 0.230 |
 | 8 | 222 060 | 0.221 |
 
-Se eligió **k = 4**: tiene la silueta más alta y coincide con el codo, porque de 4 a 5 grupos la inercia baja mucho menos que de 3 a 4. El agrupamiento es estable: con cinco semillas distintas se obtiene prácticamente la misma asignación (índice de Rand ajustado de 0.999 o más). Una silueta de 0.30 indica una estructura moderada: los grupos existen, pero sus fronteras no son nítidas, por lo que se usan para describir y priorizar, no como categorías rígidas.
+Se eligió **k = 4**: tiene la silueta más alta y coincide con el codo, porque de 4 a 5 grupos la inercia baja mucho menos que de 3 a 4. El agrupamiento es estable: con cinco semillas distintas se obtiene prácticamente la misma asignación (índice de Rand ajustado de 0.999 o más). Una silueta de 0.30 indica una estructura moderada: los grupos existen, pero sus fronteras no son nítidas, por lo que se usan para describir y priorizar, no como categorías rígidas. En KNIME, con el nodo Silhouette Coefficient sobre las primeras 10 000 filas de la tabla, la silueta global de k = 4 es 0.297, casi igual que la de referencia (0.305); por grupo va de 0.11 a 0.36, así que hay un grupo que se separa con claridad y otros que se solapan más.
 
 **Análisis de sensibilidad.** Como `dias_entrega` y `dias_retraso` solo se conocen después de la entrega, se repitió el modelo con las cuatro variables disponibles al momento de la compra (precio, flete, cuotas y mismo estado). En ese caso el mejor valor es k = 3 (silueta 0.391), pero las calificaciones de los grupos apenas varían, entre 4.00 y 4.29. Es decir, la segmentación comercial casi no distingue la satisfacción; lo que la distingue es la experiencia de entrega.
 
@@ -483,15 +483,15 @@ Se eligió **k = 4**: tiene la silueta más alta y coincide con el codo, porque 
 
 | Segmento | Pedidos | Precio (mediana, BRL) | Cuotas (prom.) | Entrega (días) | Mismo estado | Entregas tardías | Calificación | Reseñas negativas |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Compras grandes a plazos | 16 805 (17.5 %) | 219.00 | 7.1 | 12.4 | 22 % | 2.6 % | 4.16 | 12.6 % |
-| Estándar entre estados | 41 538 (43.2 %) | 69.90 | 1.9 | 12.4 | 0 % | 0.7 % | 4.31 | 8.6 % |
-| Locales rápidas | 30 519 (31.7 %) | 64.99 | 2.1 | 7.3 | 99 % | 4.5 % | 4.32 | 8.9 % |
-| Entregas problemáticas | 7 282 (7.6 %) | 98.00 | 2.8 | 35.2 | 9 % | 78.0 % | 2.58 | 53.2 % |
+| Compras grandes a plazos | 16 767 (17.4 %) | 219.00 | 7.1 | 12.4 | 22 % | 2.6 % | 4.16 | 12.7 % |
+| Estándar entre estados | 41 511 (43.2 %) | 69.90 | 1.9 | 12.4 | 0 % | 0.7 % | 4.31 | 8.6 % |
+| Locales rápidas | 30 509 (31.7 %) | 64.99 | 2.1 | 7.3 | 99 % | 4.5 % | 4.32 | 8.9 % |
+| Entregas problemáticas | 7 357 (7.7 %) | 98.00 | 2.8 | 35.1 | 9 % | 77.4 % | 2.59 | 52.8 % |
 
 - **Compras grandes a plazos:** pedidos de mayor valor pagados en muchas cuotas; casi siempre llegan a tiempo, pero su calificación es algo menor que la de los pedidos baratos, lo que sugiere expectativas más altas.
 - **Estándar entre estados:** el grupo más grande; pedidos baratos entre estados distintos que, pese a tardar unos 12 días, casi nunca llegan después de la fecha estimada.
 - **Locales rápidas:** cliente y vendedor en el mismo estado; la entrega más rápida y la mejor calificación.
-- **Entregas problemáticas:** 7.6 % de los pedidos, con 35 días de entrega en promedio, 78 % de entregas tardías y más de la mitad de reseñas negativas. Es el segmento donde se concentra la mala experiencia.
+- **Entregas problemáticas:** 7.7 % de los pedidos, con 35 días de entrega en promedio, 77 % de entregas tardías y más de la mitad de reseñas negativas. Es el segmento donde se concentra la mala experiencia.
 
 Este último segmento coincide en gran parte con los pedidos tardíos, porque el retraso es una de las variables de entrada. Por eso el modelo debe leerse como una segmentación de la experiencia de entrega: confirma y dimensiona el patrón de H1, más que descubrir un factor nuevo.
 
