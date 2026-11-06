@@ -388,7 +388,7 @@ El análisis se desarrolla como un flujo por etapas en KNIME, desde la obtenció
 
 | Etapa | Qué se hace | Workflow group |
 | --- | --- | --- |
-| 1. Obtención | Lectura de los nueve archivos desde la base de datos del proyecto. | 01-ETL |
+| 1. Obtención | Lectura de los nueve archivos con un nodo CSV Reader por archivo, desde la copia versionada en `knime/datos/` (ruta relativa al workflow). Si se usa la base de datos del proyecto, solo cambia el nodo de entrada (PostgreSQL Connector + DB Table Selector); el resto del flujo es igual. | 01-ETL |
 | 2. Calidad | Perfilado de los datos (nulos, duplicados, rangos y consistencia de fechas) y aplicación de reglas (3.2). | 01-ETL |
 | 3. Transformación | Integración de las tablas a nivel de pedido y creación de variables derivadas (3.3). | 01-ETL |
 | 4. Modelado | Construcción de los dos modelos: no supervisado (3.4) y supervisado (3.5). | 02-Clustering y 03-Prediccion |
@@ -405,6 +405,8 @@ Se perfilaron los datos (nulos, duplicados, rangos y consistencia de fechas) y s
 | --- | --- | --- | --- |
 | Cobertura temporal desigual | orders | Se trabaja con pedidos entregados, con fecha de entrega entre enero de 2017 y agosto de 2018 (96 144 pedidos). | Baja cobertura de 2016 y de septiembre y octubre de 2018. |
 | Más de una reseña por pedido | order_reviews | Se usa una calificación por pedido: el promedio cuando hay más de una. | Evitar duplicar pedidos al integrar tablas. |
+| Códigos postales con ceros a la izquierda | customers, sellers, geolocation | Se leen como texto (String) y no como número. | Un prefijo como `01037` leído como entero pasa a `1037` y no coincidiría en los cruces por código postal. |
+| Pedidos entregados sin fecha de entrega | orders | 8 pedidos con `order_status = delivered` no tienen `order_delivered_customer_date`; su `dias_entrega` y `dias_retraso` quedan vacíos y se excluyen del cálculo de KPI de entrega. | No se puede medir la puntualidad sin fecha real de entrega. |
 | Atributos de producto ausentes | products | Se tratan como categoría «desconocida». | Conservar los pedidos sin perder registros. |
 | Valores atípicos e inconsistencias | Varias tablas | Se documentan, limitan o excluyen según el caso. | Mantener la calidad analítica sin perder la población del estudio. |
 
@@ -432,6 +434,18 @@ Se integraron las tablas a nivel de pedido y se crearon las siguientes variables
 | primer_pedido_tardio | es_tardio del primer pedido de cada cliente | KPI de recompra según puntualidad. |
 
 La vista base mantiene una fila por pedido, con agregación del valor total y del flete, y con una única referencia de vendedor y producto basada en el primer ítem del pedido. Esta decisión evita duplicar el pedido al integrar las tablas de items, pagos y reseñas.
+
+**Implementación en KNIME (workflow 01-ETL, versión base).** Los nueve CSV se leen con nodos CSV Reader. Items, pagos y reseñas se agregan por `order_id` con GroupBy (suma de precio y flete y máximo de `order_item_id` como número de ítems; suma de pagos y máximo de cuotas; promedio de calificación). Luego cuatro Joiner unen orders con customers y con esas tres agregaciones (Left Outer, para no perder pedidos). Un Row Filter conserva los pedidos `delivered`, un Column Renamer deja nombres claros, String to Date&Time convierte las fechas y dos nodos Date&Time Difference calculan `dias_entrega` y `dias_retraso`. El resultado se escribe en `knime/datos/ordenes_etl.csv` para los workflows 02 y 03.
+
+| Columna del ETL en KNIME | Equivale a |
+| --- | --- |
+| total_precio, total_flete | valor_items, flete_total |
+| num_items | num_items |
+| total_pagado, max_cuotas | valor_pagado, cuotas |
+| review_promedio | review_score_pedido |
+| dias_entrega, dias_retraso | dias_entrega, dias_retraso |
+
+Esta versión base aún no aplica la ventana de fechas de entrega (enero de 2017 a agosto de 2018), por lo que produce 96 478 pedidos entregados frente a los 96 144 de v_pedidos_base. Tampoco incluye todavía es_tardio, plazo_estimado_dias, mismo_estado, relacion_precio_flete, peso, volumen ni la categoría del producto; se agregarán uniendo products, sellers y la traducción de categorías. [Pendiente: completar y verificar que los conteos coincidan con v_pedidos_base.]
 
 ## 3.4 Modelo 1 — No supervisado: segmentación con k-means
 
@@ -482,6 +496,8 @@ No se incorporaron integraciones con terceros. El análisis se basa en variables
 **Responsable:** **Persona B**   ·   Puntos de la rúbrica: (incluida en los 15 del flujo)
 
 La evidencia del flujo requiere mostrar que la cadena completa corre de manera coherente desde la lectura de datos hasta la validación de resultados. En el proyecto, la prueba de ejecución se apoya en la propia validación relacional de tablas, las vistas analíticas y los resultados del cálculo de KPI, que son consistentes con la población de análisis y la lógica de negocio definida.
+
+**Ejecución del workflow 01-ETL (versión base).** El flujo se ejecutó completo en KNIME con los 16 nodos de lectura, agregación y unión en estado ejecutado. Tras los cuatro Joiner la tabla tiene 99 441 filas (una por pedido, igual que orders, sin duplicados) y, tras el filtro de pedidos entregados, 96 478 filas, que se escriben en ordenes_etl.csv. De ellas, 6 534 (6.8 %) llegaron después de la fecha estimada; este porcentaje difiere del 8.07 % de v_pedidos_base porque la versión base aún no aplica la ventana de fechas. [Pendiente: capturas de pantalla del flujo ejecutado.]
 
 ---
 
@@ -943,7 +959,7 @@ CALCULATE([Tasa Nueva Compra],
 
 | Etapa | Nodos orientativos | Notas |
 | --- | --- | --- |
-| Obtención | PostgreSQL Connector → DB Table Selector → DB Reader (uno por tabla) | Una conexión compartida; leer las nueve tablas. |
+| Obtención | PostgreSQL Connector → DB Table Selector → DB Reader (uno por tabla) | Una conexión compartida; leer las nueve tablas. Sin base de datos: un CSV Reader por archivo con ruta `../datos/<archivo>.csv` (carpeta `knime/datos/`); es lo usado en la versión base del 01-ETL, con los códigos postales como String. |
 | Calidad | Statistics, Missing Value, Duplicate Row Filter, Row Filter, Rule Engine | Documentar cada filtro con su conteo de filas antes y después. |
 | Transformación | Joiner, GroupBy, Date&Time Difference, Math Formula, Rule Engine, String Manipulation | Reproduce la vista v_pedidos_base (Anexo A); verificar que los conteos coincidan. |
 | Preparación de modelos | Column Filter, Normalizer, One to Many (codificación), Row Splitter por fecha | Partición temporal: entrenamiento hasta marzo de 2018, prueba de abril a agosto de 2018. |
