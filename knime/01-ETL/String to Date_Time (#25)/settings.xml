@@ -42,7 +42,7 @@
         </config>
         <entry key="locale" type="xstring" value="es-CR"/>
         <config key="format">
-            <entry key="temporalType" type="xstring" value="DATE"/>
+            <entry key="temporalType" type="xstring" value="DATE_TIME"/>
             <entry key="format" type="xstring" value="yyyy-MM-dd HH:mm:ss"/>
         </config>
         <entry key="validateFormatV2" type="xboolean" value="true"/>
