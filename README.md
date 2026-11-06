@@ -70,7 +70,7 @@ Los archivos que componen el dataset están en `knime/datos/` (versionados en Gi
 
 | Workflow | Estado |
 | :--- | :--- |
-| `01-ETL` | Versión base hecha: lee los 9 CSV, une orders + customers + items + pagos + reseñas, filtra `delivered`, calcula `dias_entrega` y `dias_retraso` y exporta `knime/datos/ordenes_etl.csv` (96 478 órdenes). Guía en [documento/knime-carga-csv.md](documento/knime-carga-csv.md). |
+| `01-ETL` | Hecho: lee los 9 CSV, une pedido + cliente + items + pagos + reseñas + vendedor/producto, filtra `delivered` y la ventana de entrega (2017-01 a 2018-08), calcula las variables derivadas (`es_tardio`, `dias_entrega`, `dias_retraso`, `mismo_estado`, etc.) y exporta `knime/datos/ordenes_etl.csv` (96 144 pedidos, 29 columnas; `es_tardio` = 8,07 %). Guía en [documento/knime-carga-csv.md](documento/knime-carga-csv.md). |
 | `02-Clustering` | Pendiente (RFM por `customer_unique_id`). |
 | `03-Prediccion` | Pendiente. |
 | `04-KPIs` | Pendiente. |

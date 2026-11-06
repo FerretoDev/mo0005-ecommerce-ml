@@ -80,10 +80,9 @@ El dataset base consta de 9 archivos CSV en `knime/datos/` (KNIME no permite rut
 
 ## 🚦 Estado Actual
 
-- **`01-ETL` (versión base, hecha):** 9 CSV Reader → GroupBy por `order_id` (items, pagos, reseñas) → Joiners (Orders + Customers + agregados) → Row Filter `delivered` → Column Renamer → String to Date&Time → 2 Date&Time Difference (`dias_entrega`, `dias_retraso`) → CSV Writer `knime/datos/ordenes_etl.csv` (96 478 filas).
-- **Pendiente en el ETL** (según `datos/views.sql` y `knime/Flujo con KNIME.md`): ventana de fechas de entrega 2017-01 a 2018-08, `es_tardio`, `plazo_estimado_dias`, `mismo_estado`, `relacion_precio_flete`, categoría del producto, `peso_g` y `volumen_cm3`. Hoy no se unen Products, Sellers ni Translation.
-- **Sin base de datos todavía:** KNIME lee los CSV directamente. `02-Clustering`, `03-Prediccion` y `04-KPIs` pendientes.
-- **Trampas conocidas:** los códigos postales deben ser String; 8 órdenes `delivered` no tienen fecha de entrega (`dias_retraso` vacío); mover CSV con `core.autocrlf=false`.
+- **`01-ETL` (hecho, 39 nodos):** 9 CSV Reader → GroupBy por `order_id` (items, pagos, reseñas) → Joiners → Row Filter `delivered` → rama del primer ítem (sellers, products, traducción) → `mismo_estado` → fechas Date&Time → ventana de entrega 2017-01 a 2018-08 → Date&Time Difference en segundos + Math Formula `/86400` → `es_tardio` → `relacion_precio_flete`, `volumen_cm3` → Column Filter → Missing Value → CSV Writer `knime/datos/ordenes_etl.csv` (**96 144 filas, 29 columnas, `es_tardio` = 0,0807**, igual que `datos/views.sql`).
+- **Aún no hay:** `02-Clustering`, `03-Prediccion`, `04-KPIs`. La salida del ETL es un CSV ignorado en Git; hay que ejecutar `01-ETL` para generarlo.
+- **Trampas conocidas:** los códigos postales deben ser String; los Date&Time Difference con granularidad Day no dan decimales (medir en segundos y dividir entre 86 400); mover CSV con `core.autocrlf=false`; resetear nodos antes de guardar (el `.gitignore` ya ignora `port_*/` e `internal/`).
 
 ---
 

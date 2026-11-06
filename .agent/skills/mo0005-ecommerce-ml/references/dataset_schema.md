@@ -130,17 +130,23 @@ Tabla auxiliar para traducción de nombres de categoría.
 
 ## 📤 Salida del ETL: `knime/datos/ordenes_etl.csv`
 
-Una fila por pedido `delivered` (96 478 filas). Lo genera `01-ETL`; está ignorado en Git y se regenera ejecutando el flujo.
+Una fila por pedido `delivered` con fecha de entrega entre 2017-01-01 y 2018-08-31 (**96 144 filas**, 29 columnas). Lo genera `01-ETL`; está ignorado en Git y se regenera ejecutando el flujo. Equivale a `v_pedidos_base` de `datos/views.sql`.
 
 | Columna | Origen |
 | :--- | :--- |
-| `order_id`, `customer_id`, `order_status` | orders |
-| `order_purchase_timestamp`, `order_approved_at`, `order_delivered_carrier_date`, `order_delivered_customer_date`, `order_estimated_delivery_date` | orders (como fecha) |
+| `order_id` | orders |
+| `order_purchase_timestamp`, `order_approved_at`, `order_delivered_carrier_date`, `order_delivered_customer_date`, `order_estimated_delivery_date` | orders (Date&Time) |
 | `customer_unique_id`, `customer_zip_code_prefix` (String), `customer_city`, `customer_state` | customers |
 | `total_precio`, `total_flete`, `num_items` | order_items agregado (suma, suma, máximo de `order_item_id`) |
 | `total_pagado`, `max_cuotas` | order_payments agregado (suma, máximo) |
-| `review_promedio` | order_reviews agregado (promedio) |
+| `review_promedio` | order_reviews agregado (promedio; vacío en 642 pedidos sin reseña) |
+| `seller_state`, `product_weight_g`, `product_length_cm`, `product_height_cm`, `product_width_cm`, `product_category_name_english` | primer ítem del pedido (sellers, products, traducción; categoría ausente = `desconocida`) |
+| `mismo_estado` | 1 si `customer_state = seller_state` |
+| `plazo_estimado_dias` | fecha estimada menos compra, en días |
 | `dias_entrega` | entrega al cliente menos compra, en días |
 | `dias_retraso` | entrega al cliente menos fecha estimada, en días (positivo = tarde) |
+| `es_tardio` | 1 si `dias_retraso > 0` (promedio 0,0807) |
+| `relacion_precio_flete` | `total_flete / total_precio` |
+| `volumen_cm3` | largo x alto x ancho |
 
-Nota: 8 pedidos `delivered` no tienen fecha de entrega al cliente, así que `dias_entrega` y `dias_retraso` quedan vacíos.
+Nulos que quedan: `review_promedio` 642, peso, medidas y `volumen_cm3` 16 cada uno, `order_approved_at` 14 y `order_delivered_carrier_date` 1.
