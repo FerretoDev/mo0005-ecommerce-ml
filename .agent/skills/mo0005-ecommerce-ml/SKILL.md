@@ -4,7 +4,7 @@ description: >-
   Contexto operativo integral y guía técnica del proyecto MO-0005 (Análisis de Clientes E-commerce con Olist).
   Activar esta skill cuando se trabaje en el repositorio mo0005-ecommerce-ml, incluyendo el diseño y ejecución
   de flujos en KNIME Analytics Platform (ETL, Clustering, Predicción, KPIs), exploración y transformación
-  del dataset Olist, formulación de métricas de negocio, integración con PostgreSQL/Snowflake,
+  del dataset Olist, formulación de métricas de negocio, integración con PostgreSQL (Docker),
   preparación de datos para Power BI o gestión de commits y colaboración con Git/GitHub.
 ---
 
@@ -20,8 +20,8 @@ Esta skill encapsula el contexto completo, la arquitectura técnica, las restric
 - **Equipo:** 4 estudiantes universitarios (Marcos Ferreto Estrada y compañeros).
 - **Objetivos de Análisis y ML:**
   1. **ETL y Calidad de Datos (`01-ETL`):** Consolidación de tablas relacionales, manejo de valores nulos, estandarización de categorías y feature engineering.
-  2. **Segmentación de Clientes (`02-Clustering`):** Aplicación de algoritmos no supervisados (ej. K-Means, modelo RFM: Recencia, Frecuencia, Valor Monetario) para agrupar clientes por patrones de consumo.
-  3. **Modelado Predictivo (`03-Prediccion`):** Modelos de clasificación/regresión supervisada (predicción de probabilidad de recompra, churn o calificación de satisfacción de reseñas).
+  2. **Modelo 1, segmentación (`02-Clustering`):** k-means sobre pedidos con precio, flete, cuotas, días de entrega, retraso y mismo estado (logaritmo en precio y flete, z-score); k = 4. La calificación no entra, para que H4 no sea circular. Guía: `documento/guia-modelo1-knime.md`.
+  3. **Modelo 2, predicción (`03-Prediccion`):** clasificación de `es_tardio` con variables conocidas al comprar (sin fechas posteriores, sin calificación y sin mes de compra), regresión logística y Random Forest frente a dos líneas base, partición temporal con corte 2018-04-01. Guía: `documento/guia-modelo2-knime.md`.
   4. **Métricas y KPIs (`04-KPIs`):** Cálculo automatizado de indicadores clave de negocio (LTV, ticket promedio, tiempos de entrega) para su consumo en Power BI.
 
 ---
@@ -31,7 +31,7 @@ Esta skill encapsula el contexto completo, la arquitectura técnica, las restric
 | Herramienta | Rol en el Proyecto |
 | :--- | :--- |
 | **KNIME Analytics Platform** | Pipeline visual de ETL, ingeniería de características, entrenamiento y evaluación de modelos ML. |
-| **Snowflake / PostgreSQL** | Almacenamiento relacional, consultas SQL analíticas y persistencia del modelo ER. |
+| **PostgreSQL (Docker)** | Almacenamiento relacional, consultas SQL analíticas y persistencia del modelo ER. |
 | **Power BI** | Dashboards ejecutivos e interactivos para visualización de KPIs y clústeres. |
 | **Git / GitHub** | Control de versiones distribuido del repositorio `mo0005-ecommerce-ml`. |
 | **OneDrive (Word)** | Documento formal escrito para evaluación académica (ignorado en Git). |
@@ -81,7 +81,7 @@ El dataset base consta de 9 archivos CSV en `knime/datos/` (KNIME no permite rut
 ## 🚦 Estado Actual
 
 - **`01-ETL` (hecho, 39 nodos):** 9 CSV Reader → GroupBy por `order_id` (items, pagos, reseñas) → Joiners → Row Filter `delivered` → rama del primer ítem (sellers, products, traducción) → `mismo_estado` → fechas Date&Time → ventana de entrega 2017-01 a 2018-08 → Date&Time Difference en segundos + Math Formula `/86400` → `es_tardio` → `relacion_precio_flete`, `volumen_cm3` → Column Filter → Missing Value → CSV Writer `knime/datos/ordenes_etl.csv` (**96 144 filas, 29 columnas, `es_tardio` = 0,0807**, igual que `datos/views.sql`).
-- **Aún no hay:** `02-Clustering`, `03-Prediccion`, `04-KPIs`. La salida del ETL, `knime/datos/ordenes_etl.csv`, está versionada (~33 MB): 02 y 03 la leen directamente. Si cambia el ETL, regenerarla y subirla con `core.autocrlf=false`.
+- **Aún no hay:** `02-Clustering`, `03-Prediccion`, `04-KPIs` (guías con números de referencia en `documento/guia-modelo1-knime.md` y `documento/guia-modelo2-knime.md`). La salida del ETL, `knime/datos/ordenes_etl.csv`, está versionada (~33 MB): 02 y 03 la leen directamente. Si cambia el ETL, regenerarla y subirla con `core.autocrlf=false`.
 - **Trampas conocidas:** los códigos postales deben ser String; los Date&Time Difference con granularidad Day no dan decimales (medir en segundos y dividir entre 86 400); mover CSV con `core.autocrlf=false`; resetear nodos antes de guardar (el `.gitignore` ya ignora `port_*/` e `internal/`).
 
 ---

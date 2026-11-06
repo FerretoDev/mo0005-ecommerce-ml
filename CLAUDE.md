@@ -6,7 +6,7 @@ Esta guía contiene los lineamientos elementales de trabajo para el equipo de de
 
 ## 📌 Contexto Rápido del Repositorio
 - **Objetivo:** Análisis de datos y Machine Learning sobre clientes de e-commerce usando el dataset de Olist.
-- **Herramientas principales:** KNIME Analytics Platform, Snowflake / PostgreSQL, Power BI, Git / GitHub.
+- **Herramientas principales:** KNIME Analytics Platform, PostgreSQL (Docker), Power BI, Git / GitHub.
 - **Documento formal:** Se trabaja en OneDrive (los archivos `.docx` locales están ignorados en Git).
 
 ---
@@ -92,8 +92,8 @@ El archivo `.gitignore` ya está configurado para protegerte, pero ten presente 
 - **/datos:** Scripts SQL de PostgreSQL (`schema.sql`, `views.sql`), `resultados_kpis.txt` y notas del origen de los datos.
 - **/knime/datos:** Datasets `.csv` de Olist (versionados). Van dentro de `knime/` porque KNIME no permite rutas relativas fuera de su workspace. La salida `ordenes_etl.csv` (96 144 pedidos, unos 33 MB) también está versionada para que 02-Clustering y 03-Prediccion la lean sin correr el ETL; si cambia el ETL, regenerarla y commitearla con `git -c core.autocrlf=false add` para que Git no reescriba los finales de línea.
 - **/knime/01-ETL:** Flujos de limpieza, cruces y preprocesamiento (ver `documento/knime-carga-csv.md`).
-- **/knime/02-Clustering:** Modelos no supervisados (segmentación RFM, K-Means, etc.).
-- **/knime/03-Prediccion:** Modelos supervisados de predicción y scoring.
+- **/knime/02-Clustering:** Modelo 1, no supervisado: k-means sobre pedidos (ver `documento/guia-modelo1-knime.md`).
+- **/knime/03-Prediccion:** Modelo 2, supervisado: predicción de entrega tardía (ver `documento/guia-modelo2-knime.md`).
 - **/knime/04-KPIs:** Automatización de métricas de negocio para Power BI.
 - **/kpis:** Documentos de texto o tablas con las fórmulas matemáticas y lógica de negocio.
 - **/diagrama-er:** Diagramas relacionales de las tablas de Olist y scripts SQL.
