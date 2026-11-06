@@ -43,9 +43,10 @@ Esta skill encapsula el contexto completo, la arquitectura técnica, las restric
 ```text
 mo0005-ecommerce-ml/
 ├── .agent/skills/mo0005-ecommerce-ml/  # Contexto y skill del proyecto para el asistente de IA
-├── datos/                             # Datasets crudos de Olist en CSV (Kaggle)
+├── datos/                             # Scripts SQL (schema, views, kpis) y resultados de KPIs
 ├── documento/                         # Enlace oficial al documento en OneDrive (Word)
 ├── knime/                             # Workflows abiertos de KNIME Analytics Platform
+│   ├── datos/                         # CSV crudos de Olist (versionados) + ordenes_etl.csv (generado, ignorado)
 │   ├── 01-ETL/                        # Ingesta, limpieza y preparación de datos
 │   ├── 02-Clustering/                 # Segmentación algorítmica de clientes
 │   ├── 03-Prediccion/                 # Modelos predictivos y scoring
@@ -61,7 +62,7 @@ mo0005-ecommerce-ml/
 
 ## 📊 Dataset Olist y Estructura Relacional
 
-El dataset base consta de 9 archivos CSV en `/datos`:
+El dataset base consta de 9 archivos CSV en `knime/datos/` (KNIME no permite rutas relativas fuera de `knime/`; los nodos usan `../datos/<archivo>.csv`):
 - `olist_customers_dataset.csv`
 - `olist_orders_dataset.csv`
 - `olist_order_items_dataset.csv`
@@ -74,6 +75,15 @@ El dataset base consta de 9 archivos CSV en `/datos`:
 
 > 📖 **Para consultar el diccionario completo de columnas, tipos y claves relacionales:**  
 > Revisa la guía detallada en [dataset_schema.md](./references/dataset_schema.md).
+
+---
+
+## 🚦 Estado Actual
+
+- **`01-ETL` (versión base, hecha):** 9 CSV Reader → GroupBy por `order_id` (items, pagos, reseñas) → Joiners (Orders + Customers + agregados) → Row Filter `delivered` → Column Renamer → String to Date&Time → 2 Date&Time Difference (`dias_entrega`, `dias_retraso`) → CSV Writer `knime/datos/ordenes_etl.csv` (96 478 filas).
+- **Pendiente en el ETL** (según `datos/views.sql` y `knime/Flujo con KNIME.md`): ventana de fechas de entrega 2017-01 a 2018-08, `es_tardio`, `plazo_estimado_dias`, `mismo_estado`, `relacion_precio_flete`, categoría del producto, `peso_g` y `volumen_cm3`. Hoy no se unen Products, Sellers ni Translation.
+- **Sin base de datos todavía:** KNIME lee los CSV directamente. `02-Clustering`, `03-Prediccion` y `04-KPIs` pendientes.
+- **Trampas conocidas:** los códigos postales deben ser String; 8 órdenes `delivered` no tienen fecha de entrega (`dias_retraso` vacío); mover CSV con `core.autocrlf=false`.
 
 ---
 

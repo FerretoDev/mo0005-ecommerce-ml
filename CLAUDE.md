@@ -89,8 +89,9 @@ El archivo `.gitignore` ya está configurado para protegerte, pero ten presente 
 
 ## 📂 ¿Dónde colocar cada cosa?
 
-- **/datos:** Datasets `.csv` y notas explicativas de fuentes de datos.
-- **/knime/01-ETL:** Flujos de limpieza, cruces y preprocesamiento.
+- **/datos:** Scripts SQL de PostgreSQL (`schema.sql`, `views.sql`, `kpis.sql`), `resultados_kpis.txt` y notas del origen de los datos.
+- **/knime/datos:** Datasets `.csv` de Olist (versionados). Van dentro de `knime/` porque KNIME no permite rutas relativas fuera de su workspace. La salida `ordenes_etl.csv` se genera al ejecutar `01-ETL` y está en `.gitignore`.
+- **/knime/01-ETL:** Flujos de limpieza, cruces y preprocesamiento (ver `documento/knime-carga-csv.md`).
 - **/knime/02-Clustering:** Modelos no supervisados (segmentación RFM, K-Means, etc.).
 - **/knime/03-Prediccion:** Modelos supervisados de predicción y scoring.
 - **/knime/04-KPIs:** Automatización de métricas de negocio para Power BI.
@@ -112,3 +113,12 @@ El archivo `.gitignore` ya está configurado para protegerte, pero ten presente 
 
 > ⚠️ **Si al hacer `git push` te sale error de rechazo:**  
 > **NO uses `--force`**. Significa que un compañero subió cambios antes que tú. Corre `git pull origin main` primero, revisa que todo esté en orden y vuelve a hacer `git push`.
+
+---
+
+## 💡 Notas Prácticas (aprendidas en el ETL)
+
+- **Rutas de CSV en KNIME:** los nodos *CSV Reader* usan `Relative to → Current workflow` con rutas como `../datos/<archivo>.csv` (apunta a `knime/datos/`). `../../datos` falla porque sale del workspace.
+- **Códigos postales siempre como String:** `customer_zip_code_prefix`, `seller_zip_code_prefix` y `geolocation_zip_code_prefix` se leen como **String** para no perder ceros a la izquierda (`01037`). Si KNIME los vuelve a adivinar como Integer, se corrige en la sección *Transformation* del CSV Reader.
+- **Mover o renombrar los CSV con Git:** usar `git -c core.autocrlf=false add -A ...` y `git -c core.autocrlf=false commit`. Con `autocrlf=true` Git convierte CRLF a LF y reescribe los 125 MB en vez de registrar un renombrado.
+- **Antes de guardar en KNIME:** Reset (F8) a todos los nodos y cerrar KNIME. Si se edita el XML de un workflow desde fuera de KNIME, KNIME debe estar cerrado.

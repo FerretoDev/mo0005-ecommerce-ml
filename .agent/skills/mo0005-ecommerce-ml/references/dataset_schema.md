@@ -1,6 +1,6 @@
 # Esquema del Dataset Olist E-Commerce
 
-Este documento describe la estructura relacional, tablas, campos y llaves del dataset público **Brazilian E-Commerce Public Dataset by Olist** alojado en `/datos`.
+Este documento describe la estructura relacional, tablas, campos y llaves del dataset público **Brazilian E-Commerce Public Dataset by Olist** alojado en `knime/datos/`.
 
 ---
 
@@ -125,3 +125,22 @@ Tabla auxiliar para traducción de nombres de categoría.
 3. **Cálculo de Tiempos Logísticos:**  
    Tiempo real de entrega = `order_delivered_customer_date` - `order_purchase_timestamp`.  
    Diferencia frente a lo prometido = `order_delivered_customer_date` - `order_estimated_delivery_date`.
+
+---
+
+## 📤 Salida del ETL: `knime/datos/ordenes_etl.csv`
+
+Una fila por pedido `delivered` (96 478 filas). Lo genera `01-ETL`; está ignorado en Git y se regenera ejecutando el flujo.
+
+| Columna | Origen |
+| :--- | :--- |
+| `order_id`, `customer_id`, `order_status` | orders |
+| `order_purchase_timestamp`, `order_approved_at`, `order_delivered_carrier_date`, `order_delivered_customer_date`, `order_estimated_delivery_date` | orders (como fecha) |
+| `customer_unique_id`, `customer_zip_code_prefix` (String), `customer_city`, `customer_state` | customers |
+| `total_precio`, `total_flete`, `num_items` | order_items agregado (suma, suma, máximo de `order_item_id`) |
+| `total_pagado`, `max_cuotas` | order_payments agregado (suma, máximo) |
+| `review_promedio` | order_reviews agregado (promedio) |
+| `dias_entrega` | entrega al cliente menos compra, en días |
+| `dias_retraso` | entrega al cliente menos fecha estimada, en días (positivo = tarde) |
+
+Nota: 8 pedidos `delivered` no tienen fecha de entrega al cliente, así que `dias_entrega` y `dias_retraso` quedan vacíos.
