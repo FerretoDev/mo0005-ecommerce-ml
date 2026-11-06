@@ -56,6 +56,9 @@ Los Date&Time Difference miden en segundos porque con granularidad Day KNIME no 
 - Nulos que quedan: `review_promedio` 642, peso y medidas 16 (también `volumen_cm3`), `order_approved_at` 14 y `order_delivered_carrier_date` 1.
 - Si se mide solo con fecha (granularidad Day, sin hora), `es_tardio` sale en 6,73 % y no en 8,07 %.
 
+## Formato de las fechas en `ordenes_etl.csv`
+KNIME escribe las fechas sin los segundos cuando valen cero: `2018-06-11T21:17` en lugar de `2018-06-11T21:17:00`. Por eso conviven dos formatos en una misma columna: 1 559 filas de `order_purchase_timestamp`, 889 de `order_approved_at`, 28 519 de `order_delivered_carrier_date` y 1 563 de `order_delivered_customer_date` salen así, y las 96 144 de `order_estimated_delivery_date` (siempre a las 00:00). KNIME y la mayoría de los lectores las leen bien, pero un script con formato fijo falla. Si Power BI u otra herramienta da problema, convertir esas columnas a texto con formato fijo `yyyy-MM-dd HH:mm:ss` antes del CSV Writer (nodo *Date&Time to String*).
+
 ## Antes de guardar y commitear
 Reset (F8) a todos los nodos (con los datos guardados `knime/01-ETL` pesa cientos de MB; reseteado, menos de 1 MB), guardar, cerrar KNIME y:
 ```bash
