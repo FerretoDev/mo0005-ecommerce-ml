@@ -7,3 +7,5 @@ knime/Example Workflows/
 *.docx
 ~$*.docx
 /documento/plantilla-entregable.md
+# salida generada por el ETL (se regenera ejecutando 01-ETL)
+/knime/datos/ordenes_etl.csv
