@@ -21,7 +21,9 @@
                 <entry key="5" type="xstring" value="mismo_estado"/>
             </config>
             <config key="excluded_names">
-                <entry key="array-size" type="xint" value="0"/>
+                <entry key="array-size" type="xint" value="2"/>
+                <entry key="0" type="xstring" value="review_promedio"/>
+                <entry key="1" type="xstring" value="es_tardio"/>
             </config>
             <entry key="enforce_option" type="xstring" value="EnforceExclusion"/>
             <config key="name_pattern">
