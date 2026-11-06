@@ -102,3 +102,33 @@ KNIME numera los grupos en otro orden; identifíquenlos por el perfil.
 1. **El cuarto grupo coincide casi con los pedidos tardíos**, porque `dias_retraso` es una de las entradas. Entonces "ese grupo está peor calificado" repite en buena parte H1. El modelo segmenta la **experiencia de entrega**, no el comportamiento comercial.
 2. **Análisis de sensibilidad** (recomendado, en una rama aparte del mismo workflow): repetir con las 4 variables que se conocen al comprar (precio, flete, cuotas y mismo estado). Ahí el mejor k es 3 (silueta 0.391), y las calificaciones por grupo apenas varían, de 4.00 a 4.29 (Kruskal-Wallis H = 507, p < 0.001: significativo, pero con un efecto pequeño). Conclusión: la segmentación comercial casi no explica la satisfacción; lo que la explica es la experiencia logística.
 3. Una silueta de 0.30 es moderada: los grupos sirven para describir y priorizar, no como categorías rígidas.
+
+## 7. Cómo quedó en KNIME (workflow `02-Clustering`)
+
+El workflow tiene 14 nodos y se ejecuta completo con Shift+F7 en menos de un minuto.
+
+| # | Nodo | Qué hace |
+| --- | --- | --- |
+| 1 | CSV Reader | Lee `../datos/ordenes_etl.csv` (96 144 filas) |
+| 2 | Column Filter | Deja 10 columnas (excluye explícitamente las 19 restantes) |
+| 3, 4 | Math Formula | `ln(precio + 1)` y `ln(flete + 1)`, reemplazando la columna |
+| 5 | Normalizer | Z-score solo en las 6 entradas (excluye `review_promedio` y `es_tardio`) |
+| 6 | k-Means | k = 4, inicialización aleatoria, semilla 2 |
+| 7 | Joiner | Une la asignación con la tabla antes de los logaritmos, por `order_id` |
+| 8 | GroupBy | Por `Cluster`: conteo, mediana de precio y promedio de entrega, tardías y calificación |
+| 9, 10 | Column Filter + CSV Writer | Escribe `../datos/segmentos_modelo1.csv` (`order_id` + `Cluster`) |
+| 11, 12 | Rule-based Row Filter + One-way ANOVA | Quita los 642 pedidos sin reseña (quedan 95 502) y prueba `review_promedio` por grupo (H4) |
+| 13, 14 | Rule-based Row Filter + Silhouette Coefficient | Primeras 10 000 filas y silueta del k = 4 |
+
+**Resultados de KNIME**
+- Grupos: **7 357 / 16 767 / 30 509 / 41 511** pedidos (referencia de Python: 7 423 / 16 708 / 30 498 / 41 515).
+- Grupo problemático: 35,1 días de entrega, 77,4 % tardías, calificación 2,59.
+- H4, One-way ANOVA: **F = 4 477,7** (3 y 95 498 gl), p < 0,001, tamaño de efecto 0,12.
+- Silueta global de k = 4: **0,297** (Python: 0,305); por grupo entre 0,11 y 0,36.
+
+**Diferencias con la guía de referencia**
+- Se usó **One-way ANOVA** y no Kruskal-Wallis, porque el nodo de Kruskal-Wallis no está instalado en esta versión de KNIME. La calificación es ordinal, así que Kruskal-Wallis (H = 7 789 en Python) es la prueba más adecuada; ambas concluyen lo mismo.
+- La silueta se calculó **solo para k = 4**, sobre las primeras 10 000 filas. La tabla de k = 2 a 8 y el codo son de Python; falta el ciclo equivalente en KNIME.
+- Con otra semilla el k-Means puede caer en otro óptimo local (con una semilla se obtuvo un reparto distinto de 4 817 / 8 871 / 33 000 / 49 456, cuando el logaritmo no se estaba aplicando). Con el logaritmo bien aplicado el resultado fue estable.
+
+**Errores que aparecieron al armarlo** (por si se repiten): el Math Formula añadía una columna en vez de reemplazarla (ver `CLAUDE.md`), el Column Filter dejaba pasar todas las columnas por tener la lista de excluidas vacía, y el modo del Normalizer es `Z_SCORE`.

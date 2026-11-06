@@ -71,7 +71,7 @@ Los archivos que componen el dataset están en `knime/datos/` (versionados en Gi
 | Workflow | Estado |
 | :--- | :--- |
 | `01-ETL` | Hecho: lee los 9 CSV, une pedido + cliente + items + pagos + reseñas + vendedor/producto, filtra `delivered` y la ventana de entrega (2017-01 a 2018-08), calcula las variables derivadas (`es_tardio`, `dias_entrega`, `dias_retraso`, `mismo_estado`, etc.) y exporta `knime/datos/ordenes_etl.csv` (96 144 pedidos, 29 columnas; `es_tardio` = 8,07 %). Guía en [documento/knime-carga-csv.md](documento/knime-carga-csv.md). |
-| `02-Clustering` | En curso (Marcos): k-means con k = 4 armado y validado en KNIME (grupos de 7 357 / 16 767 / 30 509 / 41 511 pedidos) y salida `knime/datos/segmentos_modelo1.csv` (`order_id` + `Cluster`). Faltan el ciclo de silueta y el ANOVA de H4. Modelo 1: k-means sobre pedidos con 6 variables de compra y entrega; k = 4 según silueta y codo. Guía y números de referencia en [documento/guia-modelo1-knime.md](documento/guia-modelo1-knime.md). |
+| `02-Clustering` | Hecho (Marcos): k-means con k = 4 en KNIME (grupos de 7 357 / 16 767 / 30 509 / 41 511 pedidos), perfil de segmentos, silueta global 0,297, prueba de H4 con One-way ANOVA (F = 4 477,7; p < 0,001) y salida `knime/datos/segmentos_modelo1.csv` (`order_id` + `Cluster`). Falta el ciclo de k = 2 a 8 en KNIME (la tabla de k es de Python). Guía en [documento/guia-modelo1-knime.md](documento/guia-modelo1-knime.md). |
 | `03-Prediccion` | Pendiente. Modelo 2: predicción de `es_tardio` al comprar, con regresión logística y Random Forest frente a dos líneas base; partición temporal (corte 2018-04-01). Guía y números de referencia en [documento/guia-modelo2-knime.md](documento/guia-modelo2-knime.md). |
 | `04-KPIs` | Pendiente. |
 
