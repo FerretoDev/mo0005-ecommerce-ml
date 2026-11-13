@@ -129,7 +129,6 @@ Como estamos acostumbrados a programar en lenguajes como Python, C++ o Java, Git
 3. **Resetear nodos antes de guardar:** En KNIME, haz clic derecho y selecciona *Reset* en los nodos con tablas muy grandes si no es indispensable guardarlos ejecutados. Esto evita que el repositorio se vuelva pesado e infle el historial de Git.
 4. **Al terminar tu parte:** Guarda en KNIME, cierra el workflow, haz tu commit con un mensaje claro (por ejemplo `feat(knime): agregar filtro de valores nulos en ETL`) y corre `git push origin main`.
 5. **No forzar archivos temporales:** El `.gitignore` ya está configurado para excluir archivos de bloqueo (`.knimeLock`), memorias temporales (`.metadata/`) y documentos de Word (`.docx`). No uses `git add -f` para forzarlos.
-6. **Guía de commits y comandos:** Consulta [CLAUDE.md](CLAUDE.md) para ver la guía completa de commits atómicos, tipos de cambios y comandos frecuentes de Git.
 
 ---
 
