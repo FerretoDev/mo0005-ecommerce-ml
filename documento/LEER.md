@@ -1,5 +1,5 @@
-Aqui se encuentra el documento del proyecto
-esta en One drive
+# Project document
 
+The formal course report is written collaboratively outside this repository (Word document shared among the team members).
 
-https://6f33fa7f78ea46e2aaca-my.sharepoint.com/:w:/g/personal/marcos_ferreto_ucr_ac_cr/IQABJCkrsGImR5wmLFiIGFeeAfE5l5Db-igcNxQiegwNxAw?e=gEcaFn
+Ask the team for access. The share link is intentionally not published here.
