@@ -5,6 +5,7 @@ Evidencia de que los workflows corrieron y de que los resultados coinciden con l
 ## Modelo 2 (`modelo2/`, workflow 03-Prediccion)
 | Archivo | Muestra |
 | --- | --- |
+| `workflow-03-prediccion-completo` | Workflow `03-Prediccion` completo y ejecutado: lectura, partición temporal, preparación, Random Forest y regresión logística, líneas base, Scorer, ROC Curve, validación cruzada del Random Forest y exportación de predicciones. El triángulo de la regresión logística es el aviso de convergencia. |
 | `scorer-*-matriz` y `scorer-*-estadisticas` | Matriz de confusión y estadísticas por clase (precisión, sensibilidad, F1) de la Base 1, la Base 2, el Random Forest y la regresión logística, sobre la prueba (32 092 pedidos). |
 | `roc-random-forest-auc-0590` | Curva ROC del Random Forest, AUC 0.590. |
 | `roc-regresion-logistica-auc-0719` | Curva ROC de la regresión logística, AUC 0.719. |
@@ -46,7 +47,7 @@ Es una aproximación a la importancia (frecuencia con que cada variable se usa e
 | `pedidos-kpi-tabla-de-salida` | Tabla que se escribe en `pedidos_kpi.csv` (96 144 filas, 14 columnas). |
 
 ## Falta tomar
-- Los **cuatro workflows completos en verde** (`01-ETL`, `02-Clustering`, `03-Prediccion` con la validación cruzada y la exportación, y `04-KPIs`).
+- Los workflows completos en verde de `01-ETL`, `02-Clustering` y `04-KPIs` (el de `03-Prediccion` ya está).
 - **KPI 9, 10 y 11** (recompra): las tablas de los GroupBy.
 - **Importancia de variables:** volver a capturar con la columna *RowID* ensanchada, para que se lean los nombres.
 - **Modelo 1:** perfiles de los segmentos, silueta (0.297) y ANOVA (H4).
