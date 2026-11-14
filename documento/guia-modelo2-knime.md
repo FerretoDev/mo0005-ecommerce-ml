@@ -113,3 +113,35 @@ Variables más importantes del Random Forest: `plazo_estimado_dias`, `total_flet
 2. **La Base 2 sale peor que el azar en la prueba (AUC 0.47).** En el entrenamiento, los pedidos entre estados distintos llegaban tarde mucho más (11.0 % frente a 5.7 %). En la prueba se invierte: 5.3 % frente a 6.6 %. La relación geografía–retraso **no es estable en el tiempo**, y eso afecta a H2: con todo el periodo la diferencia existe, pero en abril–agosto de 2018 no se sostiene.
 3. **La prueba tiene menos tardíos que el entrenamiento** (5.85 % frente a 9.19 %), como ya dice la sección 3.5.1.
 4. **La precisión es baja en todos los modelos** (de cada 10 pedidos marcados como tardíos, 1 lo es). Sirve para priorizar seguimiento, no para tomar decisiones automáticas sobre un pedido.
+
+---
+
+## 10. Cómo quedó en KNIME (workflow `03-Prediccion`)
+
+El workflow tiene **28 nodos** y se ejecuta completo. Se generó el esqueleto escribiendo XML y se terminó de configurar en la interfaz de KNIME.
+
+**Cadena:** CSV Reader → String to Date&Time → Date&Time Part Extractor (`dia_semana`) → Column Filter → Number To String (`es_tardio`) → **Domain Calculator** → Row Splitter (corte 2018-04-01). Rama de entrenamiento: Column Filter → Missing Value (mediana) → Equal Size Sampling (`es_tardio`, exacto, semilla 42) → Random Forest Learner y Normalizer → Logistic Regression Learner. Rama de prueba: Column Filter → Missing Value (Apply) → Random Forest Predictor, Normalizer (Apply) → Logistic Regression Predictor y tres Rule Engine (líneas base). Cuatro Scorer y tres ROC Curve.
+
+**Resultados de KNIME (prueba, abril a agosto de 2018; 32 092 pedidos, 1 878 tardíos; umbral 0.5):**
+
+| Modelo | AUC | Precisión | Sensibilidad | F1 |
+| --- | ---: | ---: | ---: | ---: |
+| Base 1: siempre a tiempo | 0.50 | no definida | 0 | no definido |
+| Base 2: estados distintos | 0.472 | 0.053 | 0.545 | 0.097 |
+| Random Forest | 0.590 | 0.078 | 0.460 | 0.134 |
+| Regresión logística | **0.719** | **0.100** | **0.787** | **0.177** |
+
+Matrices de confusión (filas = real, columnas = predicho; `0`/`1`): Base 1 = [30 214, 0 / 1 878, 0]; Base 2 = [12 048, 18 166 / 854, 1 024]; Random Forest = [20 042, 10 172 / 1 015, 863]; regresión logística = [16 877, 13 337 / 400, 1 478]. Filas del Row Splitter: 64 052 y 32 092, como en la sección 3.
+
+**Diferencias con la referencia de Python (sección 8):** AUC de la regresión logística 0.719 (referencia 0.721) y de las líneas base idénticos. El Random Forest da 0.590 frente a 0.625, algo fuera del ±0.03: queda por debajo de 0.60. Se atribuye a que en KNIME se balanceó con Equal Size Sampling (Python usó ponderación de clases) y a que el tamaño mínimo de nodo no se ajustó con validación cruzada. La regresión logística supera a ambas líneas base y cumple H3.
+
+**Problemas que aparecieron al armarlo (por si se repiten):**
+- **Row Splitter sin `outputMode`:** al cargar decía `String for key "outputMode" not found` y caía a valores por defecto. Se corrige poniendo la condición a mano (`order_purchase_timestamp` antes de `2018-04-01`).
+- **Random Forest Learner con 3 salidas:** el modelo es la **tercera**; el cable al Predictor debe salir de ahí (`Unable to insert connection`).
+- **Random Forest rechazaba valores faltantes:** los 16 vacíos de `product_weight_g` y `volumen_cm3` son enteros; el Missing Value debe imputar también enteros con la mediana.
+- **Columna ignorada por falta de dominio:** `product_category_name_english` (más de 60 categorías) perdía su dominio al leer el CSV; se recalcula con un **Domain Calculator** (máximo 1 000 valores) antes del Row Splitter.
+- **ROC Curve:** *Class column* debe ser `es_tardio` (no la de "(prediction)") y *Positive class value* `1`. Con el valor equivocado el AUC sale como 1 − AUC (0.28 en vez de 0.72). Las columnas de probabilidad: `1` en el Random Forest, `P (es_tardio=1)` en la logística y `puntaje_base2` en la Base 2.
+- **Scorer:** la columna de predicción se llama `Prediction ()` en el Random Forest y `es_tardio (prediction)` en la logística.
+- **Aviso de la regresión logística:** no converge en el número de épocas y no calcula la covarianza (matriz singular); no afecta a las predicciones.
+
+**Pendiente:** validación cruzada (X-Partitioner / X-Aggregator) para elegir el tamaño mínimo de nodo y el umbral; sección 3.5.2 de la plantilla.
