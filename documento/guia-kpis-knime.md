@@ -1,8 +1,8 @@
 # Guía de los KPI en KNIME: workflow `04-KPIs`
 
-Workflow: `knime/04-KPIs` (30 nodos, generado a mano; falta probarlo en KNIME). Entradas: `knime/datos/ordenes_etl.csv` (96 144 pedidos entregados), `olist_orders_dataset.csv` y `olist_customers_dataset.csv`. No usa PostgreSQL: reproduce en KNIME los 11 KPI de `kpis/kpis.sql` y deja dos tablas para Power BI.
+Workflow: `knime/04-KPIs` (36 nodos; se generó el esqueleto a mano y se terminó de configurar y probar en KNIME). Entradas: `knime/datos/ordenes_etl.csv` (96 144 pedidos entregados), `olist_orders_dataset.csv` y `olist_customers_dataset.csv`. No usa PostgreSQL: reproduce en KNIME los 11 KPI de `kpis/kpis.sql` y deja dos tablas para Power BI.
 
-Salidas versionadas: `knime/datos/pedidos_kpi.csv` (una fila por pedido, equivale a `v_pedidos_base`) y `knime/datos/clientes_kpi.csv` (una fila por cliente, equivale a `v_clientes`).
+Salidas versionadas: `knime/datos/pedidos_kpi.csv` (una fila por pedido, equivale a `v_pedidos_base` y trae además el segmento del Modelo 1 y las predicciones del Modelo 2) y `knime/datos/clientes_kpi.csv` (una fila por cliente, equivale a `v_clientes`).
 
 ## 1. Rama de pedidos (KPI 1 a 4, 6 a 8)
 
@@ -11,7 +11,8 @@ Salidas versionadas: `knime/datos/pedidos_kpi.csv` (una fila por pedido, equival
 | 1 | CSV Reader | Lee `ordenes_etl.csv`. |
 | 2 | Rule Engine | `resena_negativa`: 1 si `review_promedio` ≤ 2, 0 si es mayor; vacío si no hay reseña. |
 | 3 | Rule Engine | `banda_retraso`: a tiempo, 1 a 3, 4 a 7 y más de 7 días. |
-| 4, 5 | Column Filter + CSV Writer | Dejan 14 columnas y escriben `pedidos_kpi.csv`. |
+| 31 a 36 | CSV Reader (2), Joiner (2) y Rule Engine (2) | Leen `segmentos_modelo1.csv` y `predicciones_modelo2.csv` y los unen por `order_id` (unión izquierda). `en_prueba` vale 1 si el pedido tiene predicción; `segmento` da el nombre del grupo (cluster_0 = Estándar entre estados, cluster_1 = Entregas problemáticas, cluster_2 = Locales rápidas, cluster_3 = Compras grandes a plazos). |
+| 4, 5 | Column Filter + CSV Writer | Dejan 18 columnas (las 14 anteriores más `segmento`, `en_prueba`, `prob_tardio_rf` y `prob_tardio_logistica`) y escriben `pedidos_kpi.csv`. |
 | 6 | GroupBy (global) | Conteo, promedio de `es_tardio` (KPI 1), `dias_entrega` (KPI 2), `review_promedio` (KPI 6) y `resena_negativa` (KPI 7). |
 | 7 | GroupBy por `es_tardio` | Conteo, retraso promedio (KPI 3: fila `es_tardio` = 1), calificación y % negativas (KPI 8). |
 | 8 | GroupBy por `mismo_estado` | Conteo y días de entrega (KPI 4). |
@@ -82,3 +83,5 @@ En los KPI 10 y 11, KNIME cuenta **un cliente más** en el grupo tardío o negat
 - **Segundo Joiner:** la configuración de columnas copiada del Modelo 1 solo dejaba pasar `order_id` y `Cluster`. Hay que incluir en la tabla derecha `es_tardio` y `review_promedio`; sin eso el GroupBy por cliente salía con tres columnas.
 - **Nombre del conteo:** el GroupBy lo llama `Count*(order_id)` (con asterisco), y el Column Renamer debe usar ese nombre exacto.
 - **GroupBy sin columna de grupo:** el diálogo pide guardar la configuración la primera vez que se abre; la configuración está bien.
+
+**Unión con los modelos (nodos 31 a 36).** `pedidos_kpi.csv` queda con 18 columnas y 96 144 filas, sin duplicados. `en_prueba` = 1 en 32 092 pedidos (abril a agosto de 2018), que son los únicos con probabilidad; fuera de la prueba, las columnas de probabilidad quedan vacías. Segmentos: 41 511 Estándar entre estados, 30 509 Locales rápidas, 16 767 Compras grandes a plazos y 7 357 Entregas problemáticas. Las probabilidades no son frecuencias reales (los modelos se entrenaron con datos balanceados): sirven para ordenar los pedidos por riesgo.
