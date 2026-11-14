@@ -915,7 +915,7 @@ GROUP BY 1 ORDER BY 1;
 
 ## Anexo C. Medidas DAX para Power BI
 
-Las medidas usan tres tablas cargadas desde los CSV de KNIME: Pedidos (`pedidos_kpi.csv`), Clientes (`clientes_kpi.csv`) y PedidosTodos (`olist_orders_dataset.csv`, solo para el KPI 5). En Pedidos, `resena_negativa` vale 1 si la calificación es 1 o 2 y queda vacía en los 642 pedidos sin reseña; `banda_retraso` toma los valores «a tiempo», «1 a 3 dias», «4 a 7 dias» y «mas de 7 dias». En Clientes, `primer_en_2017` vale 1 si el primer pedido del cliente fue en 2017.
+Las medidas usan tres tablas cargadas desde los CSV de KNIME: Pedidos (`pedidos_kpi.csv`), Clientes (`clientes_kpi.csv`) y PedidosTodos (`olist_orders_dataset.csv`, solo para el KPI 5). En Pedidos, `resena_negativa` vale 1 si la calificación es 1 o 2 y queda vacía en los 642 pedidos sin reseña; `banda_retraso` toma los valores «a tiempo», «1 a 3 dias», «4 a 7 dias» y «mas de 7 dias». En Clientes, `primer_en_2017` vale 1 si el primer pedido del cliente fue en 2017, y `primer_pedido_tardio` y `primer_pedido_negativo` quedan vacíos cuando el primer pedido no se entregó o no tiene reseña. Por eso las medidas de recompra usan `==`: en DAX, un valor vacío comparado con `= 0` da verdadero, y esos clientes se sumarían al grupo puntual o no negativo.
 
 ```
 % Entregas Tardías =
@@ -961,19 +961,23 @@ DIVIDE(CALCULATE(COUNTROWS(Clientes), Clientes[total_pedidos] > 1),
 
 Recompra Primer Pedido Puntual =
 CALCULATE([Tasa Nueva Compra],
-          Clientes[primer_en_2017] = 1, Clientes[primer_pedido_tardio] = 0)
+          Clientes[primer_en_2017] = 1,
+          FILTER(ALL(Clientes[primer_pedido_tardio]), Clientes[primer_pedido_tardio] == 0))
 
 Recompra Primer Pedido Tardío =
 CALCULATE([Tasa Nueva Compra],
-          Clientes[primer_en_2017] = 1, Clientes[primer_pedido_tardio] = 1)
+          Clientes[primer_en_2017] = 1,
+          FILTER(ALL(Clientes[primer_pedido_tardio]), Clientes[primer_pedido_tardio] == 1))
 
 Recompra Primer Pedido Negativo =
 CALCULATE([Tasa Nueva Compra],
-          Clientes[primer_en_2017] = 1, Clientes[primer_pedido_negativo] = 1)
+          Clientes[primer_en_2017] = 1,
+          FILTER(ALL(Clientes[primer_pedido_negativo]), Clientes[primer_pedido_negativo] == 1))
 
 Recompra Primer Pedido No Negativo =
 CALCULATE([Tasa Nueva Compra],
-          Clientes[primer_en_2017] = 1, Clientes[primer_pedido_negativo] = 0)
+          Clientes[primer_en_2017] = 1,
+          FILTER(ALL(Clientes[primer_pedido_negativo]), Clientes[primer_pedido_negativo] == 0))
 ```
 
 ## Anexo D. Nodos de KNIME por etapa
