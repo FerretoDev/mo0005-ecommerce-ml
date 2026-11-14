@@ -9,38 +9,50 @@
         <config key="column-filter">
             <entry key="filter-type" type="xstring" value="STANDARD"/>
             <config key="included_names">
-                <entry key="array-size" type="xint" value="15"/>
-                <entry key="0" type="xstring" value="total_precio"/>
-                <entry key="1" type="xstring" value="total_flete"/>
-                <entry key="2" type="xstring" value="num_items"/>
-                <entry key="3" type="xstring" value="max_cuotas"/>
-                <entry key="4" type="xstring" value="relacion_precio_flete"/>
-                <entry key="5" type="xstring" value="product_weight_g"/>
-                <entry key="6" type="xstring" value="volumen_cm3"/>
-                <entry key="7" type="xstring" value="plazo_estimado_dias"/>
-                <entry key="8" type="xstring" value="mismo_estado"/>
-                <entry key="9" type="xstring" value="customer_state"/>
-                <entry key="10" type="xstring" value="seller_state"/>
-                <entry key="11" type="xstring" value="product_category_name_english"/>
-                <entry key="12" type="xstring" value="dia_semana"/>
-                <entry key="13" type="xstring" value="es_tardio"/>
-                <entry key="14" type="xstring" value="order_purchase_timestamp"/>
+                <entry key="array-size" type="xint" value="16"/>
+                <entry key="0" type="xstring" value="order_purchase_timestamp"/>
+                <entry key="1" type="xstring" value="customer_state"/>
+                <entry key="2" type="xstring" value="total_precio"/>
+                <entry key="3" type="xstring" value="total_flete"/>
+                <entry key="4" type="xstring" value="num_items"/>
+                <entry key="5" type="xstring" value="max_cuotas"/>
+                <entry key="6" type="xstring" value="seller_state"/>
+                <entry key="7" type="xstring" value="product_weight_g"/>
+                <entry key="8" type="xstring" value="product_category_name_english"/>
+                <entry key="9" type="xstring" value="mismo_estado"/>
+                <entry key="10" type="xstring" value="plazo_estimado_dias"/>
+                <entry key="11" type="xstring" value="es_tardio"/>
+                <entry key="12" type="xstring" value="relacion_precio_flete"/>
+                <entry key="13" type="xstring" value="volumen_cm3"/>
+                <entry key="14" type="xstring" value="dia_semana"/>
+                <entry key="15" type="xstring" value="order_id"/>
             </config>
             <config key="excluded_names">
-                <entry key="array-size" type="xint" value="0"/>
+                <entry key="array-size" type="xint" value="14"/>
+                <entry key="0" type="xstring" value="order_approved_at"/>
+                <entry key="1" type="xstring" value="order_delivered_carrier_date"/>
+                <entry key="2" type="xstring" value="order_delivered_customer_date"/>
+                <entry key="3" type="xstring" value="order_estimated_delivery_date"/>
+                <entry key="4" type="xstring" value="customer_unique_id"/>
+                <entry key="5" type="xstring" value="customer_city"/>
+                <entry key="6" type="xstring" value="total_pagado"/>
+                <entry key="7" type="xstring" value="review_promedio"/>
+                <entry key="8" type="xstring" value="product_length_cm"/>
+                <entry key="9" type="xstring" value="product_height_cm"/>
+                <entry key="10" type="xstring" value="product_width_cm"/>
+                <entry key="11" type="xstring" value="dias_entrega"/>
+                <entry key="12" type="xstring" value="dias_retraso"/>
+                <entry key="13" type="xstring" value="customer_zip_code_prefix"/>
             </config>
             <entry key="enforce_option" type="xstring" value="EnforceInclusion"/>
             <config key="name_pattern">
                 <entry key="pattern" type="xstring" value=""/>
-                <entry key="type" type="xstring" value="Wildcard"/>
                 <entry key="caseSensitive" type="xboolean" value="true"/>
                 <entry key="excludeMatching" type="xboolean" value="false"/>
+                <entry key="type" type="xstring" value="Wildcard"/>
             </config>
             <config key="datatype">
-                <config key="typelist">
-                    <entry key="org.knime.core.data.IntValue" type="xboolean" value="false"/>
-                    <entry key="org.knime.core.data.DoubleValue" type="xboolean" value="false"/>
-                </config>
+                <config key="typelist"/>
             </config>
         </config>
     </config>
