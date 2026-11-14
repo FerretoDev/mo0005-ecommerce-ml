@@ -580,19 +580,19 @@ Se definen once indicadores, organizados según el objetivo estratégico al que 
 
 ## 4.3 Dashboard
 
-La estructura del dashboard contempla una vista de resumen, otra de entregas, otra de satisfacción y otra de fidelización, con filtros por período y por estado del cliente en todas las páginas.
+El dashboard está en `powerbi/dashboard_olist.pbix` y tiene cinco páginas: un resumen, una por cada objetivo estratégico y una con los resultados de los dos modelos. La página de resumen incluye un filtro por estado del cliente. Antes de armar las páginas se verificaron todas las medidas con una consulta DAX dentro de Power BI, y los valores coinciden con los de KNIME (sección 4.2).
 
 | Página | KPI | Visuales |
 | --- | --- | --- |
-| 1. Resumen | 1, 2, 6, 9 | Tarjetas con los cuatro KPI y línea mensual del % de entregas tardías y de la calificación promedio. |
-| 2. Entregas (OE1) | 1 a 5 | Mapa o barras por estado; barras de tiempo de entrega en el mismo estado vs. estados distintos; histograma de días de retraso. |
-| 3. Satisfacción (OE2) | 6 a 8 | Calificación promedio de pedidos puntuales vs. tardíos; % de reseñas negativas por tramo de retraso (a tiempo, 1 a 3, 4 a 7 y más de 7 días). |
-| 4. Fidelización (OE3) | 9 a 11 | Tasa de recompra según la puntualidad y según la calificación del primer pedido. |
-| 5. Perfiles y riesgo | — | Tabla de segmentos del Modelo 1 (tamaño, valor y calificación promedio); distribución del nivel de riesgo del Modelo 2 y cantidad de pedidos en riesgo alto. |
+| 1. Resumen | 1, 2, 6, 9 | Tarjetas con los cuatro KPI; línea mensual del % de entregas tardías (eje principal) y de la calificación promedio (eje secundario); filtro por estado del cliente. |
+| 2. Entregas (OE1) | 1 a 5 | Tarjetas de los cinco KPI; barras del % de entregas tardías por estado del cliente, de mayor a menor; columnas del tiempo de entrega en el mismo estado y en estados distintos; columnas de pedidos por tramo de retraso. |
+| 3. Satisfacción (OE2) | 6 a 8 | Tarjetas de los tres KPI y de la brecha; calificación promedio de pedidos puntuales vs. tardíos; % de reseñas negativas por tramo de retraso (a tiempo, 1 a 3, 4 a 7 y más de 7 días). |
+| 4. Fidelización (OE3) | 9 a 11 | Tarjetas de clientes únicos y tasa de recompra; columnas de la recompra según la puntualidad y según la calificación del primer pedido, con etiquetas de datos. |
+| 5. Perfiles y riesgo | — | Tabla de los segmentos del Modelo 1 (pedidos, % de entregas tardías y calificación promedio); columnas del % de entregas tardías por nivel de riesgo del Modelo 2; leyenda sobre el alcance de las predicciones. |
 
 En la página 5, el segmento sale de la columna `segmento` de `pedidos_kpi.csv`, que ya trae el nombre de cada grupo del Modelo 1 (sin tildes, como lo escribe KNIME): «Estandar entre estados» (41 511 pedidos), «Locales rapidas» (30 509), «Compras grandes a plazos» (16 767) y «Entregas problematicas» (7 357).
 
-La parte de riesgo de esa página necesita dos aclaraciones. La primera es que las probabilidades del Modelo 2 están infladas: los modelos se entrenaron con datos balanceados, mitad tardíos y mitad puntuales, cuando en realidad llegó tarde el 9.2 % de los pedidos del entrenamiento y el 5.85 % de los de la prueba. En la prueba, la probabilidad promedio es 0.486 en la regresión logística y 0.425 en el Random Forest, muy por encima de esa tasa. Por eso no se presentan como una frecuencia («60 % de riesgo»), sino como un nivel de riesgo relativo, definido con percentiles de `prob_tardio_logistica` sobre los 32 092 pedidos con `en_prueba` = 1; por ejemplo, riesgo alto es el 10 % de pedidos con mayor probabilidad. Ese grupo funciona: de sus 3 210 pedidos llegó tarde el 13.3 %, 2.3 veces la tasa de la prueba, y en él está el 22.8 % de todos los pedidos tardíos. La leyenda lo advierte: las probabilidades sirven para ordenar los pedidos por riesgo, no para estimar la frecuencia real de retraso. La segunda es que solo hay predicciones para los 32 092 pedidos de la prueba (abril a agosto de 2018), y la leyenda también lo indica.
+La parte de riesgo de esa página necesita dos aclaraciones. La primera es que las probabilidades del Modelo 2 están infladas: los modelos se entrenaron con datos balanceados, mitad tardíos y mitad puntuales, cuando en realidad llegó tarde el 9.2 % de los pedidos del entrenamiento y el 5.85 % de los de la prueba. En la prueba, la probabilidad promedio es 0.486 en la regresión logística y 0.425 en el Random Forest, muy por encima de esa tasa. Por eso no se presentan como una frecuencia («60 % de riesgo»), sino como un nivel de riesgo relativo, definido con percentiles de `prob_tardio_logistica` sobre los 32 092 pedidos con `en_prueba` = 1; por ejemplo, riesgo alto es el 10 % de pedidos con mayor probabilidad, riesgo medio va del percentil 75 al 90 y riesgo bajo es el 75 % restante. La columna `nivel_riesgo` se calcula en Power Query con esos percentiles. Ese grupo funciona: de sus 3 210 pedidos llegó tarde el 13.3 %, 2.3 veces la tasa de la prueba, y en él está el 22.8 % de todos los pedidos tardíos. En el nivel medio (4 813 pedidos) llegó tarde el 11.3 % y en el bajo (24 069 pedidos), el 3.8 %; es decir, el grupo de riesgo alto llega tarde 3.5 veces más que el de riesgo bajo. La leyenda lo advierte: las probabilidades sirven para ordenar los pedidos por riesgo, no para estimar la frecuencia real de retraso. La segunda es que solo hay predicciones para los 32 092 pedidos de la prueba (abril a agosto de 2018), y la leyenda también lo indica.
 
 Las medidas DAX de los KPI están en el Anexo C. Usan `pedidos_kpi.csv` y `clientes_kpi.csv`, que equivalen a las vistas v_pedidos_base y v_clientes del Anexo A.
 
@@ -998,6 +998,15 @@ Recompra Primer Pedido No Negativo =
 CALCULATE([Tasa Nueva Compra],
           Clientes[primer_en_2017] = 1,
           FILTER(ALL(Clientes[primer_pedido_negativo]), Clientes[primer_pedido_negativo] == 0))
+
+Pedidos de prueba =
+CALCULATE(COUNTROWS(Pedidos), Pedidos[en_prueba] = 1)
+
+% Tardías en prueba =
+CALCULATE([% Entregas Tardías], Pedidos[en_prueba] = 1)
+
+Probabilidad promedio (logística) =
+CALCULATE(AVERAGE(Pedidos[prob_tardio_logistica]), Pedidos[en_prueba] = 1)
 ```
 
 ## Anexo D. Nodos de KNIME por etapa
