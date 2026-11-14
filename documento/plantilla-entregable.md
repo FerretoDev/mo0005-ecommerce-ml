@@ -915,6 +915,8 @@ GROUP BY 1 ORDER BY 1;
 
 ## Anexo C. Medidas DAX para Power BI
 
+Las medidas usan tres tablas cargadas desde los CSV de KNIME: Pedidos (`pedidos_kpi.csv`), Clientes (`clientes_kpi.csv`) y PedidosTodos (`olist_orders_dataset.csv`, solo para el KPI 5). En Pedidos, `resena_negativa` vale 1 si la calificación es 1 o 2 y queda vacía en los 642 pedidos sin reseña; `banda_retraso` toma los valores «a tiempo», «1 a 3 dias», «4 a 7 dias» y «mas de 7 dias». En Clientes, `primer_en_2017` vale 1 si el primer pedido del cliente fue en 2017.
+
 ```
 % Entregas Tardías =
 DIVIDE(CALCULATE(COUNTROWS(Pedidos), Pedidos[es_tardio] = 1), COUNTROWS(Pedidos))
@@ -938,12 +940,12 @@ DIVIDE(
             PedidosTodos[order_status] IN {"canceled", "unavailable"}),
   COUNTROWS(PedidosTodos))
 
-Calificación Promedio = AVERAGE(Pedidos[review_score_pedido])
+Calificación Promedio = AVERAGE(Pedidos[review_promedio])
 
 % Reseñas Negativas =
 DIVIDE(
-  CALCULATE(COUNTROWS(Pedidos), Pedidos[review_score_pedido] <= 2),
-  COUNT(Pedidos[review_score_pedido]))
+  CALCULATE(COUNTROWS(Pedidos), Pedidos[resena_negativa] = 1),
+  COUNT(Pedidos[resena_negativa]))
 
 Calificación Puntuales =
 CALCULATE([Calificación Promedio], Pedidos[es_tardio] = 0)
@@ -959,19 +961,19 @@ DIVIDE(CALCULATE(COUNTROWS(Clientes), Clientes[total_pedidos] > 1),
 
 Recompra Primer Pedido Puntual =
 CALCULATE([Tasa Nueva Compra],
-          Clientes[anio_primer_pedido] = 2017, Clientes[primer_pedido_tardio] = 0)
+          Clientes[primer_en_2017] = 1, Clientes[primer_pedido_tardio] = 0)
 
 Recompra Primer Pedido Tardío =
 CALCULATE([Tasa Nueva Compra],
-          Clientes[anio_primer_pedido] = 2017, Clientes[primer_pedido_tardio] = 1)
+          Clientes[primer_en_2017] = 1, Clientes[primer_pedido_tardio] = 1)
 
 Recompra Primer Pedido Negativo =
 CALCULATE([Tasa Nueva Compra],
-          Clientes[anio_primer_pedido] = 2017, Clientes[primer_pedido_negativo] = 1)
+          Clientes[primer_en_2017] = 1, Clientes[primer_pedido_negativo] = 1)
 
 Recompra Primer Pedido No Negativo =
 CALCULATE([Tasa Nueva Compra],
-          Clientes[anio_primer_pedido] = 2017, Clientes[primer_pedido_negativo] = 0)
+          Clientes[primer_en_2017] = 1, Clientes[primer_pedido_negativo] = 0)
 ```
 
 ## Anexo D. Nodos de KNIME por etapa
@@ -983,9 +985,10 @@ CALCULATE([Tasa Nueva Compra],
 | Transformación | Joiner, GroupBy, Date&Time Difference, Math Formula, Rule Engine, String Manipulation | Reproduce la vista v_pedidos_base (Anexo A); verificar que los conteos coincidan. |
 | Preparación de modelos | Column Filter, Normalizer, One to Many (codificación), Row Splitter por fecha | Partición temporal: entrenamiento hasta marzo de 2018, prueba de abril a agosto de 2018. |
 | Modelo 1 | CSV Reader, Column Filter, Math Formula (logaritmo), Normalizer (Z-score), k-Means, Joiner, GroupBy, Rule-based Row Filter, Silhouette Coefficient, One-way ANOVA, CSV Writer | k = 4 con semilla 2; la silueta de k = 4 en KNIME es 0.297 y la comparación de k de 2 a 8 se calculó en Python. La prueba de H4 usa One-way ANOVA, porque el nodo de Kruskal-Wallis no está instalado. Detalle en `documento/guia-modelo1-knime.md`. |
-| Modelo 2 | Row Splitter (corte 2018-04-01), Missing Value y Missing Value (Apply), Equal Size Sampling, Normalizer y Normalizer (Apply), Random Forest Learner y Predictor, Logistic Regression Learner y Predictor, Rule Engine (líneas base), Scorer, Binary Classification Inspector | Balanceo solo sobre entrenamiento. Detalle en `documento/guia-modelo2-knime.md`. |
-| Validación | Scorer, ROC Curve, Cross Validation (X-Partitioner / X-Aggregator) | Validación cruzada solo dentro del conjunto de entrenamiento. |
-| Salida a Power BI | CSV Writer | Escribe `ordenes_etl.csv` y `segmentos_modelo1.csv` con el identificador del pedido. |
+| Modelo 2 | Row Splitter (corte 2018-04-01), Missing Value y Missing Value (Apply), Equal Size Sampling, Normalizer y Normalizer (Apply), Random Forest Learner y Predictor, Logistic Regression Learner y Predictor, Rule Engine (líneas base), Scorer, ROC Curve (legacy), Domain Calculator, Date&Time Part Extractor | Balanceo solo sobre entrenamiento. Detalle en `documento/guia-modelo2-knime.md`. |
+| Validación | Scorer, ROC Curve, Cross Validation (X-Partitioner / X-Aggregator) | Validación cruzada solo dentro del conjunto de entrenamiento. [Pendiente: X-Partitioner / X-Aggregator para el tamaño mínimo de nodo del Random Forest.] |
+| KPI | CSV Reader, Rule Engine, GroupBy, Joiner, Sorter, Column Renamer, Column Filter, Rule-based Row Filter, CSV Writer | Workflow `04-KPIs`: calcula los 11 KPI y escribe `pedidos_kpi.csv` y `clientes_kpi.csv`. Detalle en `documento/guia-kpis-knime.md`. |
+| Salida a Power BI | CSV Writer | Escribe `ordenes_etl.csv`, `segmentos_modelo1.csv`, `pedidos_kpi.csv` y `clientes_kpi.csv`, todas con el identificador del pedido o del cliente. [Pendiente: `predicciones_modelo2.csv`.] |
 
 ## Anexo E. Glosario
 
