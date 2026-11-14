@@ -46,12 +46,12 @@ Es una aproximación a la importancia (frecuencia con que cada variable se usa e
 | `resena-negativa-por-banda-de-retraso` | % de reseñas negativas según los días de retraso. |
 | `kpi-9-recompra` | Tasa de nueva compra: 96 096 clientes únicos; recompra 0.031 (3.12 %). |
 | `kpi-10-recompra-por-puntualidad` | Recompra según la puntualidad del primer pedido (clientes con primer pedido en 2017): 39 283 a tiempo, recompra 0.043; 2 794 tardíos, 0.030 (2.97 % con más decimales). |
+| `kpi-11-recompra-por-resena` | Recompra según la reseña del primer pedido (clientes con primer pedido en 2017 y reseña): 36 716 sin reseña negativa, recompra 0.043; 5 046 con reseña negativa, 0.037 (3.73 % con más decimales). |
 | `kpi-5-no-concretados` | Pedidos no concretados sobre los 99 441 pedidos. |
 | `pedidos-kpi-tabla-de-salida` | Tabla que se escribe en `pedidos_kpi.csv` (96 144 filas, 14 columnas). |
 
 ## Falta tomar
 - Los workflows completos en verde de `01-ETL` y `02-Clustering` (los de `03-Prediccion` y `04-KPIs` ya están).
-- **KPI 11** (recompra según la reseña del primer pedido): la tabla del GroupBy.
 - **Importancia de variables:** volver a capturar con la columna *RowID* ensanchada, para que se lean los nombres.
 - **Modelo 1:** perfiles de los segmentos, silueta (0.297) y ANOVA (H4).
 - **ETL:** la tabla final (96 144 filas) y la verificación de conteos.
