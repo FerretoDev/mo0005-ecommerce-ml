@@ -38,6 +38,7 @@ Es una aproximación a la importancia (frecuencia con que cada variable se usa e
 ## KPI (`kpis/`, workflow 04-KPIs)
 | Archivo | Muestra |
 | --- | --- |
+| `workflow-04-kpis-completo` | Workflow `04-KPIs` completo y ejecutado: rama de pedidos (KPI 1 a 4 y 6 a 8, con la unión de segmentos y predicciones que genera `pedidos_kpi.csv`) y rama de clientes (KPI 5, 9, 10 y 11, que genera `clientes_kpi.csv`). |
 | `kpi-1-2-6-7-global` | % de tardías, días de entrega, calificación y % de reseñas negativas (96 144 pedidos). |
 | `kpi-3-8-por-es-tardio` | Retraso promedio de las tardías y brecha de calificación por puntualidad. |
 | `kpi-4-por-mismo-estado` | Días de entrega con el mismo estado y con estados distintos. |
@@ -47,7 +48,7 @@ Es una aproximación a la importancia (frecuencia con que cada variable se usa e
 | `pedidos-kpi-tabla-de-salida` | Tabla que se escribe en `pedidos_kpi.csv` (96 144 filas, 14 columnas). |
 
 ## Falta tomar
-- Los workflows completos en verde de `01-ETL`, `02-Clustering` y `04-KPIs` (el de `03-Prediccion` ya está).
+- Los workflows completos en verde de `01-ETL` y `02-Clustering` (los de `03-Prediccion` y `04-KPIs` ya están).
 - **KPI 9, 10 y 11** (recompra): las tablas de los GroupBy.
 - **Importancia de variables:** volver a capturar con la columna *RowID* ensanchada, para que se lean los nombres.
 - **Modelo 1:** perfiles de los segmentos, silueta (0.297) y ANOVA (H4).
