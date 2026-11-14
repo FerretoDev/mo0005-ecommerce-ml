@@ -9,7 +9,7 @@
         <config key="column-filter">
             <entry key="filter-type" type="xstring" value="STANDARD"/>
             <config key="included_names">
-                <entry key="array-size" type="xint" value="14"/>
+                <entry key="array-size" type="xint" value="18"/>
                 <entry key="0" type="xstring" value="order_id"/>
                 <entry key="1" type="xstring" value="customer_unique_id"/>
                 <entry key="2" type="xstring" value="customer_state"/>
@@ -24,6 +24,10 @@
                 <entry key="11" type="xstring" value="review_promedio"/>
                 <entry key="12" type="xstring" value="resena_negativa"/>
                 <entry key="13" type="xstring" value="banda_retraso"/>
+                <entry key="14" type="xstring" value="segmento"/>
+                <entry key="15" type="xstring" value="en_prueba"/>
+                <entry key="16" type="xstring" value="prob_tardio_rf"/>
+                <entry key="17" type="xstring" value="prob_tardio_logistica"/>
             </config>
             <config key="excluded_names">
                 <entry key="array-size" type="xint" value="0"/>
@@ -60,7 +64,7 @@
         <config key="styles"/>
     </config>
     <entry key="customDescription" type="xstring" isnull="true" value=""/>
-    <entry key="state" type="xstring" value="CONFIGURED"/>
+    <entry key="state" type="xstring" value="IDLE"/>
     <entry key="factory" type="xstring" value="org.knime.base.node.preproc.filter.column.DataColumnSpecFilterNodeFactory"/>
     <entry key="node-name" type="xstring" value="Column Filter"/>
     <entry key="node-bundle-name" type="xstring" value="KNIME Base Nodes"/>
