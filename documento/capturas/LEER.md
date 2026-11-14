@@ -9,7 +9,7 @@ Evidencia de que los workflows corrieron y de que los resultados coinciden con l
 | `roc-random-forest-auc-0590` | Curva ROC del Random Forest, AUC 0.590. |
 | `roc-regresion-logistica-auc-0719` | Curva ROC de la regresión logística, AUC 0.719. |
 | `roc-base2-auc-0472` | Curva ROC de la línea base 2, AUC 0.472. |
-| `cv-nodo-10/20/40/80-*` | AUC de la validación cruzada de 5 particiones del Random Forest con tamaño mínimo de nodo 10, 20, 40 y 80. **Confirmar que la de 20 se hizo con ese valor.** |
+| `cv-nodo-10/20/40/80-*` | AUC de la validación cruzada de 5 particiones del Random Forest con tamaño mínimo de nodo 10, 20, 40 y 80. |
 
 ## KPI (`kpis/`, workflow 04-KPIs)
 | Archivo | Muestra |
