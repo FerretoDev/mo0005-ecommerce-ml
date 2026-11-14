@@ -118,7 +118,7 @@ Variables más importantes del Random Forest: `plazo_estimado_dias`, `total_flet
 
 ## 10. Cómo quedó en KNIME (workflow `03-Prediccion`)
 
-El workflow tiene **28 nodos** y se ejecuta completo. Se generó el esqueleto escribiendo XML y se terminó de configurar en la interfaz de KNIME.
+El workflow tiene **39 nodos** (28 del modelo y 11 de la validación cruzada y la exportación) y se ejecuta completo. Se generó el esqueleto escribiendo XML y se terminó de configurar en la interfaz de KNIME.
 
 **Cadena:** CSV Reader → String to Date&Time → Date&Time Part Extractor (`dia_semana`) → Column Filter → Number To String (`es_tardio`) → **Domain Calculator** → Row Splitter (corte 2018-04-01). Rama de entrenamiento: Column Filter → Missing Value (mediana) → Equal Size Sampling (`es_tardio`, exacto, semilla 42) → Random Forest Learner y Normalizer → Logistic Regression Learner. Rama de prueba: Column Filter → Missing Value (Apply) → Random Forest Predictor, Normalizer (Apply) → Logistic Regression Predictor y tres Rule Engine (líneas base). Cuatro Scorer y tres ROC Curve.
 
@@ -144,4 +144,24 @@ Matrices de confusión (filas = real, columnas = predicho; `0`/`1`): Base 1 = [3
 - **Scorer:** la columna de predicción se llama `Prediction ()` en el Random Forest y `es_tardio (prediction)` en la logística.
 - **Aviso de la regresión logística:** no converge en el número de épocas y no calcula la covarianza (matriz singular); no afecta a las predicciones.
 
-**Pendiente:** validación cruzada (X-Partitioner / X-Aggregator) para elegir el tamaño mínimo de nodo y el umbral; sección 3.5.2 de la plantilla.
+
+## 11. Validación cruzada, importancia de variables y exportación de predicciones
+
+**Validación cruzada del Random Forest (nodos 35 a 39).** X-Partitioner de 5 particiones, estratificada por `es_tardio`, semilla 42, sobre el entrenamiento ya balanceado; Random Forest Learner y Predictor, X-Aggregator y ROC Curve (el AUC es el de las 5 particiones juntas). Se varió el campo *Minimum node size* del Learner de la validación cruzada (guarda `minChildSize` = ese valor y `minNodeSize` = el doble):
+
+| Tamaño mínimo | AUC de validación |
+| ---: | ---: |
+| 10 | 0.6858 |
+| 20 | 0.6871 |
+| 40 | 0.6876 |
+| 80 | 0.6855 |
+
+**Decisión:** se mantiene 20. La diferencia entre el mejor y el peor (0.002) es del orden del ruido. La prueba temporal se usó una sola vez con esa configuración (AUC 0.590). El AUC de validación (≈ 0.69) es mayor que el de la prueba (0.59) porque la validación cruzada mezcla pedidos del mismo período de entrenamiento; la relación entre variables y retraso cambia con el tiempo. Como se hizo sobre el entrenamiento balanceado, sirve para comparar parámetros, no para estimar precisión ni sensibilidad reales.
+
+**Variables más usadas por el Random Forest** (salida *Attribute Statistics* del Learner del modelo final; divisiones en la raíz de los 200 árboles): `customer_state` 47, `total_flete` 46, `mismo_estado` 28, `product_category_name_english` 24, `plazo_estimado_dias` 19, `seller_state` 12, `total_precio` 7, `product_weight_g` 7, `volumen_cm3` 7, `relacion_precio_flete` 3; `num_items`, `max_cuotas` y `dia_semana`, 0. Es una aproximación a la importancia, no un valor como el de scikit-learn; las variables con muchas categorías tienden a salir arriba con Gini.
+
+**Exportación de predicciones (nodos 29 a 34).** Se escribe `knime/datos/predicciones_modelo2.csv` con `order_id`, `prob_tardio_rf` y `prob_tardio_logistica` para los 32 092 pedidos de la prueba (abril a agosto de 2018). Para esto `order_id` pasa por el primer Column Filter y por el de la rama de prueba, y no entra al de entrenamiento. Los AUC recalculados desde el archivo coinciden con los de las ROC Curve (0.590 y 0.719).
+
+**Las probabilidades no son frecuencias reales.** Los modelos se entrenaron con datos balanceados: el promedio de las probabilidades es 0.43 (Random Forest) y 0.49 (regresión logística), mientras que solo el 5.85 % de esos pedidos llegó tarde. Sirven para ordenar los pedidos por riesgo; en Power BI conviene usar niveles de riesgo por percentiles.
+
+**Errores que aparecieron al armarlo:** el primer Column Filter no dejaba pasar `order_id`, y el Joiner de la exportación fallaba con «join column names [order_id] do not exist in the target table». Al cambiar el tamaño de nodo en la validación cruzada hay que reejecutar la cadena hasta la ROC Curve; si no, la vista sigue mostrando la curva anterior.
