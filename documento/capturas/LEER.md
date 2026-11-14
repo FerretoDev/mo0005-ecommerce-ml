@@ -50,9 +50,21 @@ Es una aproximación a la importancia (frecuencia con que cada variable se usa e
 | `kpi-5-no-concretados` | Pedidos no concretados sobre los 99 441 pedidos. |
 | `pedidos-kpi-tabla-de-salida` | Tabla que se escribe en `pedidos_kpi.csv` (96 144 filas, 14 columnas). |
 
+## Dashboard (`dashboard/`, Power BI)
+| Archivo | Muestra |
+| --- | --- |
+| `pagina-1-resumen` | Página 1: KPI 1, 2, 6 y 9 (8.07 %, 4.16, 12.5 días y 3.12 %), línea mensual de tardías y calificación, y filtro por estado. |
+| `pagina-1-filtro-estado` | La misma página filtrada por Alagoas (AL): 23.80 % de tardías, calificación 3.86 y 24.4 días de entrega. La recompra no cambia porque la tabla de clientes no tiene el estado. |
+| `pagina-2-entregas` | Página 2: KPI 1 a 5, tardías por estado, tiempo de entrega por mismo estado y pedidos por tramo de retraso. |
+| `pagina-3-satisfaccion` | Página 3: KPI 6 a 8 (4.16, 4.30, 2.57, brecha 1.72, 12.73 %), calificación de puntuales y tardíos, reseñas negativas por tramo de retraso. |
+| `pagina-4-fidelizacion` | Página 4: clientes únicos, recompra 3.12 % y KPI 10 y 11 (4.34 %, 2.97 %, 4.32 % y 3.73 %). |
+| `pagina-5-perfiles-riesgo` | Página 5: tabla de segmentos y % de tardías por nivel de riesgo (13.33 %, 11.30 % y 3.76 %), con la leyenda. |
+| `modelo-de-datos` | Vista de modelo: tablas Pedidos, Clientes, PedidosTodos y Segmentos. |
+| `verificacion-dax-riesgo` | Consulta DAX de control: pedidos, % de tardías y probabilidad promedio por nivel de riesgo (3 210, 4 813 y 24 069 pedidos de prueba). |
+| `verificacion-dax-segmentos` | Consulta DAX de control por segmento: coincide con la tabla 3.4.2 (7 357 pedidos y 77.42 % de tardías en entregas problemáticas). |
+
 ## Falta tomar
 - Los workflows completos en verde de `01-ETL` y `02-Clustering` (los de `03-Prediccion` y `04-KPIs` ya están).
 - **Importancia de variables:** volver a capturar con la columna *RowID* ensanchada, para que se lean los nombres.
 - **Modelo 1:** perfiles de los segmentos, silueta (0.297) y ANOVA (H4).
 - **ETL:** la tabla final (96 144 filas) y la verificación de conteos.
-- **Dashboard de Power BI**, cuando exista.
