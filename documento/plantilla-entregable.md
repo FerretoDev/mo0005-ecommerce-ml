@@ -522,7 +522,11 @@ La evidencia del flujo requiere mostrar que la cadena completa corre de manera c
 
 ## 4.1 Conexión entre KNIME y Power BI
 
-Los resultados del flujo se exportan desde KNIME y se consumen en Power BI como tablas analíticas de pedidos y clientes. La conexión se apoya en los indicadores ya calculados en PostgreSQL y en las vistas creadas para la capa analítica, permitiendo mantener una estructura consistente entre la parte técnica y la visualización.
+Power BI no se conecta a PostgreSQL, sino a las tablas que produce el propio flujo de KNIME. El workflow `04-KPIs` lee `ordenes_etl.csv` (la salida del 01-ETL) y los archivos originales de pedidos y clientes, calcula los 11 KPI y escribe dos tablas: `knime/datos/pedidos_kpi.csv`, con una fila por pedido (96 144 pedidos, 14 columnas), y `knime/datos/clientes_kpi.csv`, con una fila por cliente (96 096 clientes, 8 columnas). Los valores se verificaron contra las consultas de PostgreSQL (`datos/resultados_kpis.txt`).
+
+Además de esas dos tablas, Power BI carga dos archivos más. El KPI 5 necesita todos los pedidos, también los cancelados, así que se lee directamente `knime/datos/olist_orders_dataset.csv` (99 441 pedidos, columna `order_status`). La segmentación del Modelo 1 viene de `knime/datos/segmentos_modelo1.csv` (columnas `order_id` y `Cluster`), que se relaciona con la tabla de pedidos por `order_id`.
+
+En la parte predictiva el dashboard usa la regresión logística, porque fue el mejor modelo (AUC 0.719) y es la que sustenta la conclusión sobre H3; el Random Forest aparece solo como comparación. [Pendiente: exportar las predicciones del workflow 03-Prediccion a `predicciones_modelo2.csv` y unirlas con las tablas de los KPI.]
 
 ## 4.2 Indicadores (KPI)
 
@@ -564,9 +568,13 @@ La estructura del dashboard contempla una vista de resumen, otra de entregas, ot
 | 2. Entregas (OE1) | 1 a 5 | Mapa o barras por estado; barras de tiempo de entrega en el mismo estado vs. estados distintos; histograma de días de retraso. |
 | 3. Satisfacción (OE2) | 6 a 8 | Calificación promedio de pedidos puntuales vs. tardíos; % de reseñas negativas por tramo de retraso (a tiempo, 1 a 3, 4 a 7 y más de 7 días). |
 | 4. Fidelización (OE3) | 9 a 11 | Tasa de recompra según la puntualidad y según la calificación del primer pedido. |
-| 5. Perfiles y riesgo | — | Tabla de segmentos del Modelo 1 (tamaño, valor y calificación promedio); distribución de la probabilidad de retraso y cantidad de pedidos en riesgo alto del Modelo 2. |
+| 5. Perfiles y riesgo | — | Tabla de segmentos del Modelo 1 (tamaño, valor y calificación promedio); distribución del nivel de riesgo del Modelo 2 y cantidad de pedidos en riesgo alto. |
 
-Las medidas DAX de los KPI están en el Anexo C y las tablas de origen (v_pedidos_base y v_clientes) en el Anexo A.
+En la página 5, los grupos que KNIME numera de forma arbitraria se muestran con los nombres de la sección 3.4.2: `cluster_0` es «Estándar entre estados» (41 511 pedidos), `cluster_1` «Entregas problemáticas» (7 357), `cluster_2` «Locales rápidas» (30 509) y `cluster_3` «Compras grandes a plazos» (16 767).
+
+La parte de riesgo de esa página necesita dos aclaraciones. La primera es que las probabilidades del Modelo 2 están infladas: los modelos se entrenaron con datos balanceados, mitad tardíos y mitad puntuales, cuando en realidad llegó tarde el 9.2 % de los pedidos del entrenamiento y el 5.9 % de los de la prueba. Por eso no se presentan como una frecuencia («60 % de riesgo»), sino como un nivel de riesgo relativo definido por percentiles; por ejemplo, riesgo alto es el 10 % de pedidos con mayor probabilidad. La leyenda lo advierte: las probabilidades sirven para ordenar los pedidos por riesgo, no para estimar la frecuencia real de retraso. La segunda es que solo hay predicciones para los 32 092 pedidos de la prueba (abril a agosto de 2018), y la leyenda también lo indica.
+
+Las medidas DAX de los KPI están en el Anexo C. Usan `pedidos_kpi.csv` y `clientes_kpi.csv`, que equivalen a las vistas v_pedidos_base y v_clientes del Anexo A.
 
 ## 4.4 Hallazgos principales
 
