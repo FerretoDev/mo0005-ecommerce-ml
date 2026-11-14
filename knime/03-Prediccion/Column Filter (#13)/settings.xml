@@ -9,7 +9,7 @@
         <config key="column-filter">
             <entry key="filter-type" type="xstring" value="STANDARD"/>
             <config key="included_names">
-                <entry key="array-size" type="xint" value="14"/>
+                <entry key="array-size" type="xint" value="15"/>
                 <entry key="0" type="xstring" value="total_precio"/>
                 <entry key="1" type="xstring" value="total_flete"/>
                 <entry key="2" type="xstring" value="num_items"/>
@@ -24,6 +24,7 @@
                 <entry key="11" type="xstring" value="product_category_name_english"/>
                 <entry key="12" type="xstring" value="dia_semana"/>
                 <entry key="13" type="xstring" value="es_tardio"/>
+                <entry key="14" type="xstring" value="order_id"/>
             </config>
             <config key="excluded_names">
                 <entry key="array-size" type="xint" value="0"/>
