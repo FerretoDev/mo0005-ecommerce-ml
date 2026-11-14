@@ -28,8 +28,8 @@ The goal is to practice the full data lifecycle: extracting, cleaning and joinin
 | :--- | :--- |
 | `01-ETL` | Done. Reads the 9 CSV files, joins orders with customers, items, payments, reviews and seller/product data, keeps `delivered` orders within the delivery window (2017-01 to 2018-08), computes derived variables (`es_tardio`, `dias_entrega`, `dias_retraso`, `mismo_estado`, …) and exports `knime/datos/ordenes_etl.csv` (96,144 orders, 29 columns; late deliveries = 8.07%). |
 | `02-Clustering` | Done. k-means with k = 4 in KNIME (groups of 7,357 / 16,767 / 30,509 / 41,511 orders), segment profiles, overall silhouette 0.297, one-way ANOVA test of hypothesis H4 (F = 4,477.7; p < 0.001) and output `knime/datos/segmentos_modelo1.csv` (`order_id` + `Cluster`). Pending: the k = 2…8 loop in KNIME (the k table was computed in Python). |
-| `03-Prediccion` | Pending. Model 2: predict late delivery (`es_tardio`) at purchase time with logistic regression and Random Forest against two baselines; temporal split (cutoff 2018-04-01). |
-| `04-KPIs` | Pending. |
+| `03-Prediccion` | Done. Model 2: predicts late delivery (`es_tardio`) at purchase time with logistic regression and Random Forest against two baselines, with a temporal split (cutoff 2018-04-01; 64,052 training and 32,092 test orders). Test AUC: logistic regression 0.719, Random Forest 0.590, baselines 0.500 and 0.472. Five-fold cross-validation of the Random Forest minimum node size (10, 20, 40, 80; AUC 0.686 to 0.688, 20 kept). Exports `knime/datos/predicciones_modelo2.csv` (test orders only). |
+| `04-KPIs` | Done. Computes the 11 KPIs (checked against `datos/resultados_kpis.txt`), joins the Model 1 segment and the Model 2 probabilities, and writes `knime/datos/pedidos_kpi.csv` (96,144 orders, 18 columns) and `knime/datos/clientes_kpi.csv` (96,096 customers, 8 columns) for Power BI. |
 
 KNIME can read the CSV files directly (as `01-ETL` does today) or connect to the PostgreSQL database started with Docker (next section).
 
