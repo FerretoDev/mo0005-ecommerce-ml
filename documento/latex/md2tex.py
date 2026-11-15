@@ -210,12 +210,13 @@ def convertir(md):
             i += 1
             out.append(r'\begin{lstlisting}'); out.extend(bloque); out.append(r'\end{lstlisting}')
             continue
-        mi = re.match(r'^!\[(.*?)\]\((.+?)\)\s*$', ln)
+        mi = re.match(r'^!\[(.*?)\]\((.+?)\)(?:\{alto=([0-9.]+)\})?\s*$', ln)
         if mi:
             cerrar_parrafo(); cerrar_lista()
             cap, ruta = mi.group(1), mi.group(2)
+            alto = mi.group(3) or '0.30'   # fracción de la altura de página; ![...](ruta){alto=0.85}
             out.append(r'\begin{figure}[H]' + '\n' + r'\centering' + '\n'
-                       + r'\includegraphics[width=\linewidth,height=0.30\textheight,keepaspectratio]{../' + ruta + '}\n'
+                       + r'\includegraphics[width=\linewidth,height=' + alto + r'\textheight,keepaspectratio]{../' + ruta + '}\n'
                        + r'\caption{' + inline(cap) + '}\n' + r'\end{figure}')
             i += 1
             continue
