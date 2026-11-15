@@ -29,3 +29,12 @@ CLAUDE.md
 AGENTS.md
 GEMINI.md
 .github/copilot-instructions.md
+
+# auxiliares de LaTeX (se generan al compilar documento/latex/main.tex)
+documento/latex/*.aux
+documento/latex/*.log
+documento/latex/*.fls
+documento/latex/*.fdb_latexmk
+documento/latex/*.xdv
+documento/latex/*.toc
+documento/latex/*.out
