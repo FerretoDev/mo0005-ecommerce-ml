@@ -20,6 +20,7 @@ SALIDA = os.path.join(AQUI, 'main.tex')
 UNICODE = {
     '≤': r'$\leq$', '≥': r'$\geq$', '→': r'$\rightarrow$', '←': r'$\leftarrow$',
     '−': r'$-$', '÷': r'$\div$', '×': r'$\times$', '≈': r'$\approx$', '≠': r'$\neq$',
+    'χ': r'$\chi$', 'α': r'$\alpha$', 'β': r'$\beta$', 'μ': r'$\mu$', 'σ': r'$\sigma$', 'η': r'$\eta$',
     '±': r'$\pm$', '↑': r'$\uparrow$', '↓': r'$\downarrow$', '✓': r'$\checkmark$',
     ' ': '~', ' ': '~',
 }
@@ -68,7 +69,12 @@ def inline(s):
         elif ltxt is not None:
             out.append(r'\href{' + lurl.replace('%', r'\%').replace('#', r'\#') + '}{' + inline(ltxt) + '}')
         elif url is not None:
-            out.append(r'\url{' + url + '}')
+            if len(url) > 70:
+                # URL muy larga: se permite cortar en cualquier letra, solo dentro de este grupo
+                letras = ''.join(r'\do\%s' % c for c in 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
+                out.append(r'{\def\UrlBreaks{\do\/\do\-\do\?\do\=\do\.\do\_' + letras + r'}\url{' + url + '}}')
+            else:
+                out.append(r'\url{' + url + '}')
         elif bold is not None:
             out.append(r'\textbf{' + inline(bold) + '}')
         else:
@@ -95,7 +101,9 @@ def tabla(filas):
     pesos = []
     for j in range(n):
         m = max([len(enc[j])] + [len(r[j]) for r in datos])
-        pesos.append(max(6, min(m, 55)))
+        # la columna nunca debe ser mas angosta que su palabra mas larga (el encabezado va en negrita)
+        palabra = max(len(w) for c in [enc[j]] + [r[j] for r in datos] for w in (c.split() or ['']))
+        pesos.append(max(6, min(m, 55), min(int(palabra * 1.9) + 1, 16)))
     tot = sum(pesos)
     esp = 2 * n  # \tabcolsep a cada lado de cada columna
     cols = ''
@@ -134,11 +142,15 @@ PREAMBULO = r'''\documentclass[11pt,a4paper]{article}
 \usepackage{xcolor}
 \usepackage{array}
 \usepackage{longtable}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
 \usepackage{listings}
 \usepackage[hidelinks]{hyperref}
 \urlstyle{same}
 \Urlmuskip=0mu plus 1mu
-\def\UrlBreaks{\do\/\do\-\do\?\do\=\do\.\do\_\do\a\do\b\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j\do\k\do\l\do\m\do\n\do\o\do\p\do\q\do\r\do\s\do\t\do\u\do\v\do\w\do\x\do\y\do\z\do\A\do\B\do\C\do\D\do\E\do\F\do\G\do\H\do\I\do\J\do\K\do\L\do\M\do\N\do\O\do\P\do\Q\do\R\do\S\do\T\do\U\do\V\do\W\do\X\do\Y\do\Z\do\0\do\1\do\2\do\3\do\4\do\5\do\6\do\7\do\8\do\9}
+\def\UrlBreaks{\do\/\do\-\do\?\do\=\do\.\do\_}
 \setlength{\tabcolsep}{4pt}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{6pt}
@@ -197,6 +209,15 @@ def convertir(md):
                 bloque.append(L[i]); i += 1
             i += 1
             out.append(r'\begin{lstlisting}'); out.extend(bloque); out.append(r'\end{lstlisting}')
+            continue
+        mi = re.match(r'^!\[(.*?)\]\((.+?)\)\s*$', ln)
+        if mi:
+            cerrar_parrafo(); cerrar_lista()
+            cap, ruta = mi.group(1), mi.group(2)
+            out.append(r'\begin{figure}[H]' + '\n' + r'\centering' + '\n'
+                       + r'\includegraphics[width=\linewidth,height=0.30\textheight,keepaspectratio]{../' + ruta + '}\n'
+                       + r'\caption{' + inline(cap) + '}\n' + r'\end{figure}')
+            i += 1
             continue
         m = re.match(r'^(#{1,4}) (.*)$', ln)
         if m:
