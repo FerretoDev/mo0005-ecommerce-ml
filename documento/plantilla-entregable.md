@@ -30,7 +30,7 @@ Olist es un integrador de marketplaces brasileño que conecta a pequeños comerc
 
 Este proyecto analiza, con el conjunto público de Olist (alrededor de 100 000 pedidos de 2016 a 2018), cómo se relacionan las entregas tardías con la satisfacción de los clientes y con su probabilidad de volver a comprar. La exploración sobre la base de datos muestra que el 8.07 % de los pedidos llegó tarde, que su calificación promedio fue de 2.57 frente a 4.30 en los pedidos puntuales y que solo el 3.12 % de los clientes realizó más de un pedido.
 
-Para apoyar a la empresa se construyó, en KNIME, un flujo que integra y depura los datos almacenados en PostgreSQL; un modelo supervisado que predice la entrega tardía con información disponible al comprar; un modelo no supervisado que segmenta los pedidos en perfiles; y un conjunto de 11 indicadores presentados en Power BI. Los resultados muestran una relación clara entre los retrasos y una menor satisfacción, y una relación más modesta con la recompra, lo que sustenta acciones preventivas en logística y atención al cliente.
+Para apoyar a la empresa se construyó, en KNIME, un flujo que integra y depura los archivos originales de Olist; un modelo supervisado que predice la entrega tardía con información disponible al comprar; un modelo no supervisado que segmenta los pedidos en perfiles; y un conjunto de 11 indicadores presentados en Power BI. Los resultados muestran una relación clara entre los retrasos y una menor satisfacción, y una relación más modesta con la recompra, lo que sustenta acciones preventivas en logística y atención al cliente.
 
 ---
 
@@ -136,7 +136,7 @@ Los datos provienen del conjunto público Brazilian E-Commerce Public Dataset by
 
 ## 2.5 Infraestructura de base de datos
 
-Se utilizó **PostgreSQL** ejecutándose localmente mediante Docker, en lugar de Snowflake. Esta decisión fue funcional y reproducible para todo el equipo: el esquema quedó versionado en el repositorio con el script `schema.sql`, la instancia se levantó de forma local y el flujo de ETL se conectó directamente con KNIME. La estructura final se implementó en el esquema `olist`, con la base de datos `postgres` configurada dentro del contenedor `olist-db`.
+Se utilizó **PostgreSQL** ejecutándose localmente mediante Docker, en lugar de Snowflake. Esta decisión fue funcional y reproducible para todo el equipo: el esquema quedó versionado en el repositorio con el script `schema.sql`, la instancia se levantó de forma local y se usó para explorar los datos y verificar los resultados de KNIME, cuyos flujos leen los CSV del repositorio. La estructura final se implementó en el esquema `olist`, con la base de datos `postgres` configurada dentro del contenedor `olist-db`.
 
 Se documentó la evidencia de funcionamiento mediante consultas SQL sobre el esquema y sobre la vista `v_pedidos_base`, así como la validación de conteos por tabla. La instancia quedó disponible para el desarrollo y la verificación del análisis de negocio.
 
