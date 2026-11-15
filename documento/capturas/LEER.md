@@ -63,8 +63,20 @@ Es una aproximación a la importancia (frecuencia con que cada variable se usa e
 | `verificacion-dax-riesgo` | Consulta DAX de control: pedidos, % de tardías y probabilidad promedio por nivel de riesgo (3 210, 4 813 y 24 069 pedidos de prueba). |
 | `verificacion-dax-segmentos` | Consulta DAX de control por segmento: coincide con la tabla 3.4.2 (7 357 pedidos y 77.42 % de tardías en entregas problemáticas). |
 
+## 01-ETL (`etl/`)
+| Archivo | Muestra |
+| --- | --- |
+| `workflow-01-etl-completo` | Workflow `01-ETL` completo y ejecutado, con sus 40 nodos en verde: nueve CSV Reader, agregaciones y uniones, rama del primer ítem, variables derivadas, filtros, Missing Value, Date&Time to String, Statistics y CSV Writer. |
+| `tabla-final-96144-filas` | Salida del Missing Value: **96 144 filas y 29 columnas**, con los códigos postales como texto (`28013`) y la configuración del nodo (`product_category_name_english` → `desconocida`). |
+| `statistics-tabla-de-estadisticas` | Salida del nodo Statistics: mínimo, máximo, media y valores ausentes de las variables numéricas (642 sin reseña, 16 en peso y medidas). |
+
+## Modelo 1 (`modelo1/`, workflow 02-Clustering)
+| Archivo | Muestra |
+| --- | --- |
+| `workflow-02-clustering-completo` | Workflow `02-Clustering` completo y ejecutado, con sus 14 nodos en verde. El CSV Writer tiene el icono rojo propio de los nodos de escritura; no es un error. |
+| `groupby-perfil-por-grupo` | Salida del GroupBy: los cuatro grupos con **41 511 / 7 357 / 30 509 / 16 767** pedidos y su mediana de precio, días de entrega, % de entregas tardías y calificación. |
+| `anova-h4-f-4477` | One-way ANOVA de `review_promedio` por grupo (H4): F = 4 477.682, 3 y 95 498 grados de libertad, p ≈ 0. |
+| `silueta-k4-0297` | Silhouette Coefficient de k = 4 sobre las primeras 10 000 filas: global 0.297 (por grupo 0.355, 0.358, 0.106 y 0.155). |
+
 ## Falta tomar
-- Los workflows completos en verde de `01-ETL` y `02-Clustering` (los de `03-Prediccion` y `04-KPIs` ya están).
 - **Importancia de variables:** volver a capturar con la columna *RowID* ensanchada, para que se lean los nombres.
-- **Modelo 1:** perfiles de los segmentos, silueta (0.297) y ANOVA (H4).
-- **ETL:** la tabla final (96 144 filas) y la verificación de conteos.
