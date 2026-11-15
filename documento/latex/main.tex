@@ -415,10 +415,13 @@ sellers.seller\_\allowbreak{}zip\_\allowbreak{}code\_\allowbreak{}prefix & geolo
 \end{longtable}
 }
 \subsection{2.9 Diagrama entidad-relación}
-Se incorpora el diagrama entidad-relación del modelo relacional usado en el proyecto. La versión fuente se conserva en la carpeta del repositorio y el esquema quedó alineado con la base implementada en PostgreSQL.
+La figura siguiente muestra el diagrama entidad-relación del modelo relacional usado en el proyecto, alineado con el esquema \texttt{olist} implementado en PostgreSQL. El archivo editable (draw.io) está en la carpeta \texttt{diagrama-er/\allowbreak{}} del repositorio.
 
-Enlace al diagrama: {\def\UrlBreaks{\do\/\do\-\do\?\do\=\do\.\do\_\do\a\do\b\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j\do\k\do\l\do\m\do\n\do\o\do\p\do\q\do\r\do\s\do\t\do\u\do\v\do\w\do\x\do\y\do\z\do\A\do\B\do\C\do\D\do\E\do\F\do\G\do\H\do\I\do\J\do\K\do\L\do\M\do\N\do\O\do\P\do\Q\do\R\do\S\do\T\do\U\do\V\do\W\do\X\do\Y\do\Z\do\0\do\1\do\2\do\3\do\4\do\5\do\6\do\7\do\8\do\9}\url{https://drive.google.com/file/d/1xBKpA89fh4JQ7KKysahj6yNuwq9vtR2d/view?usp=sharing}}
-
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth,height=0.80\textheight,keepaspectratio]{../../diagrama-er/diagrama-er.png}
+\caption{Diagrama entidad-relación del esquema olist: nueve tablas, sus llaves y sus relaciones.}
+\end{figure}
 \textbf{Cómo leer el diagrama:}
 
 \begin{itemize}
@@ -760,11 +763,11 @@ Los valores de las pruebas se calcularon en Python sobre \texttt{knime/\allowbre
 \item Trabajo futuro: actualización y monitoreo de los modelos, nuevas variables, análisis del texto de los comentarios (en portugués) y prueba de otros algoritmos.
 \end{itemize}
 \section{7. Referencias y anexos}
+KNIME AG. (2026). \emph{KNIME Analytics Platform} (Versión 5.12) [Software]. \url{https://www.knime.com/}
+
 Microsoft. (s. f.-a). \emph{Power BI Desktop} [Software]. \url{https://powerbi.microsoft.com/}
 
 Microsoft. (s. f.-b). \emph{Referencia de funciones DAX}. \url{https://learn.microsoft.com/en-us/dax/dax-function-reference}
-
-KNIME AG. (2026). \emph{KNIME Analytics Platform} (Versión 5.12) [Software]. \url{https://www.knime.com/}
 
 Olist. (2018). \emph{Brazilian E-Commerce Public Dataset by Olist} [Conjunto de datos]. Kaggle. \url{https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce}
 
