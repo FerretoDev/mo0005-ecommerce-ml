@@ -341,9 +341,9 @@ Las columnas derivadas del flujo se documentan en la sección 3.3, donde se desc
 
 ## 2.9 Diagrama entidad-relación
 
-Se incorpora el diagrama entidad-relación del modelo relacional usado en el proyecto. La versión fuente se conserva en la carpeta del repositorio y el esquema quedó alineado con la base implementada en PostgreSQL.
+La figura siguiente muestra el diagrama entidad-relación del modelo relacional usado en el proyecto, alineado con el esquema `olist` implementado en PostgreSQL. El archivo editable (draw.io) está en la carpeta `diagrama-er/` del repositorio.
 
-Enlace al diagrama: https://drive.google.com/file/d/1xBKpA89fh4JQ7KKysahj6yNuwq9vtR2d/view?usp=sharing
+![Diagrama entidad-relación del esquema olist: nueve tablas, sus llaves y sus relaciones.](../diagrama-er/diagrama-er.png){alto=0.80}
 
 **Cómo leer el diagrama:**
 
@@ -652,11 +652,11 @@ Los valores de las pruebas se calcularon en Python sobre `knime/datos/ordenes_et
 
 # 7. Referencias y anexos
 
+KNIME AG. (2026). *KNIME Analytics Platform* (Versión 5.12) [Software]. https://www.knime.com/
+
 Microsoft. (s. f.-a). *Power BI Desktop* [Software]. https://powerbi.microsoft.com/
 
 Microsoft. (s. f.-b). *Referencia de funciones DAX*. https://learn.microsoft.com/en-us/dax/dax-function-reference
-
-KNIME AG. (2026). *KNIME Analytics Platform* (Versión 5.12) [Software]. https://www.knime.com/
 
 Olist. (2018). *Brazilian E-Commerce Public Dataset by Olist* [Conjunto de datos]. Kaggle. https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
 
