@@ -8,6 +8,7 @@
 \usepackage{longtable}
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage{needspace}
 \usepackage{caption}
 \captionsetup{font=small,labelfont=bf}
 \usepackage{listings}
@@ -48,7 +49,7 @@ MO-0005 Análisis de Algoritmos · Grupo 01 · II Ciclo 2026\par\medskip
 Prof. Manfred Mejías Acevedo\par\medskip
 \textbf{PUNTUAL}\par\medskip
 \vspace{1cm}{\LARGE \textbf{Entregas tardías, satisfacción y fidelización de clientes en Olist: modelo de aprendizaje automático e indicadores analíticos}\par}\vspace{1cm}
-\textbf{Entregable 1 — Documental (10 \% de la nota final)}\par\medskip
+\textbf{Entregable 1 — Documental (10~\% de la nota final)}\par\medskip
 Fecha límite: 24 de noviembre de 2026, en Mediación Virtual\par\medskip
 Equipo: \textbf{Última Milla Labs}\par\medskip
 Autores: Kendall Alvarado Artavia (C5C322); Marcos Ferreto Estrada (C5F092); David Moya Correas (C4H773); Sebastián Sánchez Vega (C4J823)\par\medskip
@@ -61,7 +62,7 @@ Repositorio del proyecto: mo0005-ecommerce-ml\par\medskip
 \section{1. Introducción y contexto}
 Olist es un integrador de marketplaces brasileño que conecta a pequeños comerciantes con compradores de todo el país. El valor de su modelo depende de que cada pedido llegue completo, a tiempo y con una buena experiencia de compra.
 
-Este proyecto analiza, con el conjunto público de Olist (alrededor de 100 000 pedidos de 2016 a 2018), cómo se relacionan las entregas tardías con la satisfacción de los clientes y con su probabilidad de volver a comprar. La exploración sobre la base de datos muestra que el 8.07 \% de los pedidos llegó tarde, que su calificación promedio fue de 2.57 frente a 4.30 en los pedidos puntuales y que solo el 3.12 \% de los clientes realizó más de un pedido.
+Este proyecto analiza, con el conjunto público de Olist (alrededor de 100~000 pedidos de 2016 a 2018), cómo se relacionan las entregas tardías con la satisfacción de los clientes y con su probabilidad de volver a comprar. La exploración sobre la base de datos muestra que el 8.07~\% de los pedidos llegó tarde, que su calificación promedio fue de 2.57 frente a 4.30 en los pedidos puntuales y que solo el 3.12~\% de los clientes realizó más de un pedido.
 
 Para apoyar a la empresa se construyó, en KNIME, un flujo que integra y depura los archivos originales de Olist; un modelo supervisado que predice la entrega tardía con información disponible al comprar; un modelo no supervisado que segmenta los pedidos en perfiles; y un conjunto de 11 indicadores presentados en Power BI. Los resultados muestran una relación clara entre los retrasos y una menor satisfacción, y una relación más modesta con la recompra, lo que sustenta acciones preventivas en logística y atención al cliente.
 
@@ -70,12 +71,12 @@ Para apoyar a la empresa se construyó, en KNIME, un flujo que integra y depura 
 \subsection{2.1 Empresa o institución seleccionada}
 Olist (2018) es una empresa brasileña de comercio electrónico que se describe como integradora de marketplaces: conecta a pequeños negocios de todo el país con distintos canales de venta mediante un único contrato. Los comerciantes ofrecen sus productos en la tienda Olist Store y los despachan directamente a los clientes a través de socios logísticos de la empresa. En su descripción, Olist se presenta como la mayor tienda por departamentos dentro de los marketplaces de Brasil.
 
-Los datos del proyecto provienen del conjunto público que la propia empresa publicó en Kaggle y que reúne información de alrededor de 100 000 pedidos realizados entre 2016 y 2018 en múltiples marketplaces de Brasil. El archivo de pedidos contiene 99 441 registros (Olist, 2018). Como los datos corresponden a ese periodo específico, los hallazgos describen el desempeño de la empresa en dicho lapso y no necesariamente su situación actual.
+Los datos del proyecto provienen del conjunto público que la propia empresa publicó en Kaggle y que reúne información de alrededor de 100~000 pedidos realizados entre 2016 y 2018 en múltiples marketplaces de Brasil. El archivo de pedidos contiene 99~441 registros (Olist, 2018). Como los datos corresponden a ese periodo específico, los hallazgos describen el desempeño de la empresa en dicho lapso y no necesariamente su situación actual.
 
 Para efectos de este proyecto, el equipo asume el rol de Última Milla Labs, un equipo de analítica de datos que apoya a Olist en la toma de decisiones. Se trata de un ejercicio académico: Olist no encargó este estudio.
 
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-4\tabcolsep-3\arrayrulewidth)*28/83\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-4\tabcolsep-3\arrayrulewidth)*55/83\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-4\tabcolsep-3\arrayrulewidth)*3373/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-4\tabcolsep-3\arrayrulewidth)*6626/10000\relax}|}
 \hline
 \textbf{Nombre} & Olist \\ \hline
 \textbf{Tipo de negocio} & Integrador de marketplaces de comercio electrónico (conecta pequeños comerciantes con canales de venta). \\ \hline
@@ -85,11 +86,12 @@ Para efectos de este proyecto, el equipo asume el rol de Última Milla Labs, un 
 \textbf{Rol del equipo} & Equipo de analítica de datos que apoya a la empresa. \\ \hline
 \end{longtable}
 }
+\Needspace{7\baselineskip}
 \subsection{2.2 Objetivos estratégicos de la empresa}
 En el material disponible para este proyecto no consta una declaración formal de los objetivos estratégicos de Olist. Por ello, los siguientes se plantean para efectos de este estudio y se derivan de su modelo de negocio: un marketplace que conecta a pequeños comerciantes con compradores y cuyo valor depende de que el pedido llegue completo, a tiempo y con una buena experiencia de compra (Olist, 2018).
 
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*6/116\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*55/116\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*55/116\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*517/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*4741/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*4741/10000\relax}|}
 \hline
 \textbf{N.º} & \textbf{Objetivo estratégico} & \textbf{Cómo se mide} \\ \hline
 \endhead
@@ -102,13 +104,13 @@ OE3 & Fortalecer la fidelización. Favorecer que los clientes que compran por pr
 \subsubsection{2.3.1 Descripción del problema}
 El problema central es que una parte de los pedidos llega después de la fecha estimada de entrega, que esas entregas tardías se asocian con una caída marcada en la satisfacción de los clientes y que se concentran en regiones determinadas del país, en un contexto donde pocos clientes regresan a comprar. Se considera entrega tardía aquella cuya fecha de entrega al cliente es posterior a la fecha estimada.
 
-La exploración se hizo en PostgreSQL sobre los pedidos entregados con fecha de entrega entre enero de 2017 y agosto de 2018 (vista v\_\allowbreak{}pedidos\_\allowbreak{}base; 96 144 pedidos). Sus resultados son los siguientes:
+La exploración se hizo en PostgreSQL sobre los pedidos entregados con fecha de entrega entre enero de 2017 y agosto de 2018 (vista v\_\allowbreak{}pedidos\_\allowbreak{}base; 96~144 pedidos). Sus resultados son los siguientes:
 
 \begin{itemize}
-\item \textbf{Entregas.} El 8.07 \% de los pedidos llegó tarde. Cuando el vendedor y el cliente están en el mismo estado, la entrega tardó en promedio 7.9 días; cuando están en estados distintos, 15.1 días.
-\item \textbf{Geografía.} El porcentaje de entregas tardías varía mucho según el estado del cliente: los más altos son Alagoas (23.8 \%), Maranhão (19.6 \%), Piauí (16.0 \%) y Sergipe (15.4 \%), y los más bajos São Paulo (5.9 \%), Minas Gerais (5.6 \%) y Paraná (5.0 \%).
-\item \textbf{Satisfacción.} La calificación promedio general es de 4.16: 4.30 en los pedidos puntuales y 2.57 en los que llegaron tarde. Recibió una reseña de 1 o 2 estrellas el 9.2 \% de los pedidos puntuales, frente al 53.9 \% de los tardíos.
-\item \textbf{Fidelización.} Solo el 3.12 \% de los clientes realizó más de un pedido. Volvió a comprar el 4.34 \% de quienes recibieron a tiempo su primer pedido, frente al 2.97 \% de quienes lo recibieron tarde.
+\item \textbf{Entregas.} El 8.07~\% de los pedidos llegó tarde. Cuando el vendedor y el cliente están en el mismo estado, la entrega tardó en promedio 7.9 días; cuando están en estados distintos, 15.1 días.
+\item \textbf{Geografía.} El porcentaje de entregas tardías varía mucho según el estado del cliente: los más altos son Alagoas (23.8~\%), Maranhão (19.6~\%), Piauí (16.0~\%) y Sergipe (15.4~\%), y los más bajos São Paulo (5.9~\%), Minas Gerais (5.6~\%) y Paraná (5.0~\%).
+\item \textbf{Satisfacción.} La calificación promedio general es de 4.16: 4.30 en los pedidos puntuales y 2.57 en los que llegaron tarde. Recibió una reseña de 1 o 2 estrellas el 9.2~\% de los pedidos puntuales, frente al 53.9~\% de los tardíos.
+\item \textbf{Fidelización.} Solo el 3.12~\% de los clientes realizó más de un pedido. Volvió a comprar el 4.34~\% de quienes recibieron a tiempo su primer pedido, frente al 2.97~\% de quienes lo recibieron tarde.
 \end{itemize}
 Estos resultados evidencian asociaciones y no demuestran por sí mismos que el retraso cause la insatisfacción o la falta de recompra. Tampoco se dispone de información sobre las posibles causas de los retrasos, como el transporte o la ruta utilizada.
 
@@ -145,22 +147,23 @@ Las hipótesis se formulan en términos de asociación y no de causalidad. Surge
 \subsubsection{2.3.5 Metodología}
 El análisis se desarrolla como un flujo por etapas en KNIME: obtención, calidad, transformación, modelado, validación e indicadores. Cada etapa se describe en la sección 3 y los indicadores se presentan en Power BI (sección 4).
 
+\Needspace{7\baselineskip}
 \subsection{2.4 Datos fuente}
 Los datos provienen del conjunto público Brazilian E-Commerce Public Dataset by Olist, publicado por la propia empresa en Kaggle (Olist, 2018). Se descargaron el 4 de octubre de 2026 en formato CSV (codificación UTF-8), en nueve archivos que suman aproximadamente 127 MB y cubren pedidos realizados entre septiembre de 2016 y octubre de 2018.
 
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*33/114\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*55/114\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*10/114\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*16/114\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*2894/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*4824/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*877/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*1403/10000\relax}|}
 \hline
 \textbf{Archivo} & \textbf{Contenido} & \textbf{Filas} & \textbf{Columnas} \\ \hline
 \endhead
-olist\_\allowbreak{}orders\_\allowbreak{}dataset & Pedidos, estado y fechas clave del proceso & 99 441 & 8 \\ \hline
-olist\_\allowbreak{}customers\_\allowbreak{}dataset & Clientes, identificador único y ubicación & 99 441 & 5 \\ \hline
-olist\_\allowbreak{}order\_\allowbreak{}items\_\allowbreak{}dataset & Ítems de cada pedido: producto, vendedor, precio y flete & 112 650 & 7 \\ \hline
-olist\_\allowbreak{}order\_\allowbreak{}payments\_\allowbreak{}dataset & Pagos: tipo, cuotas y valor & 103 886 & 5 \\ \hline
-olist\_\allowbreak{}order\_\allowbreak{}reviews\_\allowbreak{}dataset & Calificación de 1 a 5 y comentarios & 99 224 & 7 \\ \hline
-olist\_\allowbreak{}products\_\allowbreak{}dataset & Atributos de los productos & 32 951 & 9 \\ \hline
-olist\_\allowbreak{}sellers\_\allowbreak{}dataset & Vendedores y su ubicación & 3 095 & 4 \\ \hline
-olist\_\allowbreak{}geolocation\_\allowbreak{}dataset & Coordenadas por prefijo postal & 1 000 163 & 5 \\ \hline
+olist\_\allowbreak{}orders\_\allowbreak{}dataset & Pedidos, estado y fechas clave del proceso & 99~441 & 8 \\ \hline
+olist\_\allowbreak{}customers\_\allowbreak{}dataset & Clientes, identificador único y ubicación & 99~441 & 5 \\ \hline
+olist\_\allowbreak{}order\_\allowbreak{}items\_\allowbreak{}dataset & Ítems de cada pedido: producto, vendedor, precio y flete & 112~650 & 7 \\ \hline
+olist\_\allowbreak{}order\_\allowbreak{}payments\_\allowbreak{}dataset & Pagos: tipo, cuotas y valor & 103~886 & 5 \\ \hline
+olist\_\allowbreak{}order\_\allowbreak{}reviews\_\allowbreak{}dataset & Calificación de 1 a 5 y comentarios & 99~224 & 7 \\ \hline
+olist\_\allowbreak{}products\_\allowbreak{}dataset & Atributos de los productos & 32~951 & 9 \\ \hline
+olist\_\allowbreak{}sellers\_\allowbreak{}dataset & Vendedores y su ubicación & 3~095 & 4 \\ \hline
+olist\_\allowbreak{}geolocation\_\allowbreak{}dataset & Coordenadas por prefijo postal & 1~000~163 & 5 \\ \hline
 product\_\allowbreak{}category\_\allowbreak{}name\_\allowbreak{}translation & Traducción de categorías de producto & 71 & 2 \\ \hline
 \end{longtable}
 }
@@ -168,7 +171,7 @@ product\_\allowbreak{}category\_\allowbreak{}name\_\allowbreak{}translation & Tr
 
 \textbf{Ciclo de vida.} El conjunto es una captura estática de un periodo cerrado y el equipo no lo actualizará. Dentro del proyecto, el ciclo consiste en: descarga única, almacenamiento de la copia original, transformación y análisis, conservación hasta la finalización del proyecto y posterior eliminación. Ninguna persona ajena al equipo interactúa con la información ni la observa.
 
-\textbf{Sensibilidad y seguridad.} Los archivos no incluyen nombres, correos electrónicos, documentos de identificación ni direcciones exactas. Los identificadores de pedidos, clientes, vendedores y productos son códigos de 32 caracteres, y la ubicación se limita a un prefijo postal, ciudad o estado. No obstante, los comentarios de texto libre de las reseñas podrían contener información personal incidental. Una revisión preliminar mediante patrones automáticos no halló correos ni documentos; detectó dos coincidencias con formato de teléfono celular y dos enlaces entre más de 40 000 comentarios, sin que esta revisión fuera exhaustiva. Como medida, el acceso a los datos se limita a los integrantes del equipo y en la presentación no se mostrarán registros individuales. Se respetan los términos de uso del conjunto: licencia CC BY-NC-SA 4.0 (\url{https://creativecommons.org/licenses/by-nc-sa/4.0/}). Los comentarios de texto no se utilizan en los modelos predictivos ni en la modelación analítica.
+\textbf{Sensibilidad y seguridad.} Los archivos no incluyen nombres, correos electrónicos, documentos de identificación ni direcciones exactas. Los identificadores de pedidos, clientes, vendedores y productos son códigos de 32 caracteres, y la ubicación se limita a un prefijo postal, ciudad o estado. No obstante, los comentarios de texto libre de las reseñas podrían contener información personal incidental. Una revisión preliminar mediante patrones automáticos no halló correos ni documentos; detectó dos coincidencias con formato de teléfono celular y dos enlaces entre más de 40~000 comentarios, sin que esta revisión fuera exhaustiva. Como medida, el acceso a los datos se limita a los integrantes del equipo y en la presentación no se mostrarán registros individuales. Se respetan los términos de uso del conjunto: licencia CC BY-NC-SA 4.0 (\url{https://creativecommons.org/licenses/by-nc-sa/4.0/}). Los comentarios de texto no se utilizan en los modelos predictivos ni en la modelación analítica.
 
 \subsection{2.5 Infraestructura de base de datos}
 Se utilizó \textbf{PostgreSQL} (The PostgreSQL Global Development Group, s. f.) ejecutándose localmente mediante Docker, en lugar de Snowflake. Esta decisión fue funcional y reproducible para todo el equipo: el esquema quedó versionado en el repositorio con el script \texttt{schema.sql}, la instancia se levantó de forma local y se usó para explorar los datos y verificar los resultados de KNIME, cuyos flujos leen los CSV del repositorio. La estructura final se implementó en el esquema \texttt{olist}, con la base de datos \texttt{postgres} configurada dentro del contenedor \texttt{olist-db}.
@@ -210,20 +213,21 @@ CREATE TABLE order_items (
   PRIMARY KEY (order_id, order_item_id)
 );
 \end{lstlisting}
+\Needspace{7\baselineskip}
 \subsection{2.7 Carga de los datos en las estructuras}
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*33/83\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*15/83\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*19/83\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*16/83\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*3975/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*1807/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*2289/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*1927/10000\relax}|}
 \hline
 \textbf{Tabla} & \textbf{Filas en el CSV} & \textbf{Filas en PostgreSQL} & \textbf{¿Coincide?} \\ \hline
 \endhead
-orders & 99 441 & 99 441 & sí \\ \hline
-customers & 99 441 & 99 441 & sí \\ \hline
-order\_\allowbreak{}items & 112 650 & 112 650 & sí \\ \hline
-order\_\allowbreak{}payments & 103 886 & 103 886 & sí \\ \hline
-order\_\allowbreak{}reviews & 99 224 & 99 224 & sí \\ \hline
-products & 32 951 & 32 951 & sí \\ \hline
-sellers & 3 095 & 3 095 & sí \\ \hline
-geolocation & 1 000 163 & 1 000 163 & sí \\ \hline
+orders & 99~441 & 99~441 & sí \\ \hline
+customers & 99~441 & 99~441 & sí \\ \hline
+order\_\allowbreak{}items & 112~650 & 112~650 & sí \\ \hline
+order\_\allowbreak{}payments & 103~886 & 103~886 & sí \\ \hline
+order\_\allowbreak{}reviews & 99~224 & 99~224 & sí \\ \hline
+products & 32~951 & 32~951 & sí \\ \hline
+sellers & 3~095 & 3~095 & sí \\ \hline
+geolocation & 1~000~163 & 1~000~163 & sí \\ \hline
 product\_\allowbreak{}category\_\allowbreak{}name\_\allowbreak{}translation & 71 & 71 & sí \\ \hline
 \end{longtable}
 }
@@ -242,12 +246,14 @@ UNION ALL SELECT 'translation',    COUNT(*) FROM olist.product_category_name_tra
 \end{lstlisting}
 La verificación de carga quedó validada con la comparación entre filas del CSV y filas en PostgreSQL en todas las tablas del esquema.
 
+\Needspace{7\baselineskip}
 \subsection{2.8 Diccionario de datos}
 El diccionario indica, para cada estructura, su nombre y descripción; para cada campo, su nombre, tipo y descripción; y las relaciones entre estructuras. Los tipos se expresan en SQL estándar y se ajustan al motor elegido. PK indica llave primaria y FK llave foránea.
 
+\Needspace{7\baselineskip}
 \subsubsection{2.8.1 Estructuras}
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*33/116\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*55/116\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*28/116\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*2844/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*4741/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*2413/10000\relax}|}
 \hline
 \textbf{Estructura} & \textbf{Descripción} & \textbf{Llave primaria} \\ \hline
 \endhead
@@ -262,11 +268,13 @@ geolocation & Coordenadas por prefijo postal & Ninguna natural \\ \hline
 product\_\allowbreak{}category\_\allowbreak{}name\_\allowbreak{}translation & Traducción de categorías de producto al inglés & product\_\allowbreak{}category\_\allowbreak{}name \\ \hline
 \end{longtable}
 }
+\Needspace{7\baselineskip}
 \subsubsection{2.8.2 Campos}
+\Needspace{7\baselineskip}
 \textbf{Tabla: orders}
 
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*29/120\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*16/120\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*10/120\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*10/120\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*55/120\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2346/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1572/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*827/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*827/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*4425/10000\relax}|}
 \hline
 \textbf{Campo} & \textbf{Tipo} & \textbf{Llave} & \textbf{Nulos} & \textbf{Descripción} \\ \hline
 \endhead
@@ -280,10 +288,11 @@ order\_\allowbreak{}delivered\_\allowbreak{}customer\_\allowbreak{}date & TIMEST
 order\_\allowbreak{}estimated\_\allowbreak{}delivery\_\allowbreak{}date & TIMESTAMP &  & No & Fecha estimada de entrega informada al cliente al comprar. \\ \hline
 \end{longtable}
 }
+\Needspace{7\baselineskip}
 \textbf{Tabla: customers}
 
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*24/115\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*16/115\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*10/115\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*10/115\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*55/115\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2043/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1572/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*863/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*863/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*4656/10000\relax}|}
 \hline
 \textbf{Campo} & \textbf{Tipo} & \textbf{Llave} & \textbf{Nulos} & \textbf{Descripción} \\ \hline
 \endhead
@@ -294,10 +303,11 @@ customer\_\allowbreak{}city & VARCHAR(50) &  & No & Ciudad del cliente. \\ \hlin
 customer\_\allowbreak{}state & CHAR(2) &  & No & Estado del cliente (sigla). \\ \hline
 \end{longtable}
 }
+\Needspace{7\baselineskip}
 \textbf{Tabla: order\_\allowbreak{}items}
 
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*19/110\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*16/110\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*10/110\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*10/110\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*55/110\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1678/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1758/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*897/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*897/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*4768/10000\relax}|}
 \hline
 \textbf{Campo} & \textbf{Tipo} & \textbf{Llave} & \textbf{Nulos} & \textbf{Descripción} \\ \hline
 \endhead
@@ -310,10 +320,11 @@ price & NUMERIC(10,2) &  & No & Precio del ítem. \\ \hline
 freight\_\allowbreak{}value & NUMERIC(10,2) &  & No & Valor del flete asignado al ítem. \\ \hline
 \end{longtable}
 }
+\Needspace{7\baselineskip}
 \textbf{Tabla: order\_\allowbreak{}payments}
 
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*20/111\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*16/111\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*10/111\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*10/111\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*55/111\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1777/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1758/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*887/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*887/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*4689/10000\relax}|}
 \hline
 \textbf{Campo} & \textbf{Tipo} & \textbf{Llave} & \textbf{Nulos} & \textbf{Descripción} \\ \hline
 \endhead
@@ -324,10 +335,11 @@ payment\_\allowbreak{}installments & INTEGER &  & No & Número de cuotas. \\ \hl
 payment\_\allowbreak{}value & NUMERIC(10,2) &  & No & Valor del pago. \\ \hline
 \end{longtable}
 }
+\Needspace{7\baselineskip}
 \textbf{Tabla: order\_\allowbreak{}reviews}
 
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*23/111\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*16/111\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*10/111\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*10/111\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*52/111\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2016/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1692/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*891/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*891/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*4508/10000\relax}|}
 \hline
 \textbf{Campo} & \textbf{Tipo} & \textbf{Llave} & \textbf{Nulos} & \textbf{Descripción} \\ \hline
 \endhead
@@ -340,10 +352,11 @@ review\_\allowbreak{}creation\_\allowbreak{}date & TIMESTAMP &  & No & Fecha en 
 review\_\allowbreak{}answer\_\allowbreak{}timestamp & TIMESTAMP &  & No & Fecha y hora de la respuesta a la encuesta. \\ \hline
 \end{longtable}
 }
+\Needspace{7\baselineskip}
 \textbf{Tabla: products}
 
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*26/119\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*16/119\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*12/119\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*10/119\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*55/119\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2139/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1572/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*994/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*834/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*4458/10000\relax}|}
 \hline
 \textbf{Campo} & \textbf{Tipo} & \textbf{Llave} & \textbf{Nulos} & \textbf{Descripción} \\ \hline
 \endhead
@@ -358,10 +371,11 @@ product\_\allowbreak{}height\_\allowbreak{}cm & INTEGER &  & Sí & Alto en cent�
 product\_\allowbreak{}width\_\allowbreak{}cm & INTEGER &  & Sí & Ancho en centímetros. \\ \hline
 \end{longtable}
 }
+\Needspace{7\baselineskip}
 \textbf{Tabla: sellers}
 
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*22/96\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*16/96\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*10/96\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*10/96\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*38/96\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2291/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1666/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1041/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1041/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*3958/10000\relax}|}
 \hline
 \textbf{Campo} & \textbf{Tipo} & \textbf{Llave} & \textbf{Nulos} & \textbf{Descripción} \\ \hline
 \endhead
@@ -371,10 +385,11 @@ seller\_\allowbreak{}city & VARCHAR(50) &  & No & Ciudad del vendedor. \\ \hline
 seller\_\allowbreak{}state & CHAR(2) &  & No & Estado del vendedor. \\ \hline
 \end{longtable}
 }
+\Needspace{7\baselineskip}
 \textbf{Tabla: geolocation}
 
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*27/101\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*16/101\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*10/101\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*10/101\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*38/101\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2673/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1584/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*990/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*990/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*3762/10000\relax}|}
 \hline
 \textbf{Campo} & \textbf{Tipo} & \textbf{Llave} & \textbf{Nulos} & \textbf{Descripción} \\ \hline
 \endhead
@@ -385,10 +400,11 @@ geolocation\_\allowbreak{}city & VARCHAR(50) &  & No & Ciudad. \\ \hline
 geolocation\_\allowbreak{}state & CHAR(2) &  & No & Estado (sigla). \\ \hline
 \end{longtable}
 }
+\Needspace{7\baselineskip}
 \textbf{Tabla: product\_\allowbreak{}category\_\allowbreak{}name\_\allowbreak{}translation}
 
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*29/101\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*16/101\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*10/101\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*10/101\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*36/101\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2871/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1584/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*990/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*990/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*3564/10000\relax}|}
 \hline
 \textbf{Campo} & \textbf{Tipo} & \textbf{Llave} & \textbf{Nulos} & \textbf{Descripción} \\ \hline
 \endhead
@@ -398,9 +414,10 @@ product\_\allowbreak{}category\_\allowbreak{}name\_\allowbreak{}english & VARCHA
 }
 Las columnas derivadas del flujo se documentan en la sección 3.3, donde se describen los indicadores y variables creados para el análisis de entrega, satisfacción y recompras.
 
+\Needspace{7\baselineskip}
 \subsubsection{2.8.3 Relaciones entre estructuras}
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*34/160\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*55/160\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*16/160\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*55/160\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*2120/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*3271/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*1608/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*2999/10000\relax}|}
 \hline
 \textbf{Origen} & \textbf{Destino} & \textbf{Cardinalidad} & \textbf{Observación} \\ \hline
 \endhead
@@ -432,12 +449,14 @@ La figura siguiente muestra el diagrama entidad-relación del modelo relacional 
 \item Llaves compuestas: order\_\allowbreak{}items, order\_\allowbreak{}payments y order\_\allowbreak{}reviews combinan order\_\allowbreak{}id con otro campo.
 \end{itemize}
 \medskip\noindent\rule{\linewidth}{0.4pt}\medskip
+\Needspace{7\baselineskip}
 \section{3. Parte 2 — Flujo y modelos de aprendizaje automático}
+\Needspace{7\baselineskip}
 \subsection{3.1 Descripción general del flujo en KNIME}
 El análisis se desarrolla como un flujo por etapas en KNIME, desde la obtención de los datos hasta la validación de los modelos y el cálculo de los indicadores. La estructura del proyecto refleja una separación clara entre ETL, agrupamiento y predicción, con una capa final de indicadores para la toma de decisiones.
 
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*17/101\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*55/101\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*29/101\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*1693/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*5437/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*2868/10000\relax}|}
 \hline
 \textbf{Etapa} & \textbf{Qué se hace} & \textbf{Workflow group} \\ \hline
 \endhead
@@ -451,30 +470,32 @@ El análisis se desarrolla como un flujo por etapas en KNIME, desde la obtenció
 }
 \textbf{Elección de la herramienta.} Se eligió KNIME Analytics Platform (KNIME AG, 2026) y no Dataiku por razones prácticas. Primero, KNIME Analytics Platform es de código abierto y gratuito, de modo que cada integrante lo instaló en su propio computador sin licencias. Segundo, los flujos se ejecutan de forma local y se guardan como carpetas de archivos de texto, lo que permitió versionarlos en Git junto con los datos. Tercero, un solo entorno cubrió la integración de las tablas, el aprendizaje automático (k-means, regresión logística, Random Forest y validación cruzada) y el cálculo de los indicadores. Cuarto, los nodos visuales muestran cómo cambian los datos en cada paso, lo que facilita documentar y verificar el flujo. Dataiku es una alternativa válida para el trabajo colaborativo en servidor; para un equipo de cuatro personas, con datos públicos y un plazo corto, KNIME resultó más sencillo de poner en marcha.
 
+\Needspace{7\baselineskip}
 \subsection{3.2 Obtención y calidad de los datos}
 Se perfilaron los datos (nulos, duplicados, rangos y consistencia de fechas) y se aplicaron las siguientes reglas:
 
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*41/182\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*31/182\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*55/182\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*55/182\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*2252/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*1703/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*3021/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*3021/10000\relax}|}
 \hline
 \textbf{Problema o decisión} & \textbf{Dónde} & \textbf{Acción tomada} & \textbf{Justificación} \\ \hline
 \endhead
-Cobertura temporal desigual & orders & Se trabaja con pedidos entregados, con fecha de entrega entre enero de 2017 y agosto de 2018 (96 144 pedidos). & Baja cobertura de 2016 y de septiembre y octubre de 2018. \\ \hline
+Cobertura temporal desigual & orders & Se trabaja con pedidos entregados, con fecha de entrega entre enero de 2017 y agosto de 2018 (96~144 pedidos). & Baja cobertura de 2016 y de septiembre y octubre de 2018. \\ \hline
 Más de una reseña por pedido & order\_\allowbreak{}reviews & Se usa una calificación por pedido: el promedio cuando hay más de una. & Evitar duplicar pedidos al integrar tablas. \\ \hline
 Códigos postales con ceros a la izquierda & customers, sellers, geolocation & Se leen como texto (String) y no como número. & Un prefijo como \texttt{01037} leído como entero pasa a \texttt{1037} y no coincidiría en los cruces por código postal. \\ \hline
 Pedidos entregados sin fecha de entrega & orders & 8 pedidos con \texttt{order\_\allowbreak{}status = delivered} no tienen \texttt{order\_\allowbreak{}delivered\_\allowbreak{}customer\_\allowbreak{}date}; la ventana de fechas de entrega los excluye. & No se puede medir la puntualidad sin fecha real de entrega. \\ \hline
-Categoría de producto sin traducción & products, traducción & 1 376 pedidos (1.43 \%) quedan sin \texttt{product\_\allowbreak{}category\_\allowbreak{}name\_\allowbreak{}english}; un nodo Missing Value los rellena con «desconocida». & Conservar los pedidos sin perder registros. \\ \hline
+Categoría de producto sin traducción & products, traducción & 1~376 pedidos (1.43~\%) quedan sin \texttt{product\_\allowbreak{}category\_\allowbreak{}name\_\allowbreak{}english}; un nodo Missing Value los rellena con «desconocida». & Conservar los pedidos sin perder registros. \\ \hline
 Atributos de producto ausentes & products & Se tratan como categoría «desconocida». & Conservar los pedidos sin perder registros. \\ \hline
 Valores atípicos e inconsistencias & Varias tablas & Se documentan, limitan o excluyen según el caso. & Mantener la calidad analítica sin perder la población del estudio. \\ \hline
 \end{longtable}
 }
 La población de análisis se concentra en pedidos entregados en el periodo observado, con foco en la comparación entre puntualidad, satisfacción y recompra.
 
+\Needspace{7\baselineskip}
 \subsection{3.3 Transformación de los datos}
 Se integraron las tablas a nivel de pedido y se crearon las siguientes variables derivadas. Las categorías se traducen y agrupan, las variables categóricas se codifican y las numéricas se normalizan cuando se requiere.
 
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*29/139\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*55/139\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*55/139\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*2086/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*3956/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*3956/10000\relax}|}
 \hline
 \textbf{Variable derivada} & \textbf{Cálculo} & \textbf{Uso} \\ \hline
 \endhead
@@ -499,7 +520,7 @@ La vista base mantiene una fila por pedido, con agregación del valor total y de
 Las variables derivadas se calculan así: un Rule Engine crea \texttt{mismo\_\allowbreak{}estado} (1 si \texttt{customer\_\allowbreak{}state = seller\_\allowbreak{}state}); String to Date\&Time convierte las fechas conservando la hora; un Row Filter aplica la ventana de entrega (enero de 2017 a agosto de 2018); tres nodos Date\&Time Difference miden en segundos el plazo estimado, el tiempo de entrega y el retraso, y tres Math Formula los pasan a días con decimales (\texttt{plazo\_\allowbreak{}estimado\_\allowbreak{}dias}, \texttt{dias\_\allowbreak{}entrega}, \texttt{dias\_\allowbreak{}retraso}); un Rule Engine crea \texttt{es\_\allowbreak{}tardio} (1 si el retraso en segundos es mayor que 0) y dos Math Formula calculan \texttt{relacion\_\allowbreak{}precio\_\allowbreak{}flete} y \texttt{volumen\_\allowbreak{}cm3}. Se mide en segundos porque los Date\&Time Difference solo permiten decimales con granularidad de tiempo, no con días, y así un pedido entregado el día estimado, pero después de las 00:00, cuenta como tardío. Un Column Filter deja 29 columnas, un Missing Value rellena la categoría ausente con «desconocida», un nodo Statistics resume la tabla final, un nodo Date\&Time to String deja las fechas con formato fijo \texttt{yyyy-MM-dd HH:mm:ss} y un CSV Writer la guarda en \texttt{knime/\allowbreak{}datos/\allowbreak{}ordenes\_\allowbreak{}etl.csv} para los workflows 02 y 03.
 
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-4\tabcolsep-3\arrayrulewidth)*47/94\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-4\tabcolsep-3\arrayrulewidth)*47/94\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-4\tabcolsep-3\arrayrulewidth)*5000/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-4\tabcolsep-3\arrayrulewidth)*5000/10000\relax}|}
 \hline
 \textbf{Columna del ETL en KNIME} & \textbf{Equivale a} \\ \hline
 \endhead
@@ -518,46 +539,48 @@ El peso, el volumen y la categoría se toman del primer ítem del pedido, igual 
 \subsection{3.4 Modelo 1 — No supervisado: segmentación con k-means}
 El modelo no supervisado agrupa los pedidos según su experiencia de compra y entrega, con k-means sobre seis variables: valor del pedido (\texttt{total\_\allowbreak{}precio}), costo del flete (\texttt{total\_\allowbreak{}flete}), número de cuotas (\texttt{max\_\allowbreak{}cuotas}), tiempo de entrega (\texttt{dias\_\allowbreak{}entrega}), retraso respecto de la fecha estimada (\texttt{dias\_\allowbreak{}retraso}) y si el cliente y el vendedor están en el mismo estado (\texttt{mismo\_\allowbreak{}estado}). La calificación no se usa como entrada, para que la comparación de satisfacción entre grupos (H4) no sea circular. El precio y el flete se transforman con logaritmo, porque tienen colas muy largas, y las seis variables se normalizan con puntuación z para que todas pesen lo mismo en la distancia. Ninguna de las seis tiene valores ausentes. La lista de nodos está en el Anexo D.
 
-\textbf{Origen de las cifras.} El perfil de los segmentos (3.4.2), la prueba de H4 y la silueta de k = 4 salen del workflow de KNIME (\texttt{02-Clustering}, k = 4, semilla 2; la asignación está en \texttt{knime/\allowbreak{}datos/\allowbreak{}segmentos\_\allowbreak{}modelo1.csv}). La tabla de k de 2 a 8 (3.4.1) y el análisis de sensibilidad se calcularon en Python (scikit-learn) con los mismos datos y variables. Las diferencias pequeñas con KNIME, por ejemplo 7 357 frente a 7 423 pedidos en el grupo problemático, se deben a la inicialización aleatoria del k-means.
+\textbf{Origen de las cifras.} El perfil de los segmentos (3.4.2), la prueba de H4 y la silueta de k = 4 salen del workflow de KNIME (\texttt{02-Clustering}, k = 4, semilla 2; la asignación está en \texttt{knime/\allowbreak{}datos/\allowbreak{}segmentos\_\allowbreak{}modelo1.csv}). La tabla de k de 2 a 8 (3.4.1) y el análisis de sensibilidad se calcularon en Python (scikit-learn) con los mismos datos y variables. Las diferencias pequeñas con KNIME, por ejemplo 7~357 frente a 7~423 pedidos en el grupo problemático, se deben a la inicialización aleatoria del k-means.
 
+\Needspace{7\baselineskip}
 \subsubsection{3.4.1 Resultados y validación}
-Se probaron valores de k entre 2 y 8 y se compararon con dos criterios: la inercia (método del codo) y el coeficiente de silueta, calculado sobre una muestra aleatoria de 10 000 pedidos.
+Se probaron valores de k entre 2 y 8 y se compararon con dos criterios: la inercia (método del codo) y el coeficiente de silueta, calculado sobre una muestra aleatoria de 10~000 pedidos.
 
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*10/40\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*14/40\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*16/40\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*2500/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*3500/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*4000/10000\relax}|}
 \hline
 \textbf{k} & \textbf{Inercia} & \textbf{Silueta} \\ \hline
 \endhead
-2 & 444 062 & 0.272 \\ \hline
-3 & 368 642 & 0.287 \\ \hline
-\textbf{4} & \textbf{301 593} & \textbf{0.305} \\ \hline
-5 & 273 977 & 0.272 \\ \hline
-6 & 253 415 & 0.231 \\ \hline
-7 & 240 525 & 0.230 \\ \hline
-8 & 222 060 & 0.221 \\ \hline
+2 & 444~062 & 0.272 \\ \hline
+3 & 368~642 & 0.287 \\ \hline
+\textbf{4} & \textbf{301~593} & \textbf{0.305} \\ \hline
+5 & 273~977 & 0.272 \\ \hline
+6 & 253~415 & 0.231 \\ \hline
+7 & 240~525 & 0.230 \\ \hline
+8 & 222~060 & 0.221 \\ \hline
 \end{longtable}
 }
-Se eligió \textbf{k = 4}: tiene la silueta más alta y coincide con el codo, porque de 4 a 5 grupos la inercia baja mucho menos que de 3 a 4. El agrupamiento es estable: con cinco semillas distintas se obtiene prácticamente la misma asignación (índice de Rand ajustado de 0.999 o más). Una silueta de 0.30 indica una estructura moderada: los grupos existen, pero sus fronteras no son nítidas, por lo que se usan para describir y priorizar, no como categorías rígidas. En KNIME, con el nodo Silhouette Coefficient sobre las primeras 10 000 filas de la tabla, la silueta global de k = 4 es 0.297, casi igual que la de referencia (0.305); por grupo va de 0.11 a 0.36, así que hay un grupo que se separa con claridad y otros que se solapan más.
+Se eligió \textbf{k = 4}: tiene la silueta más alta y coincide con el codo, porque de 4 a 5 grupos la inercia baja mucho menos que de 3 a 4. El agrupamiento es estable: con cinco semillas distintas se obtiene prácticamente la misma asignación (índice de Rand ajustado de 0.999 o más). Una silueta de 0.30 indica una estructura moderada: los grupos existen, pero sus fronteras no son nítidas, por lo que se usan para describir y priorizar, no como categorías rígidas. En KNIME, con el nodo Silhouette Coefficient sobre las primeras 10~000 filas de la tabla, la silueta global de k = 4 es 0.297, casi igual que la de referencia (0.305); por grupo va de 0.11 a 0.36, así que hay un grupo que se separa con claridad y otros que se solapan más.
 
 \textbf{Análisis de sensibilidad.} Como \texttt{dias\_\allowbreak{}entrega} y \texttt{dias\_\allowbreak{}retraso} solo se conocen después de la entrega, se repitió el modelo con las cuatro variables disponibles al momento de la compra (precio, flete, cuotas y mismo estado). En ese caso el mejor valor es k = 3 (silueta 0.391), pero las calificaciones de los grupos apenas varían, entre 4.00 y 4.29. Es decir, la segmentación comercial casi no distingue la satisfacción; lo que la distingue es la experiencia de entrega.
 
+\Needspace{7\baselineskip}
 \subsubsection{3.4.2 Perfil e interpretación de los segmentos}
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*24/149\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*15/149\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*21/149\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*14/149\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*14/149\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*12/149\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*16/149\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*16/149\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*17/149\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*1549/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*957/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*1073/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*832/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*957/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*790/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*1083/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*1587/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*1167/10000\relax}|}
 \hline
 \textbf{Segmento} & \textbf{Pedidos} & \textbf{Precio (mediana, BRL)} & \textbf{Cuotas (prom.)} & \textbf{Entrega (días)} & \textbf{Mismo estado} & \textbf{Entregas tardías} & \textbf{Calificación} & \textbf{Reseñas negativas} \\ \hline
 \endhead
-Compras grandes a plazos & 16 767 (17.4 \%) & 219.00 & 7.1 & 12.4 & 22 \% & 2.6 \% & 4.16 & 12.7 \% \\ \hline
-Estándar entre estados & 41 511 (43.2 \%) & 69.90 & 1.9 & 12.4 & 0 \% & 0.7 \% & 4.31 & 8.6 \% \\ \hline
-Locales rápidas & 30 509 (31.7 \%) & 64.99 & 2.1 & 7.3 & 99 \% & 4.5 \% & 4.32 & 8.9 \% \\ \hline
-Entregas problemáticas & 7 357 (7.7 \%) & 98.00 & 2.8 & 35.1 & 9 \% & 77.4 \% & 2.59 & 52.8 \% \\ \hline
+Compras grandes a plazos & 16~767 (17.4~\%) & 219.00 & 7.1 & 12.4 & 22~\% & 2.6~\% & 4.16 & 12.7~\% \\ \hline
+Estándar entre estados & 41~511 (43.2~\%) & 69.90 & 1.9 & 12.4 & 0~\% & 0.7~\% & 4.31 & 8.6~\% \\ \hline
+Locales rápidas & 30~509 (31.7~\%) & 64.99 & 2.1 & 7.3 & 99~\% & 4.5~\% & 4.32 & 8.9~\% \\ \hline
+Entregas problemáticas & 7~357 (7.7~\%) & 98.00 & 2.8 & 35.1 & 9~\% & 77.4~\% & 2.59 & 52.8~\% \\ \hline
 \end{longtable}
 }
 \begin{itemize}
 \item \textbf{Compras grandes a plazos:} pedidos de mayor valor pagados en muchas cuotas; casi siempre llegan a tiempo, pero su calificación es algo menor que la de los pedidos baratos, lo que sugiere expectativas más altas.
 \item \textbf{Estándar entre estados:} el grupo más grande; pedidos baratos entre estados distintos que, pese a tardar unos 12 días, casi nunca llegan después de la fecha estimada.
 \item \textbf{Locales rápidas:} cliente y vendedor en el mismo estado; la entrega más rápida y la mejor calificación.
-\item \textbf{Entregas problemáticas:} 7.7 \% de los pedidos, con 35 días de entrega en promedio, 77 \% de entregas tardías y más de la mitad de reseñas negativas. Es el segmento donde se concentra la mala experiencia.
+\item \textbf{Entregas problemáticas:} 7.7~\% de los pedidos, con 35 días de entrega en promedio, 77~\% de entregas tardías y más de la mitad de reseñas negativas. Es el segmento donde se concentra la mala experiencia.
 \end{itemize}
 Este último segmento coincide en gran parte con los pedidos tardíos, porque el retraso es una de las variables de entrada. Por eso el modelo debe leerse como una segmentación de la experiencia de entrega: confirma y dimensiona el patrón de H1, más que descubrir un factor nuevo.
 
@@ -571,18 +594,19 @@ Se comparan dos algoritmos, regresión logística y Random Forest, con dos líne
 \subsubsection{3.5.1 Datos de entrenamiento y de prueba}
 La partición se define en forma temporal para evitar fuga de información: el conjunto de entrenamiento cubre el período inicial y la prueba cubre el período más reciente. La clase tardía se mantiene minoritaria, por lo que se prioriza la evaluación basada en sensibilidad y AUC sobre la exactitud.
 
-Con un corte en el 1 de abril de 2018 sobre la fecha de compra, el entrenamiento reúne 64 052 pedidos con 9.19 \% de entregas tardías y la prueba 32 092 con 5.85 \%. La tasa de la prueba es menor porque el porcentaje de retrasos varió mucho entre meses: noviembre de 2017 (14.31 \%), febrero de 2018 (15.97 \%) y marzo de 2018 (21.36 \%) fueron meses atípicos y quedan en el entrenamiento, mientras que de abril a agosto de 2018 se mueve entre el 1.3 \% (junio) y el 9.9 \% (agosto). Por eso el AUC y las líneas base se evalúan sobre una clase tardía menos frecuente que en el entrenamiento, y las métricas de la prueba no son directamente comparables con las del entrenamiento. La partición no es inválida, pero esta diferencia se tiene en cuenta al interpretar los resultados.
+Con un corte en el 1 de abril de 2018 sobre la fecha de compra, el entrenamiento reúne 64~052 pedidos con 9.19~\% de entregas tardías y la prueba 32~092 con 5.85~\%. La tasa de la prueba es menor porque el porcentaje de retrasos varió mucho entre meses: noviembre de 2017 (14.31~\%), febrero de 2018 (15.97~\%) y marzo de 2018 (21.36~\%) fueron meses atípicos y quedan en el entrenamiento, mientras que de abril a agosto de 2018 se mueve entre el 1.3~\% (junio) y el 9.9~\% (agosto). Por eso el AUC y las líneas base se evalúan sobre una clase tardía menos frecuente que en el entrenamiento, y las métricas de la prueba no son directamente comparables con las del entrenamiento. La partición no es inválida, pero esta diferencia se tiene en cuenta al interpretar los resultados.
 
 \subsubsection{3.5.2 Preparación, parámetros e hiperparámetros}
 Todo lo que se aprende de los datos se calcula solo con el entrenamiento y se aplica después a la prueba: la imputación de los 16 valores ausentes de peso y volumen (mediana), la normalización de las variables numéricas para la regresión logística (puntuación z) y el balanceo de clases (muestreo de igual tamaño de tardíos y puntuales, solo en entrenamiento). En KNIME, el Random Forest se configuró con 200 árboles, criterio de Gini, raíz cuadrada del número de variables en cada división, muestreo de filas con reemplazo y semilla 42. El tamaño mínimo quedó en 20 filas por nodo hijo, y un nodo solo se divide si tiene al menos el doble (40): el diálogo de KNIME muestra un solo campo («Minimum node size» = 20) y guarda los dos valores, el segundo como el doble del primero. Con esta configuración se obtuvo el AUC de 0.590 de la sección 3.6. El desbalance se trató con muestreo de igual tamaño (en Python, con ponderación de clases). Para que el Random Forest use la categoría del producto hubo que recalcular el dominio de esa columna con un Domain Calculator (tiene más de 60 categorías). El tamaño mínimo se eligió con validación cruzada de 5 particiones, estratificada por \texttt{es\_\allowbreak{}tardio} y con semilla 42, sobre el entrenamiento ya balanceado. Se varió el campo «Minimum node size» del diálogo: con 10, 20, 40 y 80, el AUC de validación fue 0.6858, 0.6871, 0.6876 y 0.6855. Se mantuvo 20. Entre el mejor y el peor valor hay apenas 0.002, una diferencia que cabe en el ruido de la partición, así que el modelo es poco sensible a este parámetro y no hay razón para cambiar la configuración. El AUC de validación (cerca de 0.69) es mayor que el de la prueba (0.59) porque la validación cruzada mezcla pedidos del mismo período, mientras que la prueba mide el modelo en meses posteriores, cuando la relación entre las variables y el retraso ya había cambiado (sección 3.6). La prueba temporal se usa una sola vez, al final.
 
+\Needspace{7\baselineskip}
 \subsection{3.6 Validación de ambos modelos}
 \textbf{Origen de las cifras.} Las cifras del Modelo 2 de esta sección salen de la ejecución en KNIME (workflow \texttt{03-Prediccion}); como contraste se calcularon también en Python (scikit-learn) con los mismos datos, variables y partición, y las diferencias son pequeñas (se indican abajo).
 
-\textbf{Modelo 2 sobre la prueba (abril a agosto de 2018; 32 092 pedidos, 1 878 tardíos; umbral 0.5):}
+\textbf{Modelo 2 sobre la prueba (abril a agosto de 2018; 32~092 pedidos, 1~878 tardíos; umbral 0.5):}
 
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*31/95\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*16/95\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*16/95\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*16/95\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*16/95\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*3224/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1663/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1676/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1771/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1663/10000\relax}|}
 \hline
 \textbf{Modelo} & \textbf{AUC} & \textbf{Precisión} & \textbf{Exhaustividad} & \textbf{F1} \\ \hline
 \endhead
@@ -597,7 +621,7 @@ La regresión logística supera a ambas líneas base y al Random Forest, y cumpl
 \textbf{Variables que más usa el Random Forest.} La salida \emph{Attribute Statistics} del Random Forest Learner de KNIME indica cuántas veces cada variable abre uno de los 200 árboles, es decir, se usa en la primera división:
 
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-4\tabcolsep-3\arrayrulewidth)*33/63\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-4\tabcolsep-3\arrayrulewidth)*30/63\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-4\tabcolsep-3\arrayrulewidth)*5238/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-4\tabcolsep-3\arrayrulewidth)*4761/10000\relax}|}
 \hline
 \textbf{Variable} & \textbf{Divisiones en la raíz (de 200)} \\ \hline
 \endhead
@@ -616,13 +640,13 @@ num\_\allowbreak{}items, max\_\allowbreak{}cuotas, dia\_\allowbreak{}semana & 0 
 }
 Es una aproximación a la importancia, no una medida como la reducción media de impureza que calcula scikit-learn. Además, con el criterio de Gini las variables con muchas categorías, como el estado del cliente o la categoría del producto, tienden a salir arriba porque ofrecen más formas de dividir los datos. Con esa salvedad, el estado del cliente, el costo del flete y si cliente y vendedor están en el mismo estado son las señales que el modelo usa primero; el número de ítems, las cuotas y el día de la semana nunca abren un árbol.
 
-La Línea base 1 acierta el 94.1 \% de los pedidos (30 214 de 32 092) sin detectar ningún tardío: la exactitud global es engañosa con clases desbalanceadas, por eso se evalúa con AUC, exhaustividad y F1 de la clase tardía.
+La Línea base 1 acierta el 94.1~\% de los pedidos (30~214 de 32~092) sin detectar ningún tardío: la exactitud global es engañosa con clases desbalanceadas, por eso se evalúa con AUC, exhaustividad y F1 de la clase tardía.
 
 \textbf{Aviso de la regresión logística en KNIME.} El Logistic Regression Learner avisa de que no alcanzó la convergencia en el número de épocas y de que no pudo calcular la matriz de covarianza (matriz de información singular, probablemente por la relación entre \texttt{mismo\_\allowbreak{}estado} y los estados de cliente y vendedor). Esto afecta solo a los errores estándar de los coeficientes; las predicciones y el AUC coinciden con los de Python (0.719 frente a 0.721).
 
-\textbf{Análisis de errores.} La regresión logística detecta 79 de cada 100 pedidos tardíos, pero de cada 10 pedidos que marca como tardíos solo 1 lo es (1 478 aciertos y 13 337 falsas alarmas). Un falso negativo deja pasar un pedido de riesgo y un falso positivo genera una alerta innecesaria; con esta precisión el modelo sirve para priorizar el seguimiento de pedidos, no para tomar decisiones automáticas sobre cada uno. Si se cambia el umbral, debe elegirse con la validación cruzada del entrenamiento y nunca mirando la prueba.
+\textbf{Análisis de errores.} La regresión logística detecta 79 de cada 100 pedidos tardíos, pero de cada 10 pedidos que marca como tardíos solo 1 lo es (1~478 aciertos y 13~337 falsas alarmas). Un falso negativo deja pasar un pedido de riesgo y un falso positivo genera una alerta innecesaria; con esta precisión el modelo sirve para priorizar el seguimiento de pedidos, no para tomar decisiones automáticas sobre cada uno. Si se cambia el umbral, debe elegirse con la validación cruzada del entrenamiento y nunca mirando la prueba.
 
-\textbf{La regla geográfica falla en la prueba.} En el entrenamiento, los pedidos entre estados distintos llegaron tarde mucho más que los del mismo estado (11.0 \% frente a 5.7 \%); en la prueba la relación se invierte (5.3 \% frente a 6.6 \%). Por eso la línea base 2 queda por debajo del azar (AUC 0.47). La relación entre geografía y retraso no es estable en el tiempo (ver H2 en la sección 4.5).
+\textbf{La regla geográfica falla en la prueba.} En el entrenamiento, los pedidos entre estados distintos llegaron tarde mucho más que los del mismo estado (11.0~\% frente a 5.7~\%); en la prueba la relación se invierte (5.3~\% frente a 6.6~\%). Por eso la línea base 2 queda por debajo del azar (AUC 0.47). La relación entre geografía y retraso no es estable en el tiempo (ver H2 en la sección 4.5).
 
 \textbf{Modelo 1.} Su validación interna (silueta, codo y estabilidad entre semillas) está en la sección 3.4.1, y su validación externa —si los grupos difieren en satisfacción— es la prueba de H4 (sección 4.5).
 
@@ -632,62 +656,67 @@ No se incorporaron integraciones con terceros. El análisis se basa en variables
 \subsection{3.8 Evidencia de ejecución del flujo}
 La evidencia del flujo requiere mostrar que la cadena completa corre de manera coherente desde la lectura de datos hasta la validación de resultados. En el proyecto, la prueba de ejecución se apoya en la propia validación relacional de tablas, las vistas analíticas y los resultados del cálculo de KPI, que son consistentes con la población de análisis y la lógica de negocio definida.
 
-\textbf{Ejecución del workflow 01-ETL.} El flujo se ejecutó completo en KNIME con sus 40 nodos. Tras los cuatro Joiner la tabla tiene 99 441 filas (una por pedido, igual que orders, sin duplicados). Después del filtro de pedidos entregados y de la ventana de fechas de entrega quedan 96 144 filas, que coinciden con el conteo de v\_\allowbreak{}pedidos\_\allowbreak{}base, y \texttt{order\_\allowbreak{}id} no se repite. El promedio de \texttt{es\_\allowbreak{}tardio} es 0.0807 (8.07 \%), igual al KPI 1. En la tabla final solo faltan valores en \texttt{review\_\allowbreak{}promedio} (642 pedidos sin reseña), en peso y medidas (16 pedidos), en \texttt{order\_\allowbreak{}approved\_\allowbreak{}at} (14) y en \texttt{order\_\allowbreak{}delivered\_\allowbreak{}carrier\_\allowbreak{}date} (1). El nodo Statistics advierte que no calcula frecuencias de las columnas con más de 1 000 valores distintos, como los identificadores y las fechas, lo que no afecta a las columnas analíticas. Las figuras 2 a 4 (Anexo G) muestran el flujo completo con sus 40 nodos ejecutados, la tabla final (96 144 filas y 29 columnas) y la salida del nodo Statistics.
+\textbf{Ejecución del workflow 01-ETL.} El flujo se ejecutó completo en KNIME con sus 40 nodos. Tras los cuatro Joiner la tabla tiene 99~441 filas (una por pedido, igual que orders, sin duplicados). Después del filtro de pedidos entregados y de la ventana de fechas de entrega quedan 96~144 filas, que coinciden con el conteo de v\_\allowbreak{}pedidos\_\allowbreak{}base, y \texttt{order\_\allowbreak{}id} no se repite. El promedio de \texttt{es\_\allowbreak{}tardio} es 0.0807 (8.07~\%), igual al KPI 1. En la tabla final solo faltan valores en \texttt{review\_\allowbreak{}promedio} (642 pedidos sin reseña), en peso y medidas (16 pedidos), en \texttt{order\_\allowbreak{}approved\_\allowbreak{}at} (14) y en \texttt{order\_\allowbreak{}delivered\_\allowbreak{}carrier\_\allowbreak{}date} (1). El nodo Statistics advierte que no calcula frecuencias de las columnas con más de 1~000 valores distintos, como los identificadores y las fechas, lo que no afecta a las columnas analíticas. Las figuras 2 a 4 (Anexo G) muestran el flujo completo con sus 40 nodos ejecutados, la tabla final (96~144 filas y 29 columnas) y la salida del nodo Statistics.
 
-\textbf{Ejecución de los workflows 02-Clustering, 03-Prediccion y 04-KPIs.} Los tres se ejecutaron completos y sin errores. Para el Modelo 1 (figuras 5 a 8) hay una captura del workflow completo con sus 14 nodos, el perfil de los cuatro grupos (GroupBy), la prueba ANOVA de H4 (F = 4 477.7) y la silueta de k = 4 (0.297). Para el Modelo 2 (figuras 9 a 25) hay una captura del workflow completo, las matrices de confusión y las estadísticas por clase de los cuatro modelos (Scorer), las curvas ROC del Random Forest (AUC 0.590), de la regresión logística (0.719) y de la línea base 2 (0.472), el AUC de la validación cruzada con cada tamaño mínimo de nodo y la tabla de variables del Random Forest. Para los indicadores (figuras 26 a 36) hay una captura del workflow completo y una por grupo de KPI, con los mismos valores de la sección 4.2. Las figuras 37 a 45 muestran las cinco páginas del dashboard, la página 1 filtrada por un estado, la vista de modelo y dos consultas DAX de control cuyos resultados coinciden con KNIME. En 03-Prediccion, el único aviso es el de convergencia de la regresión logística, explicado en la sección 3.6.
+\textbf{Ejecución de los workflows 02-Clustering, 03-Prediccion y 04-KPIs.} Los tres se ejecutaron completos y sin errores. Para el Modelo 1 (figuras 5 a 8) hay una captura del workflow completo con sus 14 nodos, el perfil de los cuatro grupos (GroupBy), la prueba ANOVA de H4 (F = 4~477.7) y la silueta de k = 4 (0.297). Para el Modelo 2 (figuras 9 a 25) hay una captura del workflow completo, las matrices de confusión y las estadísticas por clase de los cuatro modelos (Scorer), las curvas ROC del Random Forest (AUC 0.590), de la regresión logística (0.719) y de la línea base 2 (0.472), el AUC de la validación cruzada con cada tamaño mínimo de nodo y la tabla de variables del Random Forest. Para los indicadores (figuras 26 a 36) hay una captura del workflow completo y una por grupo de KPI, con los mismos valores de la sección 4.2. Las figuras 37 a 45 muestran las cinco páginas del dashboard, la página 1 filtrada por un estado, la vista de modelo y dos consultas DAX de control cuyos resultados coinciden con KNIME. En 03-Prediccion, el único aviso es el de convergencia de la regresión logística, explicado en la sección 3.6.
 
 \medskip\noindent\rule{\linewidth}{0.4pt}\medskip
 \section{4. Parte 3 — Visualización e indicadores}
 \subsection{4.1 Conexión entre KNIME y Power BI}
-Power BI (Microsoft, s. f.-a) no se conecta a PostgreSQL, sino a las tablas que produce el propio flujo de KNIME. El workflow \texttt{04-KPIs} lee \texttt{ordenes\_\allowbreak{}etl.csv} (la salida del 01-ETL) y los archivos originales de pedidos y clientes, calcula los 11 KPI y escribe dos tablas: \texttt{knime/\allowbreak{}datos/\allowbreak{}pedidos\_\allowbreak{}kpi.csv}, con una fila por pedido (96 144 pedidos, 18 columnas), y \texttt{knime/\allowbreak{}datos/\allowbreak{}clientes\_\allowbreak{}kpi.csv}, con una fila por cliente (96 096 clientes, 8 columnas). Además de las 14 columnas de los KPI, la tabla de pedidos trae los resultados de los dos modelos: \texttt{segmento}, con el nombre del grupo del Modelo 1, y \texttt{en\_\allowbreak{}prueba}, \texttt{prob\_\allowbreak{}tardio\_\allowbreak{}rf} y \texttt{prob\_\allowbreak{}tardio\_\allowbreak{}logistica}, del Modelo 2. Los valores de los KPI se verificaron contra las consultas de PostgreSQL (\texttt{datos/\allowbreak{}resultados\_\allowbreak{}kpis.txt}).
+Power BI (Microsoft, s. f.-a) no se conecta a PostgreSQL, sino a las tablas que produce el propio flujo de KNIME. El workflow \texttt{04-KPIs} lee \texttt{ordenes\_\allowbreak{}etl.csv} (la salida del 01-ETL) y los archivos originales de pedidos y clientes, calcula los 11 KPI y escribe dos tablas: \texttt{knime/\allowbreak{}datos/\allowbreak{}pedidos\_\allowbreak{}kpi.csv}, con una fila por pedido (96~144 pedidos, 18 columnas), y \texttt{knime/\allowbreak{}datos/\allowbreak{}clientes\_\allowbreak{}kpi.csv}, con una fila por cliente (96~096 clientes, 8 columnas). Además de las 14 columnas de los KPI, la tabla de pedidos trae los resultados de los dos modelos: \texttt{segmento}, con el nombre del grupo del Modelo 1, y \texttt{en\_\allowbreak{}prueba}, \texttt{prob\_\allowbreak{}tardio\_\allowbreak{}rf} y \texttt{prob\_\allowbreak{}tardio\_\allowbreak{}logistica}, del Modelo 2. Los valores de los KPI se verificaron contra las consultas de PostgreSQL (\texttt{datos/\allowbreak{}resultados\_\allowbreak{}kpis.txt}).
 
-Además de esas dos tablas, Power BI carga un archivo más. El KPI 5 necesita todos los pedidos, también los cancelados, así que se lee directamente \texttt{knime/\allowbreak{}datos/\allowbreak{}olist\_\allowbreak{}orders\_\allowbreak{}dataset.csv} (99 441 pedidos, columna \texttt{order\_\allowbreak{}status}). Los resultados de los modelos llegan ya unidos a la tabla de pedidos: el workflow \texttt{03-Prediccion} escribe \texttt{knime/\allowbreak{}datos/\allowbreak{}predicciones\_\allowbreak{}modelo2.csv} (\texttt{order\_\allowbreak{}id}, \texttt{prob\_\allowbreak{}tardio\_\allowbreak{}rf} y \texttt{prob\_\allowbreak{}tardio\_\allowbreak{}logistica}), y \texttt{04-KPIs} lo une por \texttt{order\_\allowbreak{}id}, igual que \texttt{segmentos\_\allowbreak{}modelo1.csv}. Por eso en Power BI no hace falta relacionar archivos entre sí.
+Además de esas dos tablas, Power BI carga un archivo más. El KPI 5 necesita todos los pedidos, también los cancelados, así que se lee directamente \texttt{knime/\allowbreak{}datos/\allowbreak{}olist\_\allowbreak{}orders\_\allowbreak{}dataset.csv} (99~441 pedidos, columna \texttt{order\_\allowbreak{}status}). Los resultados de los modelos llegan ya unidos a la tabla de pedidos: el workflow \texttt{03-Prediccion} escribe \texttt{knime/\allowbreak{}datos/\allowbreak{}predicciones\_\allowbreak{}modelo2.csv} (\texttt{order\_\allowbreak{}id}, \texttt{prob\_\allowbreak{}tardio\_\allowbreak{}rf} y \texttt{prob\_\allowbreak{}tardio\_\allowbreak{}logistica}), y \texttt{04-KPIs} lo une por \texttt{order\_\allowbreak{}id}, igual que \texttt{segmentos\_\allowbreak{}modelo1.csv}. Por eso en Power BI no hace falta relacionar archivos entre sí.
 
-En la parte predictiva el dashboard usa la regresión logística, porque fue el mejor modelo (AUC 0.719) y es la que sustenta la conclusión sobre H3; el Random Forest aparece solo como comparación. Las predicciones existen únicamente para los 32 092 pedidos de la prueba (abril a agosto de 2018), marcados con \texttt{en\_\allowbreak{}prueba} = 1; en los otros 64 052 pedidos las probabilidades quedan vacías.
+En la parte predictiva el dashboard usa la regresión logística, porque fue el mejor modelo (AUC 0.719) y es la que sustenta la conclusión sobre H3; el Random Forest aparece solo como comparación. Las predicciones existen únicamente para los 32~092 pedidos de la prueba (abril a agosto de 2018), marcados con \texttt{en\_\allowbreak{}prueba} = 1; en los otros 64~052 pedidos las probabilidades quedan vacías.
 
+\Needspace{7\baselineskip}
 \subsection{4.2 Indicadores (KPI)}
 Se definen once indicadores, organizados según el objetivo estratégico al que responden. Los valores se calcularon en KNIME (workflow \texttt{04-KPIs}) y se verificaron contra las consultas de PostgreSQL (\texttt{datos/\allowbreak{}resultados\_\allowbreak{}kpis.txt}). Coinciden en todos los indicadores salvo en el 10 y el 11, donde KNIME cuenta un cliente más en el grupo tardío y en el de reseña negativa.
 
+\Needspace{7\baselineskip}
 \subsubsection{OE1 — Cumplir los plazos de entrega}
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*6/183\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*40/183\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*55/183\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*55/183\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*27/183\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*411/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2170/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2975/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2981/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1462/10000\relax}|}
 \hline
 \textbf{N.º} & \textbf{KPI} & \textbf{Definición} & \textbf{Relevancia} & \textbf{Valor} \\ \hline
 \endhead
-1 & Porcentaje de entregas tardías & Pedidos entregados después de la fecha estimada $\div$ total de pedidos entregados & Mide directamente el incumplimiento de los plazos prometidos. & 8.07 \% \\ \hline
+1 & Porcentaje de entregas tardías & Pedidos entregados después de la fecha estimada $\div$ total de pedidos entregados & Mide directamente el incumplimiento de los plazos prometidos. & 8.07~\% \\ \hline
 2 & Tiempo promedio de entrega & Promedio de días entre la compra y la entrega & Indica la velocidad general del servicio logístico. & 12.5 días \\ \hline
 3 & Retraso promedio de las entregas tardías & Promedio de días entre la fecha estimada y la fecha real, solo en pedidos tardíos & Mide la gravedad del incumplimiento y no solo su frecuencia. & 9.4 días \\ \hline
 4 & Brecha de entrega entre estados & Tiempo promedio de entrega cuando cliente y vendedor están en estados distintos, comparado con cuando están en el mismo & Identifica el efecto de la distancia geográfica sobre el plazo. & 15.1 días frente a 7.9 días \\ \hline
-5 & Tasa de pedidos no concretados & Pedidos cancelados o no disponibles $\div$ total de pedidos & Refleja los pedidos que no llegaron a entregarse. & 1.24 \% \\ \hline
+5 & Tasa de pedidos no concretados & Pedidos cancelados o no disponibles $\div$ total de pedidos & Refleja los pedidos que no llegaron a entregarse. & 1.24~\% \\ \hline
 \end{longtable}
 }
+\Needspace{7\baselineskip}
 \subsubsection{OE2 — Elevar la satisfacción del cliente}
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*6/186\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*38/186\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*55/186\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*55/186\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*32/186\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*411/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2032/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2926/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2929/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1700/10000\relax}|}
 \hline
 \textbf{N.º} & \textbf{KPI} & \textbf{Definición} & \textbf{Relevancia} & \textbf{Valor} \\ \hline
 \endhead
 6 & Calificación promedio & Promedio de la calificación de la reseña & Resume la satisfacción general. & 4.16 \\ \hline
-7 & Porcentaje de reseñas negativas & Pedidos con calificación de 1 o 2 $\div$ pedidos con reseña & Capta la proporción de clientes insatisfechos. & 12.73 \% \\ \hline
+7 & Porcentaje de reseñas negativas & Pedidos con calificación de 1 o 2 $\div$ pedidos con reseña & Capta la proporción de clientes insatisfechos. & 12.73~\% \\ \hline
 8 & Brecha de calificación por puntualidad & Calificación promedio de los pedidos puntuales menos la de los tardíos & Cuantifica cuánto se asocia el retraso con una menor satisfacción. & 1.73 puntos (4.30 frente a 2.57) \\ \hline
 \end{longtable}
 }
+\Needspace{7\baselineskip}
 \subsubsection{OE3 — Fortalecer la fidelización}
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*6/211\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*48/211\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*55/211\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*55/211\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*47/211\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*411/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2250/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2569/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2574/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2195/10000\relax}|}
 \hline
 \textbf{N.º} & \textbf{KPI} & \textbf{Definición} & \textbf{Relevancia} & \textbf{Valor} \\ \hline
 \endhead
-9 & Tasa de nueva compra & Clientes únicos con más de un pedido $\div$ total de clientes únicos & Mide la fidelización. & 3.12 \% \\ \hline
-10 & Recompra según la puntualidad del primer pedido & \% de clientes con un segundo pedido, entre quienes recibieron su primer pedido a tiempo y quienes lo recibieron con retraso & Evalúa si la experiencia de entrega se asocia con una compra futura. Se calcula solo con clientes cuyo primer pedido fue en 2017 y se entregó en el periodo (42 077 clientes), para dar tiempo a la recompra. & 4.34 \% (a tiempo) frente a 2.97 \% (tardío) \\ \hline
-11 & Recompra según la calificación del primer pedido & Igual que el anterior, comparando clientes con reseña negativa y no negativa en su primer pedido (41 762 clientes con reseña, primer pedido en 2017) & Evalúa si la satisfacción se asocia con una compra futura. & 3.73 \% (negativa) frente a 4.32 \% (no negativa) \\ \hline
+9 & Tasa de nueva compra & Clientes únicos con más de un pedido $\div$ total de clientes únicos & Mide la fidelización. & 3.12~\% \\ \hline
+10 & Recompra según la puntualidad del primer pedido & \% de clientes con un segundo pedido, entre quienes recibieron su primer pedido a tiempo y quienes lo recibieron con retraso & Evalúa si la experiencia de entrega se asocia con una compra futura. Se calcula solo con clientes cuyo primer pedido fue en 2017 y se entregó en el periodo (42~077 clientes), para dar tiempo a la recompra. & 4.34~\% (a tiempo) frente a 2.97~\% (tardío) \\ \hline
+11 & Recompra según la calificación del primer pedido & Igual que el anterior, comparando clientes con reseña negativa y no negativa en su primer pedido (41~762 clientes con reseña, primer pedido en 2017) & Evalúa si la satisfacción se asocia con una compra futura. & 3.73~\% (negativa) frente a 4.32~\% (no negativa) \\ \hline
 \end{longtable}
 }
+\Needspace{7\baselineskip}
 \subsection{4.3 Dashboard}
-El dashboard está en \texttt{powerbi/\allowbreak{}dashboard\_\allowbreak{}olist.pbix} y tiene cinco páginas: un resumen, una por cada objetivo estratégico y una con los resultados de los dos modelos. La página de resumen incluye un filtro por estado del cliente. Antes de armar las páginas se verificaron todas las medidas con una consulta DAX dentro de Power BI, y los valores coinciden con los de KNIME (sección 4.2). Las capturas de cada página están en las figuras 37 a 42 (Anexo G). Con el filtro de estado, por ejemplo, la página de resumen muestra que en Alagoas llegó tarde el 23.80 \% de los pedidos, con calificación promedio de 3.86.
+El dashboard está en \texttt{powerbi/\allowbreak{}dashboard\_\allowbreak{}olist.pbix} y tiene cinco páginas: un resumen, una por cada objetivo estratégico y una con los resultados de los dos modelos. La página de resumen incluye un filtro por estado del cliente. Antes de armar las páginas se verificaron todas las medidas con una consulta DAX dentro de Power BI, y los valores coinciden con los de KNIME (sección 4.2). Las capturas de cada página están en las figuras 37 a 42 (Anexo G). Con el filtro de estado, por ejemplo, la página de resumen muestra que en Alagoas llegó tarde el 23.80~\% de los pedidos, con calificación promedio de 3.86.
 
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*21/86\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*10/86\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*55/86\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*2441/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*1162/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*6395/10000\relax}|}
 \hline
 \textbf{Página} & \textbf{KPI} & \textbf{Visuales} \\ \hline
 \endhead
@@ -698,51 +727,53 @@ El dashboard está en \texttt{powerbi/\allowbreak{}dashboard\_\allowbreak{}olist
 5. Perfiles y riesgo & — & Tabla de los segmentos del Modelo 1 (pedidos, \% de entregas tardías y calificación promedio); columnas del \% de entregas tardías por nivel de riesgo del Modelo 2; leyenda sobre el alcance de las predicciones. \\ \hline
 \end{longtable}
 }
-En la página 5, el segmento sale de la columna \texttt{segmento} de \texttt{pedidos\_\allowbreak{}kpi.csv}, que ya trae el nombre de cada grupo del Modelo 1 (sin tildes, como lo escribe KNIME): \texttt{Estandar entre estados} (41 511 pedidos), \texttt{Locales rapidas} (30 509), \texttt{Compras grandes a plazos} (16 767) y \texttt{Entregas problematicas} (7 357).
+En la página 5, el segmento sale de la columna \texttt{segmento} de \texttt{pedidos\_\allowbreak{}kpi.csv}, que ya trae el nombre de cada grupo del Modelo 1 (sin tildes, como lo escribe KNIME): \texttt{Estandar entre estados} (41~511 pedidos), \texttt{Locales rapidas} (30~509), \texttt{Compras grandes a plazos} (16~767) y \texttt{Entregas problematicas} (7~357).
 
-La parte de riesgo de esa página necesita dos aclaraciones. La primera es que las probabilidades del Modelo 2 están infladas: los modelos se entrenaron con datos balanceados, mitad tardíos y mitad puntuales, cuando en realidad llegó tarde el 9.2 \% de los pedidos del entrenamiento y el 5.85 \% de los de la prueba. En la prueba, la probabilidad promedio es 0.486 en la regresión logística y 0.425 en el Random Forest, muy por encima de esa tasa. Por eso no se presentan como una frecuencia («60 \% de riesgo»), sino como un nivel de riesgo relativo, definido con percentiles de \texttt{prob\_\allowbreak{}tardio\_\allowbreak{}logistica} sobre los 32 092 pedidos con \texttt{en\_\allowbreak{}prueba} = 1; por ejemplo, riesgo alto es el 10 \% de pedidos con mayor probabilidad, riesgo medio va del percentil 75 al 90 y riesgo bajo es el 75 \% restante. La columna \texttt{nivel\_\allowbreak{}riesgo} se calcula en Power Query con esos percentiles. El grupo de riesgo alto funciona: de sus 3 210 pedidos llegó tarde el 13.3 \%, 2.3 veces la tasa de la prueba, y en él está el 22.8 \% de todos los pedidos tardíos. En el nivel medio (4 813 pedidos) llegó tarde el 11.3 \% y en el bajo (24 069 pedidos), el 3.8 \%; es decir, el grupo de riesgo alto llega tarde 3.5 veces más que el de riesgo bajo. La leyenda lo advierte: las probabilidades sirven para ordenar los pedidos por riesgo, no para estimar la frecuencia real de retraso. La segunda es que solo hay predicciones para los 32 092 pedidos de la prueba (abril a agosto de 2018), y la leyenda también lo indica.
+La parte de riesgo de esa página necesita dos aclaraciones. La primera es que las probabilidades del Modelo 2 están infladas: los modelos se entrenaron con datos balanceados, mitad tardíos y mitad puntuales, cuando en realidad llegó tarde el 9.2~\% de los pedidos del entrenamiento y el 5.85~\% de los de la prueba. En la prueba, la probabilidad promedio es 0.486 en la regresión logística y 0.425 en el Random Forest, muy por encima de esa tasa. Por eso no se presentan como una frecuencia («60~\% de riesgo»), sino como un nivel de riesgo relativo, definido con percentiles de \texttt{prob\_\allowbreak{}tardio\_\allowbreak{}logistica} sobre los 32~092 pedidos con \texttt{en\_\allowbreak{}prueba} = 1; por ejemplo, riesgo alto es el 10~\% de pedidos con mayor probabilidad, riesgo medio va del percentil 75 al 90 y riesgo bajo es el 75~\% restante. La columna \texttt{nivel\_\allowbreak{}riesgo} se calcula en Power Query con esos percentiles. El grupo de riesgo alto funciona: de sus 3~210 pedidos llegó tarde el 13.3~\%, 2.3 veces la tasa de la prueba, y en él está el 22.8~\% de todos los pedidos tardíos. En el nivel medio (4~813 pedidos) llegó tarde el 11.3~\% y en el bajo (24~069 pedidos), el 3.8~\%; es decir, el grupo de riesgo alto llega tarde 3.5 veces más que el de riesgo bajo. La leyenda lo advierte: las probabilidades sirven para ordenar los pedidos por riesgo, no para estimar la frecuencia real de retraso. La segunda es que solo hay predicciones para los 32~092 pedidos de la prueba (abril a agosto de 2018), y la leyenda también lo indica.
 
 Las medidas DAX de los KPI están en el Anexo C. Usan \texttt{pedidos\_\allowbreak{}kpi.csv} y \texttt{clientes\_\allowbreak{}kpi.csv}, que equivalen a las vistas v\_\allowbreak{}pedidos\_\allowbreak{}base y v\_\allowbreak{}clientes del Anexo A.
 
+\Needspace{7\baselineskip}
 \subsection{4.4 Hallazgos principales}
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*6/158\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*55/158\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*42/158\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*55/158\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*402/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*3472/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*2651/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*3472/10000\relax}|}
 \hline
 \textbf{N.º} & \textbf{Hallazgo} & \textbf{Evidencia} & \textbf{Acción recomendada} \\ \hline
 \endhead
-1 & Las entregas tardías se asocian con una caída fuerte de la satisfacción: 4.30 frente a 2.57 puntos. & KPI 8; reseñas negativas 9.2 \% vs. 53.9 \%. & Contactar de forma proactiva a los clientes con pedidos tardíos (aviso, compensación). \\ \hline
-2 & El retraso se concentra en pocos estados: 23.8 \% de entregas tardías en Alagoas y 19.6 \% en Maranhão frente a 5.9 \% en São Paulo. & KPI 1 por estado. & Revisar socios logísticos y plazos prometidos en los estados críticos. \\ \hline
+1 & Las entregas tardías se asocian con una caída fuerte de la satisfacción: 4.30 frente a 2.57 puntos. & KPI 8; reseñas negativas 9.2~\% vs. 53.9~\%. & Contactar de forma proactiva a los clientes con pedidos tardíos (aviso, compensación). \\ \hline
+2 & El retraso se concentra en pocos estados: 23.8~\% de entregas tardías en Alagoas y 19.6~\% en Maranhão frente a 5.9~\% en São Paulo. & KPI 1 por estado. & Revisar socios logísticos y plazos prometidos en los estados críticos. \\ \hline
 3 & Entre estados distintos la entrega tarda casi el doble: 15.1 frente a 7.9 días. & KPI 4. & Ajustar el plazo mostrado al cliente en rutas entre estados; fomentar vendedores cercanos. \\ \hline
-4 & La recompra es baja (3.12 \%). Según la puntualidad del primer pedido, la diferencia es significativa pero pequeña (4.34 \% vs. 2.97 \%); según la reseña es menor y no es significativa al 5 \% (4.32 \% vs. 3.73 \%). & KPI 9, 10 y 11; sección 4.5. & No atribuir la baja recompra solo a la entrega; explorar otros factores de fidelización. \\ \hline
-5 & El 7.7 \% de los pedidos (7 357) forma un segmento de «entregas problemáticas» (35 días de entrega, 77 \% tardías, calificación 2.59); la segmentación comercial, sin variables de entrega, casi no distingue la satisfacción. & Modelo 1 (sección 3.4). & Enfocar la atención al cliente en la experiencia logística más que en el tipo de compra. \\ \hline
+4 & La recompra es baja (3.12~\%). Según la puntualidad del primer pedido, la diferencia es significativa pero pequeña (4.34~\% vs. 2.97~\%); según la reseña es menor y no es significativa al 5~\% (4.32~\% vs. 3.73~\%). & KPI 9, 10 y 11; sección 4.5. & No atribuir la baja recompra solo a la entrega; explorar otros factores de fidelización. \\ \hline
+5 & El 7.7~\% de los pedidos (7~357) forma un segmento de «entregas problemáticas» (35 días de entrega, 77~\% tardías, calificación 2.59); la segmentación comercial, sin variables de entrega, casi no distingue la satisfacción. & Modelo 1 (sección 3.4). & Enfocar la atención al cliente en la experiencia logística más que en el tipo de compra. \\ \hline
 6 & Con información disponible al comprar, la regresión logística anticipa el retraso mejor que las líneas base (AUC 0.72), pero con baja precisión. En el Random Forest, el estado del cliente y el costo del flete son las variables que más abren los árboles. & Modelo 2 (sección 3.6). & Usar la probabilidad de retraso para priorizar el seguimiento, no para decisiones automáticas. \\ \hline
 7 & La relación entre geografía y retraso cambió en 2018: entre abril y agosto, los pedidos del mismo estado llegaron tarde más que los de estados distintos. & Sección 3.6; partición temporal. & Monitorear los KPI por región cada mes y reentrenar el modelo de forma periódica. \\ \hline
 \end{longtable}
 }
+\Needspace{7\baselineskip}
 \subsection{4.5 Contraste de las hipótesis}
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*16/181\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*55/181\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*55/181\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*55/181\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*1225/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*2917/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*2923/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*2932/10000\relax}|}
 \hline
 \textbf{Hipótesis} & \textbf{Qué se compara} & \textbf{Prueba propuesta} & \textbf{Resultado y conclusión} \\ \hline
 \endhead
-H1 & Calificación de pedidos puntuales vs. tardíos & Mann-Whitney U; chi-cuadrado para \% de reseñas negativas & Se confirma. Calificación 4.30 frente a 2.57 (Mann-Whitney U = 149 338 900, p < 0.001; correlación biserial de rangos 0.55, efecto grande). Reseñas negativas 9.2 \% frente a 53.9 \% ($\chi$² = 12 589, gl = 1, p < 0.001; V de Cramér 0.36). \\ \hline
-H2 & \% de entregas tardías por región y por mismo estado / estados distintos & Chi-cuadrado de independencia & Se confirma para el periodo completo, con un matiz temporal. Por estado del cliente: $\chi$² = 1 621, gl = 26, p < 0.001 (V = 0.13). Mismo estado frente a distinto: 6.0 \% frente a 9.2 \% de tardíos ($\chi$² = 301, gl = 1, p < 0.001; V = 0.06, efecto pequeño). La dirección no es estable: hasta marzo de 2018, 5.7 \% frente a 11.0 \%; de abril a agosto de 2018 se invierte, 6.6 \% frente a 5.3 \% ($\chi$² = 22.8, p < 0.001). \\ \hline
+H1 & Calificación de pedidos puntuales vs. tardíos & Mann-Whitney U; chi-cuadrado para \% de reseñas negativas & Se confirma. Calificación 4.30 frente a 2.57 (Mann-Whitney U = 149~338~900, p < 0.001; correlación biserial de rangos 0.55, efecto grande). Reseñas negativas 9.2~\% frente a 53.9~\% ($\chi$² = 12~589, gl = 1, p < 0.001; V de Cramér 0.36). \\ \hline
+H2 & \% de entregas tardías por región y por mismo estado / estados distintos & Chi-cuadrado de independencia & Se confirma para el periodo completo, con un matiz temporal. Por estado del cliente: $\chi$² = 1~621, gl = 26, p < 0.001 (V = 0.13). Mismo estado frente a distinto: 6.0~\% frente a 9.2~\% de tardíos ($\chi$² = 301, gl = 1, p < 0.001; V = 0.06, efecto pequeño). La dirección no es estable: hasta marzo de 2018, 5.7~\% frente a 11.0~\%; de abril a agosto de 2018 se invierte, 6.6~\% frente a 5.3~\% ($\chi$² = 22.8, p < 0.001). \\ \hline
 H3 & Desempeño del modelo vs. línea base & AUC, precisión, exhaustividad y F1 de la clase tardía & Se confirma. La regresión logística obtiene AUC 0.72 en la prueba temporal, frente a 0.50 y 0.47 de las líneas base, y supera el umbral de 0.60. Su precisión es baja (0.10). Confirmado con la salida de KNIME (AUC 0.719). El Random Forest queda en 0.59. \\ \hline
-H4 & Calificación promedio entre los grupos del Modelo 1 & Kruskal-Wallis o ANOVA & Se confirma, con una advertencia. Las calificaciones de los cuatro grupos van de 2.59 a 4.32 (Kruskal-Wallis H = 7 767, gl = 3, p < 0.001, sobre la asignación de KNIME). La diferencia se debe sobre todo al grupo de entregas problemáticas, que se forma con las variables de retraso; con solo las variables de compra la diferencia es pequeña (de 4.00 a 4.29; H = 507). En KNIME, el One-way ANOVA sobre los 95 502 pedidos con reseña da F = 4 477.7 (3 y 95 498 grados de libertad, p < 0.001) y un tamaño de efecto de 0.12 (suma de cuadrados entre grupos 19 358 sobre un total de 156 979). El grupo de entregas problemáticas (7 357 pedidos, 77 \% tardíos) promedia 2.59 y los otros tres entre 4.16 y 4.32. Como la calificación es ordinal, Kruskal-Wallis es la prueba más adecuada, y ambas concluyen lo mismo. \\ \hline
+H4 & Calificación promedio entre los grupos del Modelo 1 & Kruskal-Wallis o ANOVA & Se confirma, con una advertencia. Las calificaciones de los cuatro grupos van de 2.59 a 4.32 (Kruskal-Wallis H = 7~767, gl = 3, p < 0.001, sobre la asignación de KNIME). La diferencia se debe sobre todo al grupo de entregas problemáticas, que se forma con las variables de retraso; con solo las variables de compra la diferencia es pequeña (de 4.00 a 4.29; H = 507). En KNIME, el One-way ANOVA sobre los 95~502 pedidos con reseña da F = 4~477.7 (3 y 95~498 grados de libertad, p < 0.001) y un tamaño de efecto de 0.12 (suma de cuadrados entre grupos 19~358 sobre un total de 156~979). El grupo de entregas problemáticas (7~357 pedidos, 77~\% tardíos) promedia 2.59 y los otros tres entre 4.16 y 4.32. Como la calificación es ordinal, Kruskal-Wallis es la prueba más adecuada, y ambas concluyen lo mismo. \\ \hline
 \end{longtable}
 }
 Los valores de las pruebas se calcularon en Python sobre \texttt{knime/\allowbreak{}datos/\allowbreak{}ordenes\_\allowbreak{}etl.csv}, excluyendo los 642 pedidos sin reseña en las pruebas de calificación.
 
-\textbf{Recompra (KPI 10 y 11).} Volvió a comprar el 4.34 \% de los 39 283 clientes que recibieron a tiempo su primer pedido y el 2.97 \% de los 2 794 que lo recibieron tarde. La diferencia, de 1.37 puntos porcentuales, es estadísticamente significativa ($\chi$² = 12.0, gl = 1, p $\approx$ 0.0005), pero pequeña. Con la reseña del primer pedido la brecha se reduce a 0.59 puntos: recompró el 4.32 \% de los 36 716 clientes con reseña no negativa y el 3.73 \% de los 5 046 con reseña negativa, y esa diferencia no es significativa al 5 \% ($\chi$² = 3.81, gl = 1, p $\approx$ 0.051). Las dos pruebas usan los conteos exactos de \texttt{knime/\allowbreak{}datos/\allowbreak{}clientes\_\allowbreak{}kpi.csv}, sin corrección de continuidad. PostgreSQL da prácticamente lo mismo, con un cliente menos en el grupo tardío y en el de reseña negativa (2 793 y 5 045), probablemente por el desempate entre dos pedidos del mismo cliente hechos en el mismo instante.
+\textbf{Recompra (KPI 10 y 11).} Volvió a comprar el 4.34~\% de los 39~283 clientes que recibieron a tiempo su primer pedido y el 2.97~\% de los 2~794 que lo recibieron tarde. La diferencia, de 1.37 puntos porcentuales, es estadísticamente significativa ($\chi$² = 12.0, gl = 1, p $\approx$ 0.0005), pero pequeña. Con la reseña del primer pedido la brecha se reduce a 0.59 puntos: recompró el 4.32~\% de los 36~716 clientes con reseña no negativa y el 3.73~\% de los 5~046 con reseña negativa, y esa diferencia no es significativa al 5~\% ($\chi$² = 3.81, gl = 1, p $\approx$ 0.051). Las dos pruebas usan los conteos exactos de \texttt{knime/\allowbreak{}datos/\allowbreak{}clientes\_\allowbreak{}kpi.csv}, sin corrección de continuidad. PostgreSQL da prácticamente lo mismo, con un cliente menos en el grupo tardío y en el de reseña negativa (2~793 y 5~045), probablemente por el desempate entre dos pedidos del mismo cliente hechos en el mismo instante.
 
 \textbf{Dos cuidados al interpretar.} (1) Con muestras grandes casi cualquier diferencia resulta estadísticamente significativa; además del valor p hay que reportar el tamaño de la diferencia (puntos porcentuales o puntos de calificación) y si importa para el negocio. (2) Las entregas tardías se concentran en ciertas regiones; para H1 y para los KPI 10 y 11 conviene comparar también dentro de cada región, para no atribuir al retraso lo que podría deberse a la región.
 
 \section{5. Conclusiones y recomendaciones}
 \begin{itemize}
-\item \textbf{Hipótesis central y H1.} Las entregas tardías se asocian con una caída de 1.73 puntos en la calificación promedio (4.30 frente a 2.57) y con una proporción mucho mayor de reseñas negativas (9.2 \% frente a 53.9 \%). La evidencia sugiere que la puntualidad no es solo un indicador operativo, sino un factor asociado con la percepción del servicio.
+\item \textbf{Hipótesis central y H1.} Las entregas tardías se asocian con una caída de 1.73 puntos en la calificación promedio (4.30 frente a 2.57) y con una proporción mucho mayor de reseñas negativas (9.2~\% frente a 53.9~\%). La evidencia sugiere que la puntualidad no es solo un indicador operativo, sino un factor asociado con la percepción del servicio.
 \item \textbf{H2.} El retraso se concentra en regiones específicas y, en el periodo completo, es mayor cuando cliente y vendedor están en estados distintos. Sin embargo, esa relación no fue estable: entre abril y agosto de 2018 se invirtió. La localización importa, pero su efecto cambia con el tiempo, por lo que las decisiones logísticas deben basarse en un monitoreo continuo y no en una regla fija.
-\item \textbf{Fidelización.} La recompra es baja (3.12 \%). La diferencia por puntualidad del primer pedido es estadísticamente significativa, pero pequeña (1.37 puntos porcentuales: 4.34 \% frente a 2.97 \%), y la que se observa según la reseña del primer pedido ni siquiera es significativa al 5 \%. La fidelización requiere un enfoque más amplio que solo la entrega a tiempo.
-\item \textbf{Modelos (H3 y H4).} La regresión logística anticipa el retraso al momento de la compra mejor que las líneas base (AUC 0.72), aunque con baja precisión, por lo que sirve para priorizar seguimiento y no para decisiones automáticas. La segmentación identifica un 7.7 \% de pedidos con muy mala experiencia de entrega; la satisfacción depende sobre todo de la logística, no del tipo de compra. Ninguno de los dos modelos establece causalidad.
+\item \textbf{Fidelización.} La recompra es baja (3.12~\%). La diferencia por puntualidad del primer pedido es estadísticamente significativa, pero pequeña (1.37 puntos porcentuales: 4.34~\% frente a 2.97~\%), y la que se observa según la reseña del primer pedido ni siquiera es significativa al 5~\%. La fidelización requiere un enfoque más amplio que solo la entrega a tiempo.
+\item \textbf{Modelos (H3 y H4).} La regresión logística anticipa el retraso al momento de la compra mejor que las líneas base (AUC 0.72), aunque con baja precisión, por lo que sirve para priorizar seguimiento y no para decisiones automáticas. La segmentación identifica un 7.7~\% de pedidos con muy mala experiencia de entrega; la satisfacción depende sobre todo de la logística, no del tipo de compra. Ninguno de los dos modelos establece causalidad.
 \end{itemize}
 \textbf{Recomendaciones para Olist:}
 
@@ -756,7 +787,7 @@ Los valores de las pruebas se calcularon en Python sobre \texttt{knime/\allowbre
 \item Los resultados describen asociaciones y no causalidad.
 \item No se dispone de información sobre las causas de los retrasos (transporte, ruta, vendedor o temporada).
 \item Los datos corresponden a un periodo cerrado (2016–2018); los hallazgos pueden no reflejar la situación actual de Olist.
-\item Solo alrededor del 3 \% de los clientes recompra y alrededor del 8 \% de los pedidos llega tarde: las clases están desbalanceadas, lo que exige métricas y umbrales distintos de la exactitud.
+\item Solo alrededor del 3~\% de los clientes recompra y alrededor del 8~\% de los pedidos llega tarde: las clases están desbalanceadas, lo que exige métricas y umbrales distintos de la exactitud.
 \item Solo una parte de los clientes deja reseña, por lo que la satisfacción medida puede estar sesgada.
 \item La confusión regional puede exagerar la asociación entre retraso y satisfacción, porque ciertos estados concentran tanto el retraso como las condiciones de compra.
 \item La recompra se observa con un horizonte temporal limitado, y algunos clientes aún no han tenido suficiente tiempo para volver a comprar.
@@ -1123,15 +1154,16 @@ Probabilidad promedio (logística) =
 CALCULATE(AVERAGE(Pedidos[prob_tardio_logistica]), Pedidos[en_prueba] = 1)
 \end{lstlisting}
 \clearpage
+\Needspace{7\baselineskip}
 \subsection{Anexo D. Nodos de KNIME por etapa}
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*22/132\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*55/132\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*55/132\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*1693/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*4152/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*4153/10000\relax}|}
 \hline
 \textbf{Etapa} & \textbf{Nodos principales} & \textbf{Notas} \\ \hline
 \endhead
 Obtención & PostgreSQL Connector $\rightarrow$ DB Table Selector $\rightarrow$ DB Reader (uno por tabla) & Los flujos usan un CSV Reader por archivo, con ruta \texttt{../\allowbreak{}datos/\allowbreak{}<archivo>.csv} (carpeta \texttt{knime/\allowbreak{}datos/\allowbreak{}}) y los códigos postales como String. Con la base de datos, la alternativa es una conexión compartida y un DB Reader por tabla. \\ \hline
-Calidad & Statistics, Missing Value, Row Filter, Rule Engine & Se documenta cada filtro con su conteo de filas antes y después (99 441, 96 478 y 96 144 pedidos en el ETL). \\ \hline
-Transformación & Joiner, GroupBy, Date\&Time Difference, Math Formula, Rule Engine, String Manipulation & Reproduce la vista v\_\allowbreak{}pedidos\_\allowbreak{}base (Anexo A); los conteos coinciden con los de la vista (96 144 pedidos). \\ \hline
+Calidad & Statistics, Missing Value, Row Filter, Rule Engine & Se documenta cada filtro con su conteo de filas antes y después (99~441, 96~478 y 96~144 pedidos en el ETL). \\ \hline
+Transformación & Joiner, GroupBy, Date\&Time Difference, Math Formula, Rule Engine, String Manipulation & Reproduce la vista v\_\allowbreak{}pedidos\_\allowbreak{}base (Anexo A); los conteos coinciden con los de la vista (96~144 pedidos). \\ \hline
 Preparación de modelos & Column Filter, Number To String (variable objetivo), Domain Calculator, Normalizer, Row Splitter por fecha & Partición temporal: entrenamiento hasta marzo de 2018, prueba de abril a agosto de 2018. \\ \hline
 Modelo 1 & CSV Reader, Column Filter, Math Formula (logaritmo), Normalizer (Z-score), k-Means, Joiner, GroupBy, Rule-based Row Filter, Silhouette Coefficient, One-way ANOVA, CSV Writer & k = 4 con semilla 2; la silueta de k = 4 en KNIME es 0.297 y la comparación de k de 2 a 8 se calculó en Python. La prueba de H4 usa One-way ANOVA, porque el nodo de Kruskal-Wallis no está instalado. Detalle en las secciones 3.4 y 4.5. \\ \hline
 Modelo 2 & Row Splitter (corte 2018-04-01), Missing Value y Missing Value (Apply), Equal Size Sampling, Normalizer y Normalizer (Apply), Random Forest Learner y Predictor, Logistic Regression Learner y Predictor, Rule Engine (líneas base), Scorer, ROC Curve (legacy), Domain Calculator, Date\&Time Part Extractor, X-Partitioner, X-Aggregator, Column Renamer, Joiner, CSV Writer & Balanceo solo sobre entrenamiento. La validación cruzada elige el tamaño mínimo de nodo y el CSV Writer exporta \texttt{predicciones\_\allowbreak{}modelo2.csv}. Detalle en las secciones 3.5 y 3.6. \\ \hline
@@ -1141,9 +1173,10 @@ Salida a Power BI & CSV Writer & Escribe \texttt{ordenes\_\allowbreak{}etl.csv},
 \end{longtable}
 }
 \clearpage
+\Needspace{7\baselineskip}
 \subsection{Anexo E. Glosario}
 {\small
-\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-4\tabcolsep-3\arrayrulewidth)*23/78\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-4\tabcolsep-3\arrayrulewidth)*55/78\relax}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-4\tabcolsep-3\arrayrulewidth)*2948/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-4\tabcolsep-3\arrayrulewidth)*7051/10000\relax}|}
 \hline
 \textbf{Término} & \textbf{Definición} \\ \hline
 \endhead
@@ -1178,7 +1211,7 @@ Las capturas se tomaron con los workflows ya ejecutados y con el dashboard abier
 \begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth,height=0.30\textheight,keepaspectratio]{../capturas/etl/tabla-final-96144-filas.png}
-\caption{Tabla final del ETL: 96 144 filas y 29 columnas, con los códigos postales como texto.}
+\caption{Tabla final del ETL: 96~144 filas y 29 columnas, con los códigos postales como texto.}
 \end{figure}
 \begin{figure}[H]
 \centering
@@ -1194,17 +1227,17 @@ Las capturas se tomaron con los workflows ya ejecutados y con el dashboard abier
 \begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth,height=0.30\textheight,keepaspectratio]{../capturas/modelo1/groupby-perfil-por-grupo.png}
-\caption{Perfil de los cuatro grupos del Modelo 1 (GroupBy): 41 511, 7 357, 30 509 y 16 767 pedidos.}
+\caption{Perfil de los cuatro grupos del Modelo 1 (GroupBy): 41~511, 7~357, 30~509 y 16~767 pedidos.}
 \end{figure}
 \begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth,height=0.30\textheight,keepaspectratio]{../capturas/modelo1/anova-h4-f-4477.png}
-\caption{One-way ANOVA de la calificación por grupo (H4): F = 4 477.7, p cercano a 0.}
+\caption{One-way ANOVA de la calificación por grupo (H4): F = 4~477.7, p cercano a 0.}
 \end{figure}
 \begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth,height=0.30\textheight,keepaspectratio]{../capturas/modelo1/silueta-k4-0297.png}
-\caption{Coeficiente de silueta de k = 4 sobre 10 000 pedidos: 0.297 global.}
+\caption{Coeficiente de silueta de k = 4 sobre 10~000 pedidos: 0.297 global.}
 \end{figure}
 \subsubsection{G.3 Workflow 03-Prediccion (Modelo 2)}
 \begin{figure}[H]
