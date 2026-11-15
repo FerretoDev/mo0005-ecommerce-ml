@@ -74,7 +74,7 @@ La exploración se hizo en PostgreSQL sobre los pedidos entregados con fecha de 
 - **Entregas.** El 8.07 % de los pedidos llegó tarde. Cuando el vendedor y el cliente están en el mismo estado, la entrega tardó en promedio 7.9 días; cuando están en estados distintos, 15.1 días.
 - **Geografía.** El porcentaje de entregas tardías varía mucho según el estado del cliente: los más altos son Alagoas (23.8 %), Maranhão (19.6 %), Piauí (16.0 %) y Sergipe (15.4 %), y los más bajos São Paulo (5.9 %), Minas Gerais (5.6 %) y Paraná (5.0 %).
 - **Satisfacción.** La calificación promedio general es de 4.16: 4.30 en los pedidos puntuales y 2.57 en los que llegaron tarde. Recibió una reseña de 1 o 2 estrellas el 9.2 % de los pedidos puntuales, frente al 53.9 % de los tardíos.
-- **Fidelización.** Solo el 3.12 % de los clientes realizó más de un pedido. Volvió a comprar el 4.34 % de quienes recibieron a tiempo su primer pedido, frente al 2.94 % de quienes lo recibieron tarde.
+- **Fidelización.** Solo el 3.12 % de los clientes realizó más de un pedido. Volvió a comprar el 4.34 % de quienes recibieron a tiempo su primer pedido, frente al 2.97 % de quienes lo recibieron tarde.
 
 Estos resultados evidencian asociaciones y no demuestran por sí mismos que el retraso cause la insatisfacción o la falta de recompra. Tampoco se dispone de información sobre las posibles causas de los retrasos, como el transporte o la ruta utilizada.
 
@@ -136,7 +136,7 @@ Los datos provienen del conjunto público Brazilian E-Commerce Public Dataset by
 
 ## 2.5 Infraestructura de base de datos
 
-Se utilizó **PostgreSQL** ejecutándose localmente mediante Docker, en lugar de Snowflake. Esta decisión fue funcional y reproducible para todo el equipo: el esquema quedó versionado en el repositorio con el script `schema.sql`, la instancia se levantó de forma local y se usó para explorar los datos y verificar los resultados de KNIME, cuyos flujos leen los CSV del repositorio. La estructura final se implementó en el esquema `olist`, con la base de datos `postgres` configurada dentro del contenedor `olist-db`.
+Se utilizó **PostgreSQL** (The PostgreSQL Global Development Group, s. f.) ejecutándose localmente mediante Docker, en lugar de Snowflake. Esta decisión fue funcional y reproducible para todo el equipo: el esquema quedó versionado en el repositorio con el script `schema.sql`, la instancia se levantó de forma local y se usó para explorar los datos y verificar los resultados de KNIME, cuyos flujos leen los CSV del repositorio. La estructura final se implementó en el esquema `olist`, con la base de datos `postgres` configurada dentro del contenedor `olist-db`.
 
 Se documentó la evidencia de funcionamiento mediante consultas SQL sobre el esquema y sobre la vista `v_pedidos_base`, así como la validación de conteos por tabla. La instancia quedó disponible para el desarrollo y la verificación del análisis de negocio.
 
@@ -323,7 +323,7 @@ El diccionario indica, para cada estructura, su nombre y descripción; para cada
 | product_category_name | VARCHAR(50) | PK | No | Nombre de la categoría en portugués. |
 | product_category_name_english | VARCHAR(50) |  | No | Nombre de la categoría en inglés. |
 
-Las columnas derivadas del flujo se documentan en la sección 3.3, donde se describen los indicadores y variables creadas para el análisis de entrega, satisfacción y recompras.
+Las columnas derivadas del flujo se documentan en la sección 3.3, donde se describen los indicadores y variables creados para el análisis de entrega, satisfacción y recompras.
 
 ### 2.8.3 Relaciones entre estructuras
 
@@ -348,7 +348,7 @@ Enlace al diagrama: https://drive.google.com/file/d/1xBKpA89fh4JQ7KKysahj6yNuwq9
 **Cómo leer el diagrama:**
 
 - Línea continua: relación que puede imponerse como llave foránea.
-- Línea punteada: relación lógica, de tres tipos: la traducción de categorías hacia products y las dos relaciones por código postal con geolocation (no puede imponerse porque existen prefijos sin coincidencia).
+- Línea punteada: relación lógica, de tres tipos: la traducción de categorías hacia products y las dos relaciones por código postal con geolocation (no pueden imponerse porque existen prefijos sin coincidencia).
 - Cardinalidades: orders y customers son 1 a 1, porque cada pedido genera su propio customer_id. orders se relaciona 1 a muchos, con posibles ceros, con ítems, pagos y reseñas, porque hay pedidos sin ítems, sin pago o sin reseña. products y sellers aparecen en muchos ítems.
 - Llaves compuestas: order_items, order_payments y order_reviews combinan order_id con otro campo.
 
@@ -358,7 +358,7 @@ Enlace al diagrama: https://drive.google.com/file/d/1xBKpA89fh4JQ7KKysahj6yNuwq9
 
 ## 3.1 Descripción general del flujo en KNIME
 
-El análisis se desarrolla como un flujo por etapas en KNIME, desde la obtención de los datos hasta la validación de los modelos y el cálculo de los indicadores. La estructura del proyecto refleja una separación clara entre ETL, clustering y predicción, con una capa final de indicadores para la toma de decisiones.
+El análisis se desarrolla como un flujo por etapas en KNIME, desde la obtención de los datos hasta la validación de los modelos y el cálculo de los indicadores. La estructura del proyecto refleja una separación clara entre ETL, agrupamiento y predicción, con una capa final de indicadores para la toma de decisiones.
 
 | Etapa | Qué se hace | Workflow group |
 | --- | --- | --- |
@@ -368,6 +368,8 @@ El análisis se desarrolla como un flujo por etapas en KNIME, desde la obtenció
 | 4. Modelado | Construcción de los dos modelos: no supervisado (3.4) y supervisado (3.5). | 02-Clustering y 03-Prediccion |
 | 5. Validación | Ajuste de parámetros de cada modelo y documentación de los cambios (3.6). | 02 y 03 |
 | 6. Indicadores | Cálculo de los KPI sobre los datos transformados y presentación en Power BI (sección 4). | 04-KPIs |
+
+**Elección de la herramienta.** Se eligió KNIME Analytics Platform (KNIME AG, 2026) y no Dataiku por razones prácticas. Primero, KNIME Analytics Platform es de código abierto y gratuito, de modo que cada integrante lo instaló en su propio computador sin licencias. Segundo, los flujos se ejecutan de forma local y se guardan como carpetas de archivos de texto, lo que permitió versionarlos en Git junto con los datos. Tercero, un solo entorno cubrió la integración de las tablas, el aprendizaje automático (k-means, regresión logística, Random Forest y validación cruzada) y el cálculo de los indicadores. Cuarto, los nodos visuales muestran cómo cambian los datos en cada paso, lo que facilita documentar y verificar el flujo. Dataiku es una alternativa válida para el trabajo colaborativo en servidor; para un equipo de cuatro personas, con datos públicos y un plazo corto, KNIME resultó más sencillo de poner en marcha.
 
 ## 3.2 Obtención y calidad de los datos
 
@@ -404,7 +406,7 @@ Se integraron las tablas a nivel de pedido y se crearon las siguientes variables
 | num_pedidos_cliente, recompra | Conteo de pedidos por customer_unique_id; 1 si es mayor que 1 | KPI de fidelización. |
 | primer_pedido_tardio | es_tardio del primer pedido de cada cliente | KPI de recompra según puntualidad. |
 
-La vista base mantiene una fila por pedido, con agregación del valor total y del flete, y con una única referencia de vendedor y producto basada en el primer ítem del pedido. Esta decisión evita duplicar el pedido al integrar las tablas de items, pagos y reseñas.
+La vista base mantiene una fila por pedido, con agregación del valor total y del flete, y con una única referencia de vendedor y producto basada en el primer ítem del pedido. Esta decisión evita duplicar el pedido al integrar las tablas de ítems, pagos y reseñas.
 
 **Implementación en KNIME (workflow 01-ETL, 40 nodos).** Los nueve CSV se leen con nodos CSV Reader, con los códigos postales como texto. Items, pagos y reseñas se agregan por `order_id` con GroupBy (suma de precio y flete y máximo de `order_item_id` como número de ítems; suma de pagos y máximo de cuotas; promedio de calificación). Cuatro Joiner unen orders con customers y con esas tres agregaciones (Left Outer, para no perder pedidos) y un Row Filter conserva los pedidos `delivered`. Una rama aparte toma el primer ítem de cada pedido (`order_item_id = 1`) y lo une con sellers, products y la traducción de categorías para obtener `seller_state`, el peso, las medidas y la categoría; esa rama se une al flujo principal por `order_id`.
 
@@ -467,7 +469,7 @@ Este último segmento coincide en gran parte con los pedidos tardíos, porque el
 
 El modelo supervisado clasifica si un pedido llegará tarde o a tiempo usando únicamente variables conocidas al momento de la compra. Este enfoque evita filtrado de información futura y permite evaluar la utilidad del modelo para actuar de forma preventiva antes de que se produzca la entrega.
 
-Se comparan dos algoritmos, regresión logística y Random Forest, con dos líneas base: predecir siempre «a tiempo» y una regla geográfica que marca como tardío todo pedido entre estados distintos. La mejora se mide con indicadores orientados a la clase minoritaria: AUC, precisión, exhaustividad y F1 de la entrega tardía. La guía de nodos está en `documento/guia-modelo2-knime.md`.
+Se comparan dos algoritmos, regresión logística y Random Forest, con dos líneas base: predecir siempre «a tiempo» y una regla geográfica que marca como tardío todo pedido entre estados distintos. La mejora se mide con indicadores orientados a la clase minoritaria: AUC, precisión, exhaustividad y F1 de la entrega tardía. La lista de nodos está en el Anexo D.
 
 **Variables de entrada (13):** `total_precio`, `total_flete`, `num_items`, `max_cuotas`, `relacion_precio_flete`, `product_weight_g`, `volumen_cm3`, `plazo_estimado_dias`, `mismo_estado`, `customer_state`, `seller_state`, `product_category_name_english` y el día de la semana de la compra. Se excluyen todas las variables que solo se conocen después de la compra (fechas de aprobación, despacho y entrega, días de entrega, retraso y calificación). También se excluyó el mes de compra: con solo 20 meses de datos, el modelo aprendía los picos de retraso de un único año (en las pruebas era la variable más importante del Random Forest), un patrón que no se puede asumir que se repita.
 
@@ -479,7 +481,7 @@ Con un corte en el 1 de abril de 2018 sobre la fecha de compra, el entrenamiento
 
 ### 3.5.2 Preparación, parámetros e hiperparámetros
 
-Todo lo que se aprende de los datos se calcula solo con el entrenamiento y se aplica después a la prueba: la imputación de los 16 valores ausentes de peso y volumen (mediana), la normalización de las variables numéricas para la regresión logística (puntuación z) y el balanceo de clases (muestreo de igual tamaño de tardíos y puntuales, solo en entrenamiento). En KNIME, el Random Forest se configuró con 200 árboles, criterio de Gini, raíz cuadrada del número de variables en cada división, muestreo de filas con reemplazo y semilla 42. El tamaño mínimo quedó en 20 filas por nodo hijo y 40 por nodo que se divide: el diálogo muestra un solo campo («Minimum node size» = 20), pero guarda los dos valores, y el del nodo es el doble. Con esta configuración se obtuvo el AUC de 0.590 de la sección 3.6. El desbalance se trató con muestreo de igual tamaño (en Python, con ponderación de clases). Para que el Random Forest use la categoría del producto hubo que recalcular el dominio de esa columna con un Domain Calculator (tiene más de 60 categorías). El tamaño mínimo se eligió con validación cruzada de 5 particiones, estratificada por `es_tardio` y con semilla 42, sobre el entrenamiento ya balanceado. Se varió el campo «Minimum node size» del diálogo: con 10, 20, 40 y 80, el AUC de validación fue 0.6858, 0.6871, 0.6876 y 0.6855. Se mantuvo 20. Entre el mejor y el peor valor hay apenas 0.002, una diferencia que cabe en el ruido de la partición, así que el modelo es poco sensible a este parámetro y no hay razón para cambiar la configuración. El AUC de validación (cerca de 0.69) es mayor que el de la prueba (0.59) porque la validación cruzada mezcla pedidos del mismo período, mientras que la prueba mide el modelo en meses posteriores, cuando la relación entre las variables y el retraso ya había cambiado (sección 3.6). La prueba temporal se usa una sola vez, al final.
+Todo lo que se aprende de los datos se calcula solo con el entrenamiento y se aplica después a la prueba: la imputación de los 16 valores ausentes de peso y volumen (mediana), la normalización de las variables numéricas para la regresión logística (puntuación z) y el balanceo de clases (muestreo de igual tamaño de tardíos y puntuales, solo en entrenamiento). En KNIME, el Random Forest se configuró con 200 árboles, criterio de Gini, raíz cuadrada del número de variables en cada división, muestreo de filas con reemplazo y semilla 42. El tamaño mínimo quedó en 20 filas por nodo hijo, y un nodo solo se divide si tiene al menos el doble (40): el diálogo de KNIME muestra un solo campo («Minimum node size» = 20) y guarda los dos valores, el segundo como el doble del primero. Con esta configuración se obtuvo el AUC de 0.590 de la sección 3.6. El desbalance se trató con muestreo de igual tamaño (en Python, con ponderación de clases). Para que el Random Forest use la categoría del producto hubo que recalcular el dominio de esa columna con un Domain Calculator (tiene más de 60 categorías). El tamaño mínimo se eligió con validación cruzada de 5 particiones, estratificada por `es_tardio` y con semilla 42, sobre el entrenamiento ya balanceado. Se varió el campo «Minimum node size» del diálogo: con 10, 20, 40 y 80, el AUC de validación fue 0.6858, 0.6871, 0.6876 y 0.6855. Se mantuvo 20. Entre el mejor y el peor valor hay apenas 0.002, una diferencia que cabe en el ruido de la partición, así que el modelo es poco sensible a este parámetro y no hay razón para cambiar la configuración. El AUC de validación (cerca de 0.69) es mayor que el de la prueba (0.59) porque la validación cruzada mezcla pedidos del mismo período, mientras que la prueba mide el modelo en meses posteriores, cuando la relación entre las variables y el retraso ya había cambiado (sección 3.6). La prueba temporal se usa una sola vez, al final.
 
 ## 3.6 Validación de ambos modelos
 
@@ -532,9 +534,9 @@ No se incorporaron integraciones con terceros. El análisis se basa en variables
 
 La evidencia del flujo requiere mostrar que la cadena completa corre de manera coherente desde la lectura de datos hasta la validación de resultados. En el proyecto, la prueba de ejecución se apoya en la propia validación relacional de tablas, las vistas analíticas y los resultados del cálculo de KPI, que son consistentes con la población de análisis y la lógica de negocio definida.
 
-**Ejecución del workflow 01-ETL.** El flujo se ejecutó completo en KNIME con sus 40 nodos. Tras los cuatro Joiner la tabla tiene 99 441 filas (una por pedido, igual que orders, sin duplicados). Después del filtro de pedidos entregados y de la ventana de fechas de entrega quedan 96 144 filas, que coincide con el conteo de v_pedidos_base, y `order_id` no se repite. El promedio de `es_tardio` es 0.0807 (8.07 %), igual al KPI 1. En la tabla final solo faltan valores en `review_promedio` (642 pedidos sin reseña), en peso y medidas (16 pedidos), en `order_approved_at` (14) y en `order_delivered_carrier_date` (1). El nodo Statistics advierte que no calcula frecuencias de las columnas con más de 1 000 valores distintos, como los identificadores y las fechas, lo que no afecta a las columnas analíticas. Las capturas están en `documento/capturas/etl/`: el flujo completo con sus 40 nodos ejecutados, la tabla final (96 144 filas y 29 columnas) y la salida del nodo Statistics.
+**Ejecución del workflow 01-ETL.** El flujo se ejecutó completo en KNIME con sus 40 nodos. Tras los cuatro Joiner la tabla tiene 99 441 filas (una por pedido, igual que orders, sin duplicados). Después del filtro de pedidos entregados y de la ventana de fechas de entrega quedan 96 144 filas, que coinciden con el conteo de v_pedidos_base, y `order_id` no se repite. El promedio de `es_tardio` es 0.0807 (8.07 %), igual al KPI 1. En la tabla final solo faltan valores en `review_promedio` (642 pedidos sin reseña), en peso y medidas (16 pedidos), en `order_approved_at` (14) y en `order_delivered_carrier_date` (1). El nodo Statistics advierte que no calcula frecuencias de las columnas con más de 1 000 valores distintos, como los identificadores y las fechas, lo que no afecta a las columnas analíticas. Las figuras 1 a 3 (Anexo G) muestran el flujo completo con sus 40 nodos ejecutados, la tabla final (96 144 filas y 29 columnas) y la salida del nodo Statistics.
 
-**Ejecución de los workflows 03-Prediccion y 04-KPIs.** Los dos se ejecutaron completos y sin errores; las capturas están en `documento/capturas/`, y su archivo `LEER.md` describe cada una. Para el Modelo 2 (`modelo2/`) hay una captura del workflow completo, las matrices de confusión y las estadísticas por clase de los cuatro modelos (Scorer), las curvas ROC del Random Forest (AUC 0.590), de la regresión logística (0.719) y de la línea base 2 (0.472), el AUC de la validación cruzada con cada tamaño mínimo de nodo y la tabla de variables del Random Forest. Para los indicadores (`kpis/`) hay una captura del workflow completo y una por grupo de KPI, del 1 al 11, con los mismos valores de la sección 4.2. En 03-Prediccion, el único aviso es el de convergencia de la regresión logística, explicado en la sección 3.6. Las capturas del dashboard están en `documento/capturas/dashboard/`: una por página, la página 1 filtrada por un estado, la vista de modelo y dos consultas DAX de control cuyos resultados coinciden con KNIME. Las de 02-Clustering están en `documento/capturas/modelo1/`: el workflow completo con sus 14 nodos ejecutados, el perfil de los cuatro grupos (GroupBy), la prueba ANOVA de H4 (F = 4 477.7) y la silueta de k = 4 (0.297).
+**Ejecución de los workflows 02-Clustering, 03-Prediccion y 04-KPIs.** Los tres se ejecutaron completos y sin errores. Para el Modelo 1 (figuras 4 a 7) hay una captura del workflow completo con sus 14 nodos, el perfil de los cuatro grupos (GroupBy), la prueba ANOVA de H4 (F = 4 477.7) y la silueta de k = 4 (0.297). Para el Modelo 2 (figuras 8 a 24) hay una captura del workflow completo, las matrices de confusión y las estadísticas por clase de los cuatro modelos (Scorer), las curvas ROC del Random Forest (AUC 0.590), de la regresión logística (0.719) y de la línea base 2 (0.472), el AUC de la validación cruzada con cada tamaño mínimo de nodo y la tabla de variables del Random Forest. Para los indicadores (figuras 25 a 35) hay una captura del workflow completo y una por grupo de KPI, con los mismos valores de la sección 4.2. Las figuras 36 a 44 muestran las cinco páginas del dashboard, la página 1 filtrada por un estado, la vista de modelo y dos consultas DAX de control cuyos resultados coinciden con KNIME. En 03-Prediccion, el único aviso es el de convergencia de la regresión logística, explicado en la sección 3.6.
 
 ---
 
@@ -542,9 +544,9 @@ La evidencia del flujo requiere mostrar que la cadena completa corre de manera c
 
 ## 4.1 Conexión entre KNIME y Power BI
 
-Power BI no se conecta a PostgreSQL, sino a las tablas que produce el propio flujo de KNIME. El workflow `04-KPIs` lee `ordenes_etl.csv` (la salida del 01-ETL) y los archivos originales de pedidos y clientes, calcula los 11 KPI y escribe dos tablas: `knime/datos/pedidos_kpi.csv`, con una fila por pedido (96 144 pedidos, 18 columnas), y `knime/datos/clientes_kpi.csv`, con una fila por cliente (96 096 clientes, 8 columnas). Además de las 14 columnas de los KPI, la tabla de pedidos trae los resultados de los dos modelos: `segmento`, con el nombre del grupo del Modelo 1, y `en_prueba`, `prob_tardio_rf` y `prob_tardio_logistica`, del Modelo 2. Los valores de los KPI se verificaron contra las consultas de PostgreSQL (`datos/resultados_kpis.txt`).
+Power BI (Microsoft, s. f.-a) no se conecta a PostgreSQL, sino a las tablas que produce el propio flujo de KNIME. El workflow `04-KPIs` lee `ordenes_etl.csv` (la salida del 01-ETL) y los archivos originales de pedidos y clientes, calcula los 11 KPI y escribe dos tablas: `knime/datos/pedidos_kpi.csv`, con una fila por pedido (96 144 pedidos, 18 columnas), y `knime/datos/clientes_kpi.csv`, con una fila por cliente (96 096 clientes, 8 columnas). Además de las 14 columnas de los KPI, la tabla de pedidos trae los resultados de los dos modelos: `segmento`, con el nombre del grupo del Modelo 1, y `en_prueba`, `prob_tardio_rf` y `prob_tardio_logistica`, del Modelo 2. Los valores de los KPI se verificaron contra las consultas de PostgreSQL (`datos/resultados_kpis.txt`).
 
-Además de esas dos tablas, Power BI carga dos archivos más. El KPI 5 necesita todos los pedidos, también los cancelados, así que se lee directamente `knime/datos/olist_orders_dataset.csv` (99 441 pedidos, columna `order_status`). Los resultados de los modelos llegan ya unidos a la tabla de pedidos: el workflow `03-Prediccion` escribe `knime/datos/predicciones_modelo2.csv` (`order_id`, `prob_tardio_rf` y `prob_tardio_logistica`), y `04-KPIs` lo une por `order_id`, igual que `segmentos_modelo1.csv`. Por eso en Power BI no hace falta relacionar archivos entre sí.
+Además de esas dos tablas, Power BI carga un archivo más. El KPI 5 necesita todos los pedidos, también los cancelados, así que se lee directamente `knime/datos/olist_orders_dataset.csv` (99 441 pedidos, columna `order_status`). Los resultados de los modelos llegan ya unidos a la tabla de pedidos: el workflow `03-Prediccion` escribe `knime/datos/predicciones_modelo2.csv` (`order_id`, `prob_tardio_rf` y `prob_tardio_logistica`), y `04-KPIs` lo une por `order_id`, igual que `segmentos_modelo1.csv`. Por eso en Power BI no hace falta relacionar archivos entre sí.
 
 En la parte predictiva el dashboard usa la regresión logística, porque fue el mejor modelo (AUC 0.719) y es la que sustenta la conclusión sobre H3; el Random Forest aparece solo como comparación. Las predicciones existen únicamente para los 32 092 pedidos de la prueba (abril a agosto de 2018), marcados con `en_prueba` = 1; en los otros 64 052 pedidos las probabilidades quedan vacías.
 
@@ -580,7 +582,7 @@ Se definen once indicadores, organizados según el objetivo estratégico al que 
 
 ## 4.3 Dashboard
 
-El dashboard está en `powerbi/dashboard_olist.pbix` y tiene cinco páginas: un resumen, una por cada objetivo estratégico y una con los resultados de los dos modelos. La página de resumen incluye un filtro por estado del cliente. Antes de armar las páginas se verificaron todas las medidas con una consulta DAX dentro de Power BI, y los valores coinciden con los de KNIME (sección 4.2). Las capturas de cada página están en `documento/capturas/dashboard/`. Con el filtro de estado, por ejemplo, la página de resumen muestra que en Alagoas llegó tarde el 23.80 % de los pedidos, con calificación promedio de 3.86.
+El dashboard está en `powerbi/dashboard_olist.pbix` y tiene cinco páginas: un resumen, una por cada objetivo estratégico y una con los resultados de los dos modelos. La página de resumen incluye un filtro por estado del cliente. Antes de armar las páginas se verificaron todas las medidas con una consulta DAX dentro de Power BI, y los valores coinciden con los de KNIME (sección 4.2). Las capturas de cada página están en las figuras 36 a 41 (Anexo G). Con el filtro de estado, por ejemplo, la página de resumen muestra que en Alagoas llegó tarde el 23.80 % de los pedidos, con calificación promedio de 3.86.
 
 | Página | KPI | Visuales |
 | --- | --- | --- |
@@ -650,9 +652,17 @@ Los valores de las pruebas se calcularon en Python sobre `knime/datos/ordenes_et
 
 # 7. Referencias y anexos
 
-Olist. (2018). Brazilian E-Commerce Public Dataset by Olist [Conjunto de datos]. Kaggle. https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
+Microsoft. (s. f.-a). *Power BI Desktop* [Software]. https://powerbi.microsoft.com/
 
-Documentación de KNIME, PostgreSQL y Power BI consultada durante la construcción del flujo y la visualización, en formato APA y conforme a la bibliografía del curso.
+Microsoft. (s. f.-b). *Referencia de funciones DAX*. https://learn.microsoft.com/en-us/dax/dax-function-reference
+
+KNIME AG. (2026). *KNIME Analytics Platform* (Versión 5.12) [Software]. https://www.knime.com/
+
+Olist. (2018). *Brazilian E-Commerce Public Dataset by Olist* [Conjunto de datos]. Kaggle. https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
+
+Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., Blondel, M., Prettenhofer, P., Weiss, R., Dubourg, V., Vanderplas, J., Passos, A., Cournapeau, D., Brucher, M., Perrot, M., y Duchesnay, É. (2011). Scikit-learn: Machine learning in Python. *Journal of Machine Learning Research, 12*, 2825-2830.
+
+The PostgreSQL Global Development Group. (s. f.). *PostgreSQL 16 documentation*. https://www.postgresql.org/docs/16/
 
 ---
 
@@ -935,7 +945,7 @@ GROUP BY 1 ORDER BY 1;
 
 ## Anexo C. Medidas DAX para Power BI
 
-Las medidas usan tres tablas cargadas desde los CSV de KNIME: Pedidos (`pedidos_kpi.csv`), Clientes (`clientes_kpi.csv`) y PedidosTodos (`olist_orders_dataset.csv`, solo para el KPI 5). En Pedidos, `resena_negativa` vale 1 si la calificación es 1 o 2 y queda vacía en los 642 pedidos sin reseña; `banda_retraso` toma los valores «a tiempo», «1 a 3 dias», «4 a 7 dias» y «mas de 7 dias». En Clientes, `primer_en_2017` vale 1 si el primer pedido del cliente fue en 2017, y `primer_pedido_tardio` y `primer_pedido_negativo` quedan vacíos cuando el primer pedido no se entregó o no tiene reseña. Por eso las medidas de recompra usan `==`: en DAX, un valor vacío comparado con `= 0` da verdadero, y esos clientes se sumarían al grupo puntual o no negativo.
+Las medidas usan tres tablas cargadas desde los CSV de KNIME: Pedidos (`pedidos_kpi.csv`), Clientes (`clientes_kpi.csv`) y PedidosTodos (`olist_orders_dataset.csv`, solo para el KPI 5). En Pedidos, `resena_negativa` vale 1 si la calificación es 1 o 2 y queda vacía en los 642 pedidos sin reseña; `banda_retraso` toma los valores `a tiempo`, `1 a 3 dias`, `4 a 7 dias` y `mas de 7 dias`. En Clientes, `primer_en_2017` vale 1 si el primer pedido del cliente fue en 2017, y `primer_pedido_tardio` y `primer_pedido_negativo` quedan vacíos cuando el primer pedido no se entregó o no tiene reseña. Por eso las medidas de recompra usan `==`: en DAX, un valor vacío comparado con `= 0` da verdadero, y esos clientes se sumarían al grupo puntual o no negativo.
 
 ```
 % Entregas Tardías =
@@ -1013,14 +1023,14 @@ CALCULATE(AVERAGE(Pedidos[prob_tardio_logistica]), Pedidos[en_prueba] = 1)
 
 | Etapa | Nodos principales | Notas |
 | --- | --- | --- |
-| Obtención | PostgreSQL Connector → DB Table Selector → DB Reader (uno por tabla) | Una conexión compartida; leer las nueve tablas. Sin base de datos: un CSV Reader por archivo con ruta `../datos/<archivo>.csv` (carpeta `knime/datos/`); es lo usado en la versión base del 01-ETL, con los códigos postales como String. |
+| Obtención | PostgreSQL Connector → DB Table Selector → DB Reader (uno por tabla) | Los flujos usan un CSV Reader por archivo, con ruta `../datos/<archivo>.csv` (carpeta `knime/datos/`) y los códigos postales como String. Con la base de datos, la alternativa es una conexión compartida y un DB Reader por tabla. |
 | Calidad | Statistics, Missing Value, Row Filter, Rule Engine | Se documenta cada filtro con su conteo de filas antes y después (99 441, 96 478 y 96 144 pedidos en el ETL). |
-| Transformación | Joiner, GroupBy, Date&Time Difference, Math Formula, Rule Engine, String Manipulation | Reproduce la vista v_pedidos_base (Anexo A); verificar que los conteos coincidan. |
+| Transformación | Joiner, GroupBy, Date&Time Difference, Math Formula, Rule Engine, String Manipulation | Reproduce la vista v_pedidos_base (Anexo A); los conteos coinciden con los de la vista (96 144 pedidos). |
 | Preparación de modelos | Column Filter, Number To String (variable objetivo), Domain Calculator, Normalizer, Row Splitter por fecha | Partición temporal: entrenamiento hasta marzo de 2018, prueba de abril a agosto de 2018. |
-| Modelo 1 | CSV Reader, Column Filter, Math Formula (logaritmo), Normalizer (Z-score), k-Means, Joiner, GroupBy, Rule-based Row Filter, Silhouette Coefficient, One-way ANOVA, CSV Writer | k = 4 con semilla 2; la silueta de k = 4 en KNIME es 0.297 y la comparación de k de 2 a 8 se calculó en Python. La prueba de H4 usa One-way ANOVA, porque el nodo de Kruskal-Wallis no está instalado. Detalle en `documento/guia-modelo1-knime.md`. |
-| Modelo 2 | Row Splitter (corte 2018-04-01), Missing Value y Missing Value (Apply), Equal Size Sampling, Normalizer y Normalizer (Apply), Random Forest Learner y Predictor, Logistic Regression Learner y Predictor, Rule Engine (líneas base), Scorer, ROC Curve (legacy), Domain Calculator, Date&Time Part Extractor, X-Partitioner, X-Aggregator, Column Renamer, Joiner, CSV Writer | Balanceo solo sobre entrenamiento. La validación cruzada elige el tamaño mínimo de nodo y el CSV Writer exporta `predicciones_modelo2.csv`. Detalle en `documento/guia-modelo2-knime.md`. |
+| Modelo 1 | CSV Reader, Column Filter, Math Formula (logaritmo), Normalizer (Z-score), k-Means, Joiner, GroupBy, Rule-based Row Filter, Silhouette Coefficient, One-way ANOVA, CSV Writer | k = 4 con semilla 2; la silueta de k = 4 en KNIME es 0.297 y la comparación de k de 2 a 8 se calculó en Python. La prueba de H4 usa One-way ANOVA, porque el nodo de Kruskal-Wallis no está instalado. Detalle en las secciones 3.4 y 4.5. |
+| Modelo 2 | Row Splitter (corte 2018-04-01), Missing Value y Missing Value (Apply), Equal Size Sampling, Normalizer y Normalizer (Apply), Random Forest Learner y Predictor, Logistic Regression Learner y Predictor, Rule Engine (líneas base), Scorer, ROC Curve (legacy), Domain Calculator, Date&Time Part Extractor, X-Partitioner, X-Aggregator, Column Renamer, Joiner, CSV Writer | Balanceo solo sobre entrenamiento. La validación cruzada elige el tamaño mínimo de nodo y el CSV Writer exporta `predicciones_modelo2.csv`. Detalle en las secciones 3.5 y 3.6. |
 | Validación | Scorer, ROC Curve, Cross Validation (X-Partitioner / X-Aggregator) | Validación cruzada solo dentro del conjunto de entrenamiento. En el Random Forest se compararon los tamaños mínimos 10, 20, 40 y 80 (sección 3.5.2). |
-| KPI | CSV Reader, Rule Engine, GroupBy, Joiner, Sorter, Column Renamer, Column Filter, Rule-based Row Filter, CSV Writer | Workflow `04-KPIs`: calcula los 11 KPI, une los segmentos y las predicciones por `order_id`, crea `en_prueba` y escribe `pedidos_kpi.csv` y `clientes_kpi.csv`. Detalle en `documento/guia-kpis-knime.md`. |
+| KPI | CSV Reader, Rule Engine, GroupBy, Joiner, Sorter, Column Renamer, Column Filter, Rule-based Row Filter, CSV Writer | Workflow `04-KPIs`: calcula los 11 KPI, une los segmentos y las predicciones por `order_id`, crea `en_prueba` y escribe `pedidos_kpi.csv` y `clientes_kpi.csv`. Detalle en la sección 4.1. |
 | Salida a Power BI | CSV Writer | Escribe `ordenes_etl.csv`, `segmentos_modelo1.csv`, `pedidos_kpi.csv` y `clientes_kpi.csv`, todas con el identificador del pedido o del cliente, además de `predicciones_modelo2.csv` desde 03-Prediccion. |
 
 ## Anexo E. Glosario
@@ -1043,5 +1053,106 @@ CALCULATE(AVERAGE(Pedidos[prob_tardio_logistica]), Pedidos[en_prueba] = 1)
 ## Anexo F. Enlaces
 
 - Repositorio del proyecto: https://github.com/FerretoDev/mo0005-ecommerce-ml
-- Video del flujo en ejecución: PENDIENTE (agregar el enlace cuando esté grabado).
 - Diagrama entidad-relación: https://drive.google.com/file/d/1xBKpA89fh4JQ7KKysahj6yNuwq9vtR2d/view?usp=sharing
+
+## Anexo G. Capturas de la ejecución en KNIME y Power BI
+
+Las capturas se tomaron con los workflows ya ejecutados y con el dashboard abierto. La numeración de las figuras sigue el orden de este anexo y es la que se cita en las secciones 3.8 y 4.3.
+
+### G.1 Workflow 01-ETL
+
+![Workflow 01-ETL completo y ejecutado, con sus 40 nodos en verde.](capturas/etl/workflow-01-etl-completo.png)
+
+![Tabla final del ETL: 96 144 filas y 29 columnas, con los códigos postales como texto.](capturas/etl/tabla-final-96144-filas.png)
+
+![Salida del nodo Statistics: estadísticas de las variables numéricas y valores ausentes.](capturas/etl/statistics-tabla-de-estadisticas.png)
+
+### G.2 Workflow 02-Clustering (Modelo 1)
+
+![Workflow 02-Clustering completo y ejecutado, con sus 14 nodos en verde.](capturas/modelo1/workflow-02-clustering-completo.png)
+
+![Perfil de los cuatro grupos del Modelo 1 (GroupBy): 41 511, 7 357, 30 509 y 16 767 pedidos.](capturas/modelo1/groupby-perfil-por-grupo.png)
+
+![One-way ANOVA de la calificación por grupo (H4): F = 4 477.7, p cercano a 0.](capturas/modelo1/anova-h4-f-4477.png)
+
+![Coeficiente de silueta de k = 4 sobre 10 000 pedidos: 0.297 global.](capturas/modelo1/silueta-k4-0297.png)
+
+### G.3 Workflow 03-Prediccion (Modelo 2)
+
+![Workflow 03-Prediccion completo y ejecutado.](capturas/modelo2/workflow-03-prediccion-completo.png)
+
+![Matriz de confusión de la línea base 1 (siempre a tiempo) sobre la prueba.](capturas/modelo2/scorer-base1-matriz.png)
+
+![Estadísticas por clase de la línea base 1.](capturas/modelo2/scorer-base1-estadisticas.png)
+
+![Matriz de confusión de la línea base 2 (estados distintos).](capturas/modelo2/scorer-base2-matriz.png)
+
+![Estadísticas por clase de la línea base 2.](capturas/modelo2/scorer-base2-estadisticas.png)
+
+![Matriz de confusión del Random Forest.](capturas/modelo2/scorer-random-forest-matriz.png)
+
+![Estadísticas por clase del Random Forest.](capturas/modelo2/scorer-random-forest-estadisticas.png)
+
+![Matriz de confusión de la regresión logística.](capturas/modelo2/scorer-regresion-logistica-matriz.png)
+
+![Estadísticas por clase de la regresión logística.](capturas/modelo2/scorer-regresion-logistica-estadisticas.png)
+
+![Curva ROC del Random Forest: AUC 0.590.](capturas/modelo2/roc-random-forest-auc-0590.png)
+
+![Curva ROC de la regresión logística: AUC 0.719.](capturas/modelo2/roc-regresion-logistica-auc-0719.png)
+
+![Curva ROC de la línea base 2: AUC 0.472.](capturas/modelo2/roc-base2-auc-0472.png)
+
+![Validación cruzada del Random Forest con tamaño mínimo de nodo 10: AUC 0.6858.](capturas/modelo2/cv-nodo-10-auc-06858.png)
+
+![Validación cruzada con tamaño mínimo de nodo 20: AUC 0.6871.](capturas/modelo2/cv-nodo-20-auc-06871.png)
+
+![Validación cruzada con tamaño mínimo de nodo 40: AUC 0.6876.](capturas/modelo2/cv-nodo-40-auc-06876.png)
+
+![Validación cruzada con tamaño mínimo de nodo 80: AUC 0.6855.](capturas/modelo2/cv-nodo-80-auc-06855.png)
+
+![Estadísticas de atributos del Random Forest: divisiones en la raíz por variable.](capturas/modelo2/random-forest-estadisticas-de-atributos.png)
+
+### G.4 Workflow 04-KPIs
+
+![Workflow 04-KPIs completo y ejecutado.](capturas/kpis/workflow-04-kpis-completo.png)
+
+![KPI 1, 2, 6 y 7: entregas tardías, tiempo de entrega, calificación y reseñas negativas.](capturas/kpis/kpi-1-2-6-7-global.png)
+
+![KPI 3 y 8: retraso de las entregas tardías y calificación según puntualidad.](capturas/kpis/kpi-3-8-por-es-tardio.png)
+
+![KPI 4: tiempo de entrega en el mismo estado y en estados distintos.](capturas/kpis/kpi-4-por-mismo-estado.png)
+
+![KPI 5: tasa de pedidos no concretados.](capturas/kpis/kpi-5-no-concretados.png)
+
+![KPI 9: tasa de nueva compra.](capturas/kpis/kpi-9-recompra.png)
+
+![KPI 10: recompra según la puntualidad del primer pedido.](capturas/kpis/kpi-10-recompra-por-puntualidad.png)
+
+![KPI 11: recompra según la calificación del primer pedido.](capturas/kpis/kpi-11-recompra-por-resena.png)
+
+![Tabla de salida pedidos_kpi: una fila por pedido, con segmento y probabilidades.](capturas/kpis/pedidos-kpi-tabla-de-salida.png)
+
+![Reseñas negativas por tramo de retraso.](capturas/kpis/resena-negativa-por-banda-de-retraso.png)
+
+![Porcentaje de entregas tardías por estado del cliente.](capturas/kpis/tardias-por-estado.png)
+
+### G.5 Dashboard de Power BI
+
+![Dashboard, página 1: resumen.](capturas/dashboard/pagina-1-resumen.jpg)
+
+![Dashboard, página 1 filtrada por el estado de Alagoas.](capturas/dashboard/pagina-1-filtro-estado.jpg)
+
+![Dashboard, página 2: entregas.](capturas/dashboard/pagina-2-entregas.jpg)
+
+![Dashboard, página 3: satisfacción.](capturas/dashboard/pagina-3-satisfaccion.jpg)
+
+![Dashboard, página 4: fidelización.](capturas/dashboard/pagina-4-fidelizacion.jpg)
+
+![Dashboard, página 5: perfiles y riesgo.](capturas/dashboard/pagina-5-perfiles-riesgo.jpg)
+
+![Dashboard: vista de modelo de datos.](capturas/dashboard/modelo-de-datos.jpg)
+
+![Consulta DAX de control por nivel de riesgo.](capturas/dashboard/verificacion-dax-riesgo.jpg)
+
+![Consulta DAX de control por segmento.](capturas/dashboard/verificacion-dax-segmentos.jpg)
