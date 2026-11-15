@@ -1,6 +1,7 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage{fontspec}
-\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{polyglossia}
+\setdefaultlanguage{spanish}
 \usepackage[margin=2.5cm]{geometry}
 \usepackage{xcolor}
 \usepackage{array}
@@ -631,9 +632,9 @@ No se incorporaron integraciones con terceros. El análisis se basa en variables
 \subsection{3.8 Evidencia de ejecución del flujo}
 La evidencia del flujo requiere mostrar que la cadena completa corre de manera coherente desde la lectura de datos hasta la validación de resultados. En el proyecto, la prueba de ejecución se apoya en la propia validación relacional de tablas, las vistas analíticas y los resultados del cálculo de KPI, que son consistentes con la población de análisis y la lógica de negocio definida.
 
-\textbf{Ejecución del workflow 01-ETL.} El flujo se ejecutó completo en KNIME con sus 40 nodos. Tras los cuatro Joiner la tabla tiene 99 441 filas (una por pedido, igual que orders, sin duplicados). Después del filtro de pedidos entregados y de la ventana de fechas de entrega quedan 96 144 filas, que coinciden con el conteo de v\_\allowbreak{}pedidos\_\allowbreak{}base, y \texttt{order\_\allowbreak{}id} no se repite. El promedio de \texttt{es\_\allowbreak{}tardio} es 0.0807 (8.07 \%), igual al KPI 1. En la tabla final solo faltan valores en \texttt{review\_\allowbreak{}promedio} (642 pedidos sin reseña), en peso y medidas (16 pedidos), en \texttt{order\_\allowbreak{}approved\_\allowbreak{}at} (14) y en \texttt{order\_\allowbreak{}delivered\_\allowbreak{}carrier\_\allowbreak{}date} (1). El nodo Statistics advierte que no calcula frecuencias de las columnas con más de 1 000 valores distintos, como los identificadores y las fechas, lo que no afecta a las columnas analíticas. Las figuras 1 a 3 (Anexo G) muestran el flujo completo con sus 40 nodos ejecutados, la tabla final (96 144 filas y 29 columnas) y la salida del nodo Statistics.
+\textbf{Ejecución del workflow 01-ETL.} El flujo se ejecutó completo en KNIME con sus 40 nodos. Tras los cuatro Joiner la tabla tiene 99 441 filas (una por pedido, igual que orders, sin duplicados). Después del filtro de pedidos entregados y de la ventana de fechas de entrega quedan 96 144 filas, que coinciden con el conteo de v\_\allowbreak{}pedidos\_\allowbreak{}base, y \texttt{order\_\allowbreak{}id} no se repite. El promedio de \texttt{es\_\allowbreak{}tardio} es 0.0807 (8.07 \%), igual al KPI 1. En la tabla final solo faltan valores en \texttt{review\_\allowbreak{}promedio} (642 pedidos sin reseña), en peso y medidas (16 pedidos), en \texttt{order\_\allowbreak{}approved\_\allowbreak{}at} (14) y en \texttt{order\_\allowbreak{}delivered\_\allowbreak{}carrier\_\allowbreak{}date} (1). El nodo Statistics advierte que no calcula frecuencias de las columnas con más de 1 000 valores distintos, como los identificadores y las fechas, lo que no afecta a las columnas analíticas. Las figuras 2 a 4 (Anexo G) muestran el flujo completo con sus 40 nodos ejecutados, la tabla final (96 144 filas y 29 columnas) y la salida del nodo Statistics.
 
-\textbf{Ejecución de los workflows 02-Clustering, 03-Prediccion y 04-KPIs.} Los tres se ejecutaron completos y sin errores. Para el Modelo 1 (figuras 4 a 7) hay una captura del workflow completo con sus 14 nodos, el perfil de los cuatro grupos (GroupBy), la prueba ANOVA de H4 (F = 4 477.7) y la silueta de k = 4 (0.297). Para el Modelo 2 (figuras 8 a 24) hay una captura del workflow completo, las matrices de confusión y las estadísticas por clase de los cuatro modelos (Scorer), las curvas ROC del Random Forest (AUC 0.590), de la regresión logística (0.719) y de la línea base 2 (0.472), el AUC de la validación cruzada con cada tamaño mínimo de nodo y la tabla de variables del Random Forest. Para los indicadores (figuras 25 a 35) hay una captura del workflow completo y una por grupo de KPI, con los mismos valores de la sección 4.2. Las figuras 36 a 44 muestran las cinco páginas del dashboard, la página 1 filtrada por un estado, la vista de modelo y dos consultas DAX de control cuyos resultados coinciden con KNIME. En 03-Prediccion, el único aviso es el de convergencia de la regresión logística, explicado en la sección 3.6.
+\textbf{Ejecución de los workflows 02-Clustering, 03-Prediccion y 04-KPIs.} Los tres se ejecutaron completos y sin errores. Para el Modelo 1 (figuras 5 a 8) hay una captura del workflow completo con sus 14 nodos, el perfil de los cuatro grupos (GroupBy), la prueba ANOVA de H4 (F = 4 477.7) y la silueta de k = 4 (0.297). Para el Modelo 2 (figuras 9 a 25) hay una captura del workflow completo, las matrices de confusión y las estadísticas por clase de los cuatro modelos (Scorer), las curvas ROC del Random Forest (AUC 0.590), de la regresión logística (0.719) y de la línea base 2 (0.472), el AUC de la validación cruzada con cada tamaño mínimo de nodo y la tabla de variables del Random Forest. Para los indicadores (figuras 26 a 36) hay una captura del workflow completo y una por grupo de KPI, con los mismos valores de la sección 4.2. Las figuras 37 a 45 muestran las cinco páginas del dashboard, la página 1 filtrada por un estado, la vista de modelo y dos consultas DAX de control cuyos resultados coinciden con KNIME. En 03-Prediccion, el único aviso es el de convergencia de la regresión logística, explicado en la sección 3.6.
 
 \medskip\noindent\rule{\linewidth}{0.4pt}\medskip
 \section{4. Parte 3 — Visualización e indicadores}
@@ -683,7 +684,7 @@ Se definen once indicadores, organizados según el objetivo estratégico al que 
 \end{longtable}
 }
 \subsection{4.3 Dashboard}
-El dashboard está en \texttt{powerbi/\allowbreak{}dashboard\_\allowbreak{}olist.pbix} y tiene cinco páginas: un resumen, una por cada objetivo estratégico y una con los resultados de los dos modelos. La página de resumen incluye un filtro por estado del cliente. Antes de armar las páginas se verificaron todas las medidas con una consulta DAX dentro de Power BI, y los valores coinciden con los de KNIME (sección 4.2). Las capturas de cada página están en las figuras 36 a 41 (Anexo G). Con el filtro de estado, por ejemplo, la página de resumen muestra que en Alagoas llegó tarde el 23.80 \% de los pedidos, con calificación promedio de 3.86.
+El dashboard está en \texttt{powerbi/\allowbreak{}dashboard\_\allowbreak{}olist.pbix} y tiene cinco páginas: un resumen, una por cada objetivo estratégico y una con los resultados de los dos modelos. La página de resumen incluye un filtro por estado del cliente. Antes de armar las páginas se verificaron todas las medidas con una consulta DAX dentro de Power BI, y los valores coinciden con los de KNIME (sección 4.2). Las capturas de cada página están en las figuras 37 a 42 (Anexo G). Con el filtro de estado, por ejemplo, la página de resumen muestra que en Alagoas llegó tarde el 23.80 \% de los pedidos, con calificación promedio de 3.86.
 
 {\small
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*21/86\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*10/86\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*55/86\relax}|}
@@ -1121,6 +1122,7 @@ CALCULATE([% Entregas Tardías], Pedidos[en_prueba] = 1)
 Probabilidad promedio (logística) =
 CALCULATE(AVERAGE(Pedidos[prob_tardio_logistica]), Pedidos[en_prueba] = 1)
 \end{lstlisting}
+\clearpage
 \subsection{Anexo D. Nodos de KNIME por etapa}
 {\small
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*22/132\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*55/132\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*55/132\relax}|}
@@ -1138,6 +1140,7 @@ KPI & CSV Reader, Rule Engine, GroupBy, Joiner, Sorter, Column Renamer, Column F
 Salida a Power BI & CSV Writer & Escribe \texttt{ordenes\_\allowbreak{}etl.csv}, \texttt{segmentos\_\allowbreak{}modelo1.csv}, \texttt{pedidos\_\allowbreak{}kpi.csv} y \texttt{clientes\_\allowbreak{}kpi.csv}, todas con el identificador del pedido o del cliente, además de \texttt{predicciones\_\allowbreak{}modelo2.csv} desde 03-Prediccion. \\ \hline
 \end{longtable}
 }
+\clearpage
 \subsection{Anexo E. Glosario}
 {\small
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-4\tabcolsep-3\arrayrulewidth)*23/78\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-4\tabcolsep-3\arrayrulewidth)*55/78\relax}|}
