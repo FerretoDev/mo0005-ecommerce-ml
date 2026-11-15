@@ -16,7 +16,7 @@ Fecha límite: 24 de noviembre de 2026, en Mediación Virtual
 
 Equipo: **Última Milla Labs**
 
-Autores: Kendall Alvarado Artavia ([carné]); Marcos Ferreto Estrada (C5F092); David Moya Correas ([carné]); Sebastián Sánchez Vega (C4J823)
+Autores: Kendall Alvarado Artavia (C5C322); Marcos Ferreto Estrada (C5F092); David Moya Correas (C4H773); Sebastián Sánchez Vega (C4J823)
 
 Empresa de estudio: **Olist** (Brasil)
 
