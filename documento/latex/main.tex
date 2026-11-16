@@ -1,24 +1,23 @@
-\documentclass[11pt,a4paper]{article}
+\documentclass[a4paper,stu,12pt,donotrepeattitle]{apa7}
 \usepackage{fontspec}
 \usepackage{polyglossia}
 \setdefaultlanguage{spanish}
-\usepackage[margin=2.5cm]{geometry}
+\IfFontExistsTF{Times New Roman}{\setmainfont{Times New Roman}}{}
 \usepackage{xcolor}
 \usepackage{array}
 \usepackage{longtable}
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage{setspace}
 \usepackage{needspace}
 \usepackage{caption}
 \captionsetup{font=small,labelfont=bf}
 \usepackage{listings}
-\usepackage[hidelinks]{hyperref}
+\hypersetup{hidelinks}
 \urlstyle{same}
 \Urlmuskip=0mu plus 1mu
 \def\UrlBreaks{\do\/\do\-\do\?\do\=\do\.\do\_}
 \setlength{\tabcolsep}{4pt}
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{6pt}
 \setlength{\emergencystretch}{3em}
 \renewcommand{\arraystretch}{1.25}
 \setcounter{secnumdepth}{0}
@@ -35,28 +34,18 @@
   xleftmargin=4pt, xrightmargin=4pt,
   aboveskip=8pt, belowskip=8pt
 }
-\title{Entregable 1}
-\author{Última Milla Labs}
-\date{}
+\title{Entregas tardías, satisfacción y fidelización de clientes en Olist: modelo de aprendizaje automático e indicadores analíticos}
+\shorttitle{Entregas tardías y satisfacción en Olist}
+\author{Kendall Alvarado Artavia (C5C322); Marcos Ferreto Estrada (C5F092); David Moya Correas (C4H773); Sebastián Sánchez Vega (C4J823)}
+\affiliation{Equipo Última Milla Labs\\ Universidad de Costa Rica, Sede de Occidente, Recinto de Tacares\\ Entregable 1 — Documental (10 \% de la nota final)\\ Empresa de estudio: Olist (Brasil). Repositorio: mo0005-ecommerce-ml}
+\course{MO-0005 Análisis de Algoritmos, Grupo 01, II Ciclo 2026}
+\professor{Prof. Manfred Mejías Acevedo}
+\duedate{24 de noviembre de 2026}
 \begin{document}
 
-\begin{titlepage}
-\centering
-\vspace*{1cm}
-\textbf{Universidad de Costa Rica}\par\medskip
-Sede de Occidente · Recinto de Tacares\par\medskip
-MO-0005 Análisis de Algoritmos · Grupo 01 · II Ciclo 2026\par\medskip
-Prof. Manfred Mejías Acevedo\par\medskip
-\textbf{PUNTUAL}\par\medskip
-\vspace{1cm}{\LARGE \textbf{Entregas tardías, satisfacción y fidelización de clientes en Olist: modelo de aprendizaje automático e indicadores analíticos}\par}\vspace{1cm}
-\textbf{Entregable 1 — Documental (10~\% de la nota final)}\par\medskip
-Fecha límite: 24 de noviembre de 2026, en Mediación Virtual\par\medskip
-Equipo: \textbf{Última Milla Labs}\par\medskip
-Autores: Kendall Alvarado Artavia (C5C322); Marcos Ferreto Estrada (C5F092); David Moya Correas (C4H773); Sebastián Sánchez Vega (C4J823)\par\medskip
-Empresa de estudio: \textbf{Olist} (Brasil)\par\medskip
-Repositorio del proyecto: mo0005-ecommerce-ml\par\medskip
-\end{titlepage}
-\newpage
+\maketitle
+\singlespacing
+\clearpage
 \tableofcontents
 \newpage
 \section{1. Introducción y contexto}
@@ -75,7 +64,7 @@ Los datos del proyecto provienen del conjunto público que la propia empresa pub
 
 Para efectos de este proyecto, el equipo asume el rol de Última Milla Labs, un equipo de analítica de datos que apoya a Olist en la toma de decisiones. Se trata de un ejercicio académico: Olist no encargó este estudio.
 
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-4\tabcolsep-3\arrayrulewidth)*3373/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-4\tabcolsep-3\arrayrulewidth)*6626/10000\relax}|}
 \hline
 \textbf{Nombre} & Olist \\ \hline
@@ -90,7 +79,7 @@ Para efectos de este proyecto, el equipo asume el rol de Última Milla Labs, un 
 \subsection{2.2 Objetivos estratégicos de la empresa}
 En el material disponible para este proyecto no consta una declaración formal de los objetivos estratégicos de Olist. Por ello, los siguientes se plantean para efectos de este estudio y se derivan de su modelo de negocio: un marketplace que conecta a pequeños comerciantes con compradores y cuyo valor depende de que el pedido llegue completo, a tiempo y con una buena experiencia de compra (Olist, 2018).
 
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*517/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*4741/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*4741/10000\relax}|}
 \hline
 \textbf{N.º} & \textbf{Objetivo estratégico} & \textbf{Cómo se mide} \\ \hline
@@ -151,7 +140,7 @@ El análisis se desarrolla como un flujo por etapas en KNIME: obtención, calida
 \subsection{2.4 Datos fuente}
 Los datos provienen del conjunto público Brazilian E-Commerce Public Dataset by Olist, publicado por la propia empresa en Kaggle (Olist, 2018). Se descargaron el 4 de octubre de 2026 en formato CSV (codificación UTF-8), en nueve archivos que suman aproximadamente 127 MB y cubren pedidos realizados entre septiembre de 2016 y octubre de 2018.
 
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*2894/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*4824/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*877/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*1403/10000\relax}|}
 \hline
 \textbf{Archivo} & \textbf{Contenido} & \textbf{Filas} & \textbf{Columnas} \\ \hline
@@ -215,7 +204,7 @@ CREATE TABLE order_items (
 \end{lstlisting}
 \Needspace{7\baselineskip}
 \subsection{2.7 Carga de los datos en las estructuras}
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*3975/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*1807/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*2289/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*1927/10000\relax}|}
 \hline
 \textbf{Tabla} & \textbf{Filas en el CSV} & \textbf{Filas en PostgreSQL} & \textbf{¿Coincide?} \\ \hline
@@ -252,7 +241,7 @@ El diccionario indica, para cada estructura, su nombre y descripción; para cada
 
 \Needspace{7\baselineskip}
 \subsubsection{2.8.1 Estructuras}
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*2844/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*4741/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*2413/10000\relax}|}
 \hline
 \textbf{Estructura} & \textbf{Descripción} & \textbf{Llave primaria} \\ \hline
@@ -273,7 +262,7 @@ product\_\allowbreak{}category\_\allowbreak{}name\_\allowbreak{}translation & Tr
 \Needspace{7\baselineskip}
 \textbf{Tabla: orders}
 
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2346/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1572/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*827/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*827/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*4425/10000\relax}|}
 \hline
 \textbf{Campo} & \textbf{Tipo} & \textbf{Llave} & \textbf{Nulos} & \textbf{Descripción} \\ \hline
@@ -291,7 +280,7 @@ order\_\allowbreak{}estimated\_\allowbreak{}delivery\_\allowbreak{}date & TIMEST
 \Needspace{7\baselineskip}
 \textbf{Tabla: customers}
 
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2043/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1572/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*863/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*863/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*4656/10000\relax}|}
 \hline
 \textbf{Campo} & \textbf{Tipo} & \textbf{Llave} & \textbf{Nulos} & \textbf{Descripción} \\ \hline
@@ -306,7 +295,7 @@ customer\_\allowbreak{}state & CHAR(2) &  & No & Estado del cliente (sigla). \\ 
 \Needspace{7\baselineskip}
 \textbf{Tabla: order\_\allowbreak{}items}
 
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1678/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1758/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*897/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*897/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*4768/10000\relax}|}
 \hline
 \textbf{Campo} & \textbf{Tipo} & \textbf{Llave} & \textbf{Nulos} & \textbf{Descripción} \\ \hline
@@ -323,7 +312,7 @@ freight\_\allowbreak{}value & NUMERIC(10,2) &  & No & Valor del flete asignado a
 \Needspace{7\baselineskip}
 \textbf{Tabla: order\_\allowbreak{}payments}
 
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1777/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1758/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*887/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*887/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*4689/10000\relax}|}
 \hline
 \textbf{Campo} & \textbf{Tipo} & \textbf{Llave} & \textbf{Nulos} & \textbf{Descripción} \\ \hline
@@ -338,7 +327,7 @@ payment\_\allowbreak{}value & NUMERIC(10,2) &  & No & Valor del pago. \\ \hline
 \Needspace{7\baselineskip}
 \textbf{Tabla: order\_\allowbreak{}reviews}
 
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2016/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1692/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*891/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*891/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*4508/10000\relax}|}
 \hline
 \textbf{Campo} & \textbf{Tipo} & \textbf{Llave} & \textbf{Nulos} & \textbf{Descripción} \\ \hline
@@ -355,7 +344,7 @@ review\_\allowbreak{}answer\_\allowbreak{}timestamp & TIMESTAMP &  & No & Fecha 
 \Needspace{7\baselineskip}
 \textbf{Tabla: products}
 
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2139/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1572/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*994/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*834/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*4458/10000\relax}|}
 \hline
 \textbf{Campo} & \textbf{Tipo} & \textbf{Llave} & \textbf{Nulos} & \textbf{Descripción} \\ \hline
@@ -374,7 +363,7 @@ product\_\allowbreak{}width\_\allowbreak{}cm & INTEGER &  & Sí & Ancho en cent�
 \Needspace{7\baselineskip}
 \textbf{Tabla: sellers}
 
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2291/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1666/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1041/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1041/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*3958/10000\relax}|}
 \hline
 \textbf{Campo} & \textbf{Tipo} & \textbf{Llave} & \textbf{Nulos} & \textbf{Descripción} \\ \hline
@@ -388,7 +377,7 @@ seller\_\allowbreak{}state & CHAR(2) &  & No & Estado del vendedor. \\ \hline
 \Needspace{7\baselineskip}
 \textbf{Tabla: geolocation}
 
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2673/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1584/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*990/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*990/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*3762/10000\relax}|}
 \hline
 \textbf{Campo} & \textbf{Tipo} & \textbf{Llave} & \textbf{Nulos} & \textbf{Descripción} \\ \hline
@@ -403,7 +392,7 @@ geolocation\_\allowbreak{}state & CHAR(2) &  & No & Estado (sigla). \\ \hline
 \Needspace{7\baselineskip}
 \textbf{Tabla: product\_\allowbreak{}category\_\allowbreak{}name\_\allowbreak{}translation}
 
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2871/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1584/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*990/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*990/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*3564/10000\relax}|}
 \hline
 \textbf{Campo} & \textbf{Tipo} & \textbf{Llave} & \textbf{Nulos} & \textbf{Descripción} \\ \hline
@@ -416,7 +405,7 @@ Las columnas derivadas del flujo se documentan en la sección 3.3, donde se desc
 
 \Needspace{7\baselineskip}
 \subsubsection{2.8.3 Relaciones entre estructuras}
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*2120/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*3271/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*1608/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*2999/10000\relax}|}
 \hline
 \textbf{Origen} & \textbf{Destino} & \textbf{Cardinalidad} & \textbf{Observación} \\ \hline
@@ -455,7 +444,7 @@ La figura siguiente muestra el diagrama entidad-relación del modelo relacional 
 \subsection{3.1 Descripción general del flujo en KNIME}
 El análisis se desarrolla como un flujo por etapas en KNIME, desde la obtención de los datos hasta la validación de los modelos y el cálculo de los indicadores. La estructura del proyecto refleja una separación clara entre ETL, agrupamiento y predicción, con una capa final de indicadores para la toma de decisiones.
 
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*1693/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*5437/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*2868/10000\relax}|}
 \hline
 \textbf{Etapa} & \textbf{Qué se hace} & \textbf{Workflow group} \\ \hline
@@ -474,7 +463,7 @@ El análisis se desarrolla como un flujo por etapas en KNIME, desde la obtenció
 \subsection{3.2 Obtención y calidad de los datos}
 Se perfilaron los datos (nulos, duplicados, rangos y consistencia de fechas) y se aplicaron las siguientes reglas:
 
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*2252/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*1703/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*3021/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*3021/10000\relax}|}
 \hline
 \textbf{Problema o decisión} & \textbf{Dónde} & \textbf{Acción tomada} & \textbf{Justificación} \\ \hline
@@ -494,7 +483,7 @@ La población de análisis se concentra en pedidos entregados en el periodo obse
 \subsection{3.3 Transformación de los datos}
 Se integraron las tablas a nivel de pedido y se crearon las siguientes variables derivadas. Las categorías se traducen y agrupan, las variables categóricas se codifican y las numéricas se normalizan cuando se requiere.
 
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*2086/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*3956/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*3956/10000\relax}|}
 \hline
 \textbf{Variable derivada} & \textbf{Cálculo} & \textbf{Uso} \\ \hline
@@ -519,7 +508,7 @@ La vista base mantiene una fila por pedido, con agregación del valor total y de
 
 Las variables derivadas se calculan así: un Rule Engine crea \texttt{mismo\_\allowbreak{}estado} (1 si \texttt{customer\_\allowbreak{}state = seller\_\allowbreak{}state}); String to Date\&Time convierte las fechas conservando la hora; un Row Filter aplica la ventana de entrega (enero de 2017 a agosto de 2018); tres nodos Date\&Time Difference miden en segundos el plazo estimado, el tiempo de entrega y el retraso, y tres Math Formula los pasan a días con decimales (\texttt{plazo\_\allowbreak{}estimado\_\allowbreak{}dias}, \texttt{dias\_\allowbreak{}entrega}, \texttt{dias\_\allowbreak{}retraso}); un Rule Engine crea \texttt{es\_\allowbreak{}tardio} (1 si el retraso en segundos es mayor que 0) y dos Math Formula calculan \texttt{relacion\_\allowbreak{}precio\_\allowbreak{}flete} y \texttt{volumen\_\allowbreak{}cm3}. Se mide en segundos porque los Date\&Time Difference solo permiten decimales con granularidad de tiempo, no con días, y así un pedido entregado el día estimado, pero después de las 00:00, cuenta como tardío. Un Column Filter deja 29 columnas, un Missing Value rellena la categoría ausente con «desconocida», un nodo Statistics resume la tabla final, un nodo Date\&Time to String deja las fechas con formato fijo \texttt{yyyy-MM-dd HH:mm:ss} y un CSV Writer la guarda en \texttt{knime/\allowbreak{}datos/\allowbreak{}ordenes\_\allowbreak{}etl.csv} para los workflows 02 y 03.
 
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-4\tabcolsep-3\arrayrulewidth)*5000/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-4\tabcolsep-3\arrayrulewidth)*5000/10000\relax}|}
 \hline
 \textbf{Columna del ETL en KNIME} & \textbf{Equivale a} \\ \hline
@@ -545,7 +534,7 @@ El modelo no supervisado agrupa los pedidos según su experiencia de compra y en
 \subsubsection{3.4.1 Resultados y validación}
 Se probaron valores de k entre 2 y 8 y se compararon con dos criterios: la inercia (método del codo) y el coeficiente de silueta, calculado sobre una muestra aleatoria de 10~000 pedidos.
 
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*2500/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*3500/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*4000/10000\relax}|}
 \hline
 \textbf{k} & \textbf{Inercia} & \textbf{Silueta} \\ \hline
@@ -565,7 +554,7 @@ Se eligió \textbf{k = 4}: tiene la silueta más alta y coincide con el codo, po
 
 \Needspace{7\baselineskip}
 \subsubsection{3.4.2 Perfil e interpretación de los segmentos}
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*1549/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*957/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*1073/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*832/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*957/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*790/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*1083/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*1587/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*1167/10000\relax}|}
 \hline
 \textbf{Segmento} & \textbf{Pedidos} & \textbf{Precio (mediana, BRL)} & \textbf{Cuotas (prom.)} & \textbf{Entrega (días)} & \textbf{Mismo estado} & \textbf{Entregas tardías} & \textbf{Calificación} & \textbf{Reseñas negativas} \\ \hline
@@ -605,7 +594,7 @@ Todo lo que se aprende de los datos se calcula solo con el entrenamiento y se ap
 
 \textbf{Modelo 2 sobre la prueba (abril a agosto de 2018; 32~092 pedidos, 1~878 tardíos; umbral 0.5):}
 
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*3224/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1663/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1676/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1771/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1663/10000\relax}|}
 \hline
 \textbf{Modelo} & \textbf{AUC} & \textbf{Precisión} & \textbf{Exhaustividad} & \textbf{F1} \\ \hline
@@ -620,7 +609,7 @@ La regresión logística supera a ambas líneas base y al Random Forest, y cumpl
 
 \textbf{Variables que más usa el Random Forest.} La salida \emph{Attribute Statistics} del Random Forest Learner de KNIME indica cuántas veces cada variable abre uno de los 200 árboles, es decir, se usa en la primera división:
 
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-4\tabcolsep-3\arrayrulewidth)*5238/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-4\tabcolsep-3\arrayrulewidth)*4761/10000\relax}|}
 \hline
 \textbf{Variable} & \textbf{Divisiones en la raíz (de 200)} \\ \hline
@@ -675,7 +664,7 @@ Se definen once indicadores, organizados según el objetivo estratégico al que 
 
 \Needspace{7\baselineskip}
 \subsubsection{OE1 — Cumplir los plazos de entrega}
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*411/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2170/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2975/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2981/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1462/10000\relax}|}
 \hline
 \textbf{N.º} & \textbf{KPI} & \textbf{Definición} & \textbf{Relevancia} & \textbf{Valor} \\ \hline
@@ -689,7 +678,7 @@ Se definen once indicadores, organizados según el objetivo estratégico al que 
 }
 \Needspace{7\baselineskip}
 \subsubsection{OE2 — Elevar la satisfacción del cliente}
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*411/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2032/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2926/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2929/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*1700/10000\relax}|}
 \hline
 \textbf{N.º} & \textbf{KPI} & \textbf{Definición} & \textbf{Relevancia} & \textbf{Valor} \\ \hline
@@ -701,7 +690,7 @@ Se definen once indicadores, organizados según el objetivo estratégico al que 
 }
 \Needspace{7\baselineskip}
 \subsubsection{OE3 — Fortalecer la fidelización}
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*411/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2250/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2569/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2574/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep-6\arrayrulewidth)*2195/10000\relax}|}
 \hline
 \textbf{N.º} & \textbf{KPI} & \textbf{Definición} & \textbf{Relevancia} & \textbf{Valor} \\ \hline
@@ -715,7 +704,7 @@ Se definen once indicadores, organizados según el objetivo estratégico al que 
 \subsection{4.3 Dashboard}
 El dashboard está en \texttt{powerbi/\allowbreak{}dashboard\_\allowbreak{}olist.pbix} y tiene cinco páginas: un resumen, una por cada objetivo estratégico y una con los resultados de los dos modelos. La página de resumen incluye un filtro por estado del cliente. Antes de armar las páginas se verificaron todas las medidas con una consulta DAX dentro de Power BI, y los valores coinciden con los de KNIME (sección 4.2). Las capturas de cada página están en las figuras 37 a 42 (Anexo G). Con el filtro de estado, por ejemplo, la página de resumen muestra que en Alagoas llegó tarde el 23.80~\% de los pedidos, con calificación promedio de 3.86.
 
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*2441/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*1162/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*6395/10000\relax}|}
 \hline
 \textbf{Página} & \textbf{KPI} & \textbf{Visuales} \\ \hline
@@ -735,7 +724,7 @@ Las medidas DAX de los KPI están en el Anexo C. Usan \texttt{pedidos\_\allowbre
 
 \Needspace{7\baselineskip}
 \subsection{4.4 Hallazgos principales}
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*402/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*3472/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*2651/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*3472/10000\relax}|}
 \hline
 \textbf{N.º} & \textbf{Hallazgo} & \textbf{Evidencia} & \textbf{Acción recomendada} \\ \hline
@@ -751,7 +740,7 @@ Las medidas DAX de los KPI están en el Anexo C. Usan \texttt{pedidos\_\allowbre
 }
 \Needspace{7\baselineskip}
 \subsection{4.5 Contraste de las hipótesis}
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*1225/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*2917/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*2923/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*2932/10000\relax}|}
 \hline
 \textbf{Hipótesis} & \textbf{Qué se compara} & \textbf{Prueba propuesta} & \textbf{Resultado y conclusión} \\ \hline
@@ -795,17 +784,17 @@ Los valores de las pruebas se calcularon en Python sobre \texttt{knime/\allowbre
 \item Trabajo futuro: actualización y monitoreo de los modelos, nuevas variables, análisis del texto de los comentarios (en portugués) y prueba de otros algoritmos.
 \end{itemize}
 \section{7. Referencias y anexos}
-KNIME AG. (2026). \emph{KNIME Analytics Platform} (Versión 5.12) [Software]. \url{https://www.knime.com/}
+{\hangindent=0.5in\hangafter=1\noindent KNIME AG. (2026). \emph{KNIME Analytics Platform} (Versión 5.12) [Software]. \url{https://www.knime.com/}\par}
 
-Microsoft. (s. f.-a). \emph{Power BI Desktop} [Software]. \url{https://powerbi.microsoft.com/}
+{\hangindent=0.5in\hangafter=1\noindent Microsoft. (s. f.-a). \emph{Power BI Desktop} [Software]. \url{https://powerbi.microsoft.com/}\par}
 
-Microsoft. (s. f.-b). \emph{Referencia de funciones DAX}. \url{https://learn.microsoft.com/en-us/dax/dax-function-reference}
+{\hangindent=0.5in\hangafter=1\noindent Microsoft. (s. f.-b). \emph{Referencia de funciones DAX}. \url{https://learn.microsoft.com/en-us/dax/dax-function-reference}\par}
 
-Olist. (2018). \emph{Brazilian E-Commerce Public Dataset by Olist} [Conjunto de datos]. Kaggle. \url{https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce}
+{\hangindent=0.5in\hangafter=1\noindent Olist. (2018). \emph{Brazilian E-Commerce Public Dataset by Olist} [Conjunto de datos]. Kaggle. \url{https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce}\par}
 
-Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., Blondel, M., Prettenhofer, P., Weiss, R., Dubourg, V., Vanderplas, J., Passos, A., Cournapeau, D., Brucher, M., Perrot, M., y Duchesnay, É. (2011). Scikit-learn: Machine learning in Python. \emph{Journal of Machine Learning Research, 12}, 2825-2830.
+{\hangindent=0.5in\hangafter=1\noindent Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., Blondel, M., Prettenhofer, P., Weiss, R., Dubourg, V., Vanderplas, J., Passos, A., Cournapeau, D., Brucher, M., Perrot, M., y Duchesnay, É. (2011). Scikit-learn: Machine learning in Python. \emph{Journal of Machine Learning Research, 12}, 2825-2830.\par}
 
-The PostgreSQL Global Development Group. (s. f.). \emph{PostgreSQL 16 documentation}. \url{https://www.postgresql.org/docs/16/}
+{\hangindent=0.5in\hangafter=1\noindent The PostgreSQL Global Development Group. (s. f.). \emph{PostgreSQL 16 documentation}. \url{https://www.postgresql.org/docs/16/}\par}
 
 \medskip\noindent\rule{\linewidth}{0.4pt}\medskip
 \section{Anexos}
@@ -1156,7 +1145,7 @@ CALCULATE(AVERAGE(Pedidos[prob_tardio_logistica]), Pedidos[en_prueba] = 1)
 \clearpage
 \Needspace{7\baselineskip}
 \subsection{Anexo D. Nodos de KNIME por etapa}
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*1693/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*4152/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*4153/10000\relax}|}
 \hline
 \textbf{Etapa} & \textbf{Nodos principales} & \textbf{Notas} \\ \hline
@@ -1175,7 +1164,7 @@ Salida a Power BI & CSV Writer & Escribe \texttt{ordenes\_\allowbreak{}etl.csv},
 \clearpage
 \Needspace{7\baselineskip}
 \subsection{Anexo E. Glosario}
-{\small
+{\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-4\tabcolsep-3\arrayrulewidth)*2948/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-4\tabcolsep-3\arrayrulewidth)*7051/10000\relax}|}
 \hline
 \textbf{Término} & \textbf{Definición} \\ \hline
