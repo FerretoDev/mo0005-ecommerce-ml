@@ -38,3 +38,9 @@ documento/latex/*.fdb_latexmk
 documento/latex/*.xdv
 documento/latex/*.toc
 documento/latex/*.out
+documento/latex/*.fff
+documento/latex/*.ttt
+documento/latex/*.bcf
+documento/latex/*.run.xml
+documento/latex/*.bbl
+documento/latex/*.blg
