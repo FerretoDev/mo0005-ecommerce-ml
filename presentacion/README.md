@@ -1,49 +1,35 @@
 # Presentación de la defensa
 
-Presentación en HTML, como un PowerPoint: 20 diapositivas en 16:9, con animaciones SVG. Funciona sin internet, porque la fuente va incluida en `fonts/`.
+- `presentacion.pptx`: la presentación en PowerPoint (26 diapositivas, 16:9), editable. Trae animaciones de entrada (los elementos aparecen con cada clic), transiciones y notas del orador con el guion de cada diapositiva.
+- `presentacion.pdf`: la misma presentación en PDF, para subir a Mediación Virtual (sin animaciones).
 
-## Cómo abrirla
+## Orden y tiempos (unos 18 minutos)
 
-Abrir `index.html` en Chrome o Edge y presionar **F** para ponerla en pantalla completa.
+Cada parte empieza con una diapositiva divisoria y el pie de página dice quién expone.
 
-| Tecla | Acción |
-| --- | --- |
-| → · Espacio · Enter · AvPág · clic en la mitad derecha | Siguiente diapositiva |
-| ← · Retroceso · RePág · clic en la mitad izquierda | Diapositiva anterior |
-| Inicio · Fin | Primera · última |
-| **N** | Notas del orador: quién presenta, tiempo sugerido y cronómetro |
-| **F** | Pantalla completa |
+| Parte | Diapositivas | Expone | Contenido |
+| --- | --- | --- | --- |
+| Inicio | 1–2 | Marcos | Portada y contenido |
+| 1 | 3–9 | Marcos | Olist, problema, objetivos e hipótesis, CRISP-DM, modelo relacional y carga en PostgreSQL, workflow 01-ETL |
+| 2 | 10–14 | Moya | Modelo 1: planteamiento y workflow 02, elección de k, segmentos y prueba de H4 |
+| 3 | 15–19 | Sebastián | Modelo 2: planteamiento y workflow 03, resultados (AUC), uso por niveles de riesgo y cambio geográfico |
+| 4 | 20–26 | Kendall | 11 KPI, dashboard, contraste de hipótesis, conclusiones y recomendaciones, referencias y preguntas |
 
-Para ir directo a una diapositiva, agregar `#número` a la dirección (por ejemplo `index.html#12`).
+## Cómo usarla
 
-## Orden y tiempos (17–19 minutos)
+- **Presentar:** F5 en PowerPoint. Cada clic muestra el siguiente bloque; las notas (guion) se ven en la vista del moderador.
+- **Editar:** se puede cambiar todo directamente en PowerPoint. Los gráficos son nativos (clic derecho → Editar datos).
+- **Animaciones:** se ven y se ajustan en Animaciones → Panel de animación.
 
-La barra inferior es la ruta del pedido: el paquete avanza con cada diapositiva y marca quién presenta.
+## Regenerarla desde cero (opcional)
 
-| Bloque | Diapositivas | Presenta | Contenido | Tiempo |
-| --- | --- | --- | --- | --- |
-| 1 | 1–7 | Marcos | Qué es Olist, el problema, metas y preguntas, cómo preparamos los datos (PostgreSQL, 01-ETL) | ≈ 5:20 |
-| 2 | 8–11 | Moya | Modelo 1: qué tipos de compra hay y cuáles salen mal (02-Clustering) | ≈ 3:40 |
-| 3 | 12–15 | Sebastián | Modelo 2: si se puede saber antes qué pedido llegará tarde (03-Prediccion) | ≈ 4:30 |
-| 4 | 16–20 | Kendall | Los 11 indicadores, el dashboard, recomendaciones y conclusiones (04-KPIs) | ≈ 4:35 |
-
-El lenguaje es sencillo para que lo entienda cualquiera; los datos técnicos (AUC, silueta, pruebas estadísticas) van en una línea pequeña al pie de cada diapositiva, por si el profe pregunta. Las notas de cada diapositiva (tecla **N**) traen un guion en tono conversacional que termina con el pase al siguiente compañero.
-
-## PDF para Mediación Virtual
-
-`presentacion.pdf` ya está generado (una diapositiva por página). Si se cambia `index.html`, se regenera con:
+Los archivos de `fuente/` generan la presentación desde los datos del proyecto. Si se edita a mano en PowerPoint, no hace falta regenerarla.
 
 ```bash
-cd presentacion
-npm i -D playwright && npx playwright install chromium   # solo la primera vez
-node exportar-pdf.js
+cd presentacion/fuente
+npm i pptxgenjs          # solo la primera vez
+node generar.js          # crea ../presentacion.pptx
+python3 animar.py ../presentacion.pptx   # agrega animaciones y transiciones
 ```
 
-También sirve imprimir desde Chrome (Ctrl+P → Guardar como PDF, sin márgenes y con gráficos de fondo).
-
-## Archivos
-
-- `index.html`: la presentación (CSS y JavaScript incluidos).
-- `fonts/`: Archivo, con licencia SIL Open Font License (`OFL.txt`).
-- `exportar-pdf.js`: genera el PDF con Playwright.
-- `presentacion.pdf`: versión para subir.
+`muestra_segmentos.json` es una muestra aleatoria de 260 pedidos reales (días de entrega, precio y segmento) usada en el gráfico de dispersión de la diapositiva 13.
