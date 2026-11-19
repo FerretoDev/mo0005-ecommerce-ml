@@ -125,7 +125,6 @@ tr.resalta td{color:var(--tinta);font-weight:700}
 .kpi .meta{grid-column:1/-1;font-size:20px;color:var(--azul)}
 
 /* ---------- capturas ---------- */
-.captura{width:100%;border:2px solid var(--linea);background:var(--blanco);display:block}
 
 /* ---------- notas del orador ---------- */
 #notas{position:fixed;left:0;right:0;bottom:0;max-height:38vh;overflow:auto;background:#101A33;color:#E8ECF5;
@@ -495,20 +494,28 @@ tr.resalta td{color:var(--tinta);font-weight:700}
 </section>
 
 <section class="slide" data-quien="Kendall" data-min="0:50"
-  data-notas="Los indicadores viven en un dashboard de Power BI con cinco páginas: un resumen con filtro por estado, una página por cada objetivo y una con los segmentos y el riesgo que calcula el Modelo 2. Verificamos las medidas con consultas DAX y coinciden con KNIME. Por ejemplo, si filtramos Alagoas, vemos que ahí llega tarde casi uno de cada cuatro pedidos.">
+  data-notas="Los indicadores viven en un dashboard de Power BI con cinco páginas: un resumen con filtro por estado, una página por objetivo y una con los segmentos y el riesgo del Modelo 2; verificamos las medidas con consultas DAX y coinciden con KNIME. Aquí está lo que más se ve en el dashboard: mes a mes, cuando suben los retrasos baja la calificación. En noviembre de 2017, por Black Friday, y en febrero y marzo de 2018 los retrasos se disparan, hasta 21 %, y la calificación cae a 3.81. Y por estado, en Alagoas y Maranhão llega tarde uno de cada cinco pedidos, frente a menos de 6 % en São Paulo.">
   <p class="quien">Dashboard en Power BI</p>
-  <h2>Cinco páginas para seguir los objetivos cada mes</h2>
-  <div class="dos" style="grid-template-columns:3fr 2fr;margin-top:40px;align-items:start">
-    <img class="captura a1" src="img/pagina-1-resumen.jpg" alt="Página de resumen del dashboard de Power BI">
-    <div>
-      <ul class="limpia a2">
-        <li>Resumen con filtro por estado</li>
-        <li>Una página por objetivo: entregas, satisfacción, fidelización</li>
-        <li>Segmentos del Modelo 1 y riesgo del Modelo 2</li>
-        <li>Medidas verificadas con consultas DAX</li>
-      </ul>
-      <p class="a3" style="margin-top:30px"><b class="tarde">Alagoas:</b> 23.8&nbsp;% de entregas tardías y calificación de 3.86.</p>
-    </div>
+  <h2>Cuando suben los retrasos, baja la calificación</h2>
+  <div class="dos" style="grid-template-columns:1220fr 640fr;gap:60px;margin-top:36px;align-items:start">
+    <svg viewBox="0 0 1220 640" role="img" aria-label="Porcentaje de entregas tardías y calificación promedio por mes de compra, enero de 2017 a agosto de 2018"><g font-family="Archivo" font-size="26"><line x1="70" y1="250" x2="1070" y2="250" stroke="#14213D" stroke-width="2"/>
+<line x1="70" y1="169" x2="1070" y2="169" stroke="#C7CFDD" stroke-dasharray="6 6" stroke-width="2"/>
+<text x="1080" y="177" fill="#4A5672" font-size="22">8.07&nbsp;% total</text>
+<text x="58" y="258" text-anchor="end">0&nbsp;%</text><text x="58" y="58" text-anchor="end">20&nbsp;%</text>
+<line x1="70" y1="50" x2="1070" y2="50" stroke="#E2E7F0"/>
+<polyline class="trazo" pathLength="1" fill="none" stroke="#E4572E" stroke-width="5" stroke-linejoin="round" points="70,219 123,218 175,194 228,171 281,214 333,211 386,216 438,217 491,198 544,197 596,107 649,166 702,184 754,90 807,36 859,197 912,168 965,237 1017,208 1070,151"/>
+<text x="70" y="20" font-weight="700" fill="#E4572E">% de entregas tardías, por mes de compra</text>
+<circle cx="596" cy="107" r="9" fill="#E4572E"/><text x="596" y="89" text-anchor="middle" font-weight="800" fill="#E4572E">14.3&nbsp;%</text>
+<circle cx="807" cy="36" r="9" fill="#E4572E"/><text x="823" y="42" font-weight="800" fill="#E4572E">21.4&nbsp;%</text><line x1="70" y1="550" x2="1070" y2="550" stroke="#14213D" stroke-width="2"/>
+<text x="58" y="558" text-anchor="end">3.7</text><text x="58" y="369" text-anchor="end">4.3</text>
+<line x1="70" y1="361" x2="1070" y2="361" stroke="#C7CFDD" stroke-dasharray="6 6" stroke-width="2"/>
+<text x="1080" y="369" fill="#4A5672" font-size="22">meta 4.30</text>
+<polyline class="trazo d2" pathLength="1" fill="none" stroke="#14213D" stroke-width="5" stroke-linejoin="round" points="70,393 123,392 175,397 228,412 281,381 333,386 386,375 438,358 491,371 544,391 596,459 649,427 702,421 754,493 807,514 859,391 912,382 965,359 1017,354 1070,354"/>
+<text x="70" y="320" font-weight="700">Calificación promedio</text>
+<circle cx="596" cy="459" r="9" fill="#14213D"/><text x="596" y="497" text-anchor="middle" font-weight="800">3.99</text>
+<circle cx="807" cy="514" r="9" fill="#14213D"/><text x="823" y="522" font-weight="800">3.81</text>
+<g fill="#4A5672"><text x="70" y="600" text-anchor="middle">ene</text><text x="228" y="600" text-anchor="middle">abr</text><text x="386" y="600" text-anchor="middle">jul</text><text x="596" y="600" text-anchor="middle">nov</text><text x="702" y="600" text-anchor="middle">ene</text><text x="807" y="600" text-anchor="middle">mar</text><text x="1017" y="600" text-anchor="middle">jul</text><text x="1070" y="600" text-anchor="middle">ago</text><text x="70" y="632" text-anchor="middle" font-size="22">2017</text><text x="702" y="632" text-anchor="middle" font-size="22">2018</text></g></g></svg>
+    <svg viewBox="0 0 640 640" role="img" aria-label="Estados con más entregas tardías"><g font-family="Archivo" font-size="26"><text x="0" y="20" font-weight="700">Estados con más retraso</text><text x="0" y="88">Alagoas</text><rect class="barra-x d0" x="200" y="60" width="327" height="40" fill="#E4572E"/><text x="537" y="89" font-weight="800" fill="#E4572E">23.8&nbsp;%</text><text x="0" y="160">Maranhão</text><rect class="barra-x d1" x="200" y="132" width="270" height="40" fill="#E4572E"/><text x="480" y="161" font-weight="800" fill="#E4572E">19.6&nbsp;%</text><text x="0" y="232">Piauí</text><rect class="barra-x d2" x="200" y="204" width="220" height="40" fill="#E4572E"/><text x="430" y="233" font-weight="800" fill="#E4572E">16.0&nbsp;%</text><text x="0" y="304">Sergipe</text><rect class="barra-x d3" x="200" y="276" width="211" height="40" fill="#E4572E"/><text x="421" y="305" font-weight="800" fill="#E4572E">15.4&nbsp;%</text><text x="0" y="376">Ceará</text><rect class="barra-x d4" x="200" y="348" width="211" height="40" fill="#E4572E"/><text x="421" y="377" font-weight="800" fill="#E4572E">15.3&nbsp;%</text><text x="0" y="448">Río de Janeiro</text><rect class="barra-x d4" x="200" y="420" width="185" height="40" fill="#E4572E"/><text x="395" y="449" font-weight="800" fill="#E4572E">13.4&nbsp;%</text><text x="0" y="544">São Paulo</text><rect class="barra-x d4" x="200" y="516" width="80" height="40" fill="#1F8A70"/><text x="290" y="545" font-weight="800" fill="#1F8A70">5.8&nbsp;%</text></g></svg>
   </div>
 </section>
 

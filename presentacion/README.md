@@ -45,6 +45,5 @@ También sirve imprimir desde Chrome (Ctrl+P → Guardar como PDF, sin márgenes
 
 - `index.html`: la presentación (CSS y JavaScript incluidos).
 - `fonts/`: Archivo, con licencia SIL Open Font License (`OFL.txt`).
-- `img/`: capturas del dashboard de Power BI.
 - `exportar-pdf.js`: genera el PDF con Playwright.
 - `presentacion.pdf`: versión para subir.
