@@ -27,7 +27,7 @@ CREATE TABLE sellers (
 
 CREATE TABLE products (
   product_id                 VARCHAR(32) PRIMARY KEY,
-  product_category_name      VARCHAR(50),  -- relacion logica (no FK)
+  product_category_name      VARCHAR(50),  -- relación lógica (no FK)
   product_name_lenght        INTEGER,      -- se conserva el nombre original
   product_description_lenght INTEGER,      -- se conserva el nombre original
   product_photos_qty         INTEGER,

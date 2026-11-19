@@ -1,14 +1,14 @@
--- kpis.sql: valores de los 11 KPI (poblacion indicada en cada caso)
+-- kpis.sql: valores de los 11 KPI (población indicada en cada caso)
 
 SET search_path TO olist;
 
--- KPI 1. % de entregas tardias (v_pedidos_base)
+-- KPI 1. % de entregas tardías (v_pedidos_base)
 SELECT ROUND(100.0 * AVG(es_tardio), 2) AS pct_tardias FROM v_pedidos_base;
 
--- KPI 2. Tiempo promedio de entrega (dias)
+-- KPI 2. Tiempo promedio de entrega (días)
 SELECT ROUND(AVG(dias_entrega), 1) AS dias_entrega_prom FROM v_pedidos_base;
 
--- KPI 3. Retraso promedio de las entregas tardias (dias)
+-- KPI 3. Retraso promedio de las entregas tardías (días)
 SELECT ROUND(AVG(dias_retraso), 1) AS retraso_prom
 FROM v_pedidos_base WHERE es_tardio = 1;
 
@@ -23,15 +23,15 @@ SELECT ROUND(100.0 * AVG(CASE WHEN order_status IN ('canceled', 'unavailable')
                               THEN 1 ELSE 0 END), 2) AS pct_no_concretados
 FROM orders;
 
--- KPI 6. Calificacion promedio
+-- KPI 6. Calificación promedio
 SELECT ROUND(AVG(review_score_pedido), 2) AS calificacion_prom
 FROM v_pedidos_base WHERE review_score_pedido IS NOT NULL;
 
--- KPI 7. % de resenas negativas (1 o 2)
+-- KPI 7. % de reseñas negativas (1 o 2)
 SELECT ROUND(100.0 * AVG(CASE WHEN review_score_pedido <= 2 THEN 1 ELSE 0 END), 2) AS pct_negativas
 FROM v_pedidos_base WHERE review_score_pedido IS NOT NULL;
 
--- KPI 8. Brecha de calificacion por puntualidad
+-- KPI 8. Brecha de calificación por puntualidad
 SELECT es_tardio,
        COUNT(*) AS pedidos,
        ROUND(AVG(review_score_pedido), 2) AS calificacion_prom,
@@ -39,12 +39,12 @@ SELECT es_tardio,
 FROM v_pedidos_base WHERE review_score_pedido IS NOT NULL
 GROUP BY es_tardio ORDER BY es_tardio;
 
--- KPI 9. Tasa de nueva compra (todos los clientes unicos)
+-- KPI 9. Tasa de nueva compra (todos los clientes únicos)
 SELECT COUNT(*) AS clientes,
        ROUND(100.0 * AVG(CASE WHEN total_pedidos > 1 THEN 1 ELSE 0 END), 2) AS pct_recompra
 FROM v_clientes;
 
--- KPI 10. Recompra segun puntualidad del primer pedido (primer pedido en 2017)
+-- KPI 10. Recompra según puntualidad del primer pedido (primer pedido en 2017)
 SELECT primer_pedido_tardio,
        COUNT(*) AS clientes,
        ROUND(100.0 * AVG(CASE WHEN total_pedidos > 1 THEN 1 ELSE 0 END), 2) AS pct_recompra
@@ -52,7 +52,7 @@ FROM v_clientes
 WHERE anio_primer_pedido = 2017 AND primer_pedido_tardio IS NOT NULL
 GROUP BY primer_pedido_tardio ORDER BY primer_pedido_tardio;
 
--- KPI 11. Recompra segun la calificacion del primer pedido (primer pedido en 2017)
+-- KPI 11. Recompra según la calificación del primer pedido (primer pedido en 2017)
 SELECT primer_pedido_negativo,
        COUNT(*) AS clientes,
        ROUND(100.0 * AVG(CASE WHEN total_pedidos > 1 THEN 1 ELSE 0 END), 2) AS pct_recompra
@@ -60,12 +60,12 @@ FROM v_clientes
 WHERE anio_primer_pedido = 2017 AND primer_pedido_negativo IS NOT NULL
 GROUP BY primer_pedido_negativo ORDER BY primer_pedido_negativo;
 
--- Exploracion: % de tardias por estado del cliente
+-- Exploración: % de tardías por estado del cliente
 SELECT customer_state, COUNT(*) AS pedidos,
        ROUND(100.0 * AVG(es_tardio), 1) AS pct_tardias
 FROM v_pedidos_base GROUP BY customer_state ORDER BY pct_tardias DESC;
 
--- Exploracion: % de resenas negativas segun dias de retraso
+-- Exploración: % de reseñas negativas según días de retraso
 SELECT CASE WHEN es_tardio = 0 THEN 'a tiempo'
             WHEN CEIL(dias_retraso) <= 3 THEN '1 a 3 dias'
             WHEN CEIL(dias_retraso) <= 7 THEN '4 a 7 dias'
