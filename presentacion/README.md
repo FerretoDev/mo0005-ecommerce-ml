@@ -22,12 +22,12 @@ La barra inferior es la ruta del pedido: el paquete avanza con cada diapositiva 
 
 | Bloque | Diapositivas | Presenta | Contenido | Tiempo |
 | --- | --- | --- | --- | --- |
-| 1 | 1–7 | Marcos | Olist y su reto, el problema, objetivos e hipótesis, infraestructura (PostgreSQL, GitHub) y workflow 01-ETL | ≈ 5:20 |
-| 2 | 8–11 | Moya | Modelo 1: k-means, elección de k, cuatro segmentos y H4 (02-Clustering) | ≈ 3:40 |
-| 3 | 12–15 | Sebastián | Modelo 2: partición temporal, AUC, cómo usarlo y el cambio en la geografía (03-Prediccion) | ≈ 4:30 |
-| 4 | 16–20 | Kendall | 11 KPI, dashboard, propuesta de valor, hipótesis y conclusiones (04-KPIs) | ≈ 4:35 |
+| 1 | 1–7 | Marcos | Qué es Olist, el problema, metas y preguntas, cómo preparamos los datos (PostgreSQL, 01-ETL) | ≈ 5:20 |
+| 2 | 8–11 | Moya | Modelo 1: qué tipos de compra hay y cuáles salen mal (02-Clustering) | ≈ 3:40 |
+| 3 | 12–15 | Sebastián | Modelo 2: si se puede saber antes qué pedido llegará tarde (03-Prediccion) | ≈ 4:30 |
+| 4 | 16–20 | Kendall | Los 11 indicadores, el dashboard, recomendaciones y conclusiones (04-KPIs) | ≈ 4:35 |
 
-Las notas de cada diapositiva (tecla **N**) traen un guion sugerido que termina con el pase al siguiente compañero.
+El lenguaje es sencillo para que lo entienda cualquiera; los datos técnicos (AUC, silueta, pruebas estadísticas) van en una línea pequeña al pie de cada diapositiva, por si el profe pregunta. Las notas de cada diapositiva (tecla **N**) traen un guion en tono conversacional que termina con el pase al siguiente compañero.
 
 ## PDF para Mediación Virtual
 
