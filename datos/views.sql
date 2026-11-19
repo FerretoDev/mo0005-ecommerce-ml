@@ -1,10 +1,10 @@
--- views.sql: dataset analitico a nivel de pedido y de cliente
+-- views.sql: dataset analítico a nivel de pedido y de cliente
 
 SET search_path TO olist;
 
--- Poblacion base: pedidos entregados con fecha de entrega
+-- Población base: pedidos entregados con fecha de entrega
 -- entre enero de 2017 y agosto de 2018.
--- dias_retraso es negativo si el pedido llego antes de lo estimado.
+-- dias_retraso es negativo si el pedido llegó antes de lo estimado.
 CREATE OR REPLACE VIEW v_pedidos_base AS
 WITH items AS (
   SELECT order_id,
@@ -20,7 +20,7 @@ WITH items AS (
          MAX(payment_installments) AS cuotas,
          SUM(payment_value)        AS valor_pagado
   FROM order_payments GROUP BY order_id
-), resena AS (        -- una calificacion por pedido (promedio)
+), resena AS (        -- una calificación por pedido (promedio)
   SELECT order_id, ROUND(AVG(review_score), 2) AS review_score_pedido
   FROM order_reviews GROUP BY order_id
 )
@@ -59,7 +59,7 @@ WHERE o.order_status = 'delivered'
   AND o.order_delivered_customer_date >= '2017-01-01'
   AND o.order_delivered_customer_date <  '2018-09-01';
 
--- Un registro por cliente: caracteristicas de su PRIMER pedido y
+-- Un registro por cliente: características de su PRIMER pedido y
 -- cantidad total de pedidos (todos los estados).
 CREATE OR REPLACE VIEW v_clientes AS
 WITH pedidos AS (
