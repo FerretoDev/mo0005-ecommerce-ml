@@ -526,13 +526,13 @@ product\_\allowbreak{}category\_\allowbreak{}name\_\allowbreak{}english & catego
 El peso, el volumen y la categoría se toman del primer ítem del pedido, igual que en v\_\allowbreak{}pedidos\_\allowbreak{}base. Quedan fuera de la tabla final las columnas intermedias (identificadores del ítem, segundos, ciudad del vendedor y atributos del producto que no se usan).
 
 \subsection{3.4 Modelo 1 — No supervisado: segmentación con k-means}
-El modelo no supervisado agrupa los pedidos según su experiencia de compra y entrega, con k-means sobre seis variables: valor del pedido (\texttt{total\_\allowbreak{}precio}), costo del flete (\texttt{total\_\allowbreak{}flete}), número de cuotas (\texttt{max\_\allowbreak{}cuotas}), tiempo de entrega (\texttt{dias\_\allowbreak{}entrega}), retraso respecto de la fecha estimada (\texttt{dias\_\allowbreak{}retraso}) y si el cliente y el vendedor están en el mismo estado (\texttt{mismo\_\allowbreak{}estado}). La calificación no se usa como entrada, para que la comparación de satisfacción entre grupos (H4) no sea circular. El precio y el flete se transforman con logaritmo, porque tienen colas muy largas, y las seis variables se normalizan con puntuación z para que todas pesen lo mismo en la distancia. Ninguna de las seis tiene valores ausentes. La lista de nodos está en el Anexo D.
+El modelo no supervisado agrupa los pedidos según su experiencia de compra y entrega, con k-means (MacQueen, 1967) sobre seis variables: valor del pedido (\texttt{total\_\allowbreak{}precio}), costo del flete (\texttt{total\_\allowbreak{}flete}), número de cuotas (\texttt{max\_\allowbreak{}cuotas}), tiempo de entrega (\texttt{dias\_\allowbreak{}entrega}), retraso respecto de la fecha estimada (\texttt{dias\_\allowbreak{}retraso}) y si el cliente y el vendedor están en el mismo estado (\texttt{mismo\_\allowbreak{}estado}). La calificación no se usa como entrada, para que la comparación de satisfacción entre grupos (H4) no sea circular. El precio y el flete se transforman con logaritmo, porque tienen colas muy largas, y las seis variables se normalizan con puntuación z para que todas pesen lo mismo en la distancia. Ninguna de las seis tiene valores ausentes. La lista de nodos está en el Anexo D.
 
 \textbf{Origen de las cifras.} El perfil de los segmentos (3.4.2), la prueba de H4 y la silueta de k = 4 salen del workflow de KNIME (\texttt{02-Clustering}, k = 4, semilla 2; la asignación está en \texttt{knime/\allowbreak{}datos/\allowbreak{}segmentos\_\allowbreak{}modelo1.csv}). La tabla de k de 2 a 8 (3.4.1) y el análisis de sensibilidad se calcularon en Python (scikit-learn) con los mismos datos y variables. Las diferencias pequeñas con KNIME, por ejemplo 7~357 frente a 7~423 pedidos en el grupo problemático, se deben a la inicialización aleatoria del k-means.
 
 \Needspace{7\baselineskip}
 \subsubsection{3.4.1 Resultados y validación}
-Se probaron valores de k entre 2 y 8 y se compararon con dos criterios: la inercia (método del codo) y el coeficiente de silueta, calculado sobre una muestra aleatoria de 10~000 pedidos.
+Se probaron valores de k entre 2 y 8 y se compararon con dos criterios: la inercia (método del codo) y el coeficiente de silueta (Rousseeuw, 1987), calculado sobre una muestra aleatoria de 10~000 pedidos.
 
 {\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*2500/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*3500/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*4000/10000\relax}|}
@@ -574,9 +574,9 @@ Entregas problemáticas & 7~357 (7.7~\%) & 98.00 & 2.8 & 35.1 & 9~\% & 77.4~\% &
 Este último segmento coincide en gran parte con los pedidos tardíos, porque el retraso es una de las variables de entrada. Por eso el modelo debe leerse como una segmentación de la experiencia de entrega: confirma y dimensiona el patrón de H1, más que descubrir un factor nuevo.
 
 \subsection{3.5 Modelo 2 — Supervisado: predicción de la entrega tardía}
-El modelo supervisado clasifica si un pedido llegará tarde o a tiempo usando únicamente variables conocidas al momento de la compra. Este enfoque evita filtrado de información futura y permite evaluar la utilidad del modelo para actuar de forma preventiva antes de que se produzca la entrega.
+El modelo supervisado clasifica si un pedido llegará tarde o a tiempo usando únicamente variables conocidas al momento de la compra, siguiendo el esquema habitual de aprendizaje supervisado con datos de entrenamiento y de prueba (James et al., 2021). Este enfoque evita filtrado de información futura y permite evaluar la utilidad del modelo para actuar de forma preventiva antes de que se produzca la entrega.
 
-Se comparan dos algoritmos, regresión logística y Random Forest, con dos líneas base: predecir siempre «a tiempo» y una regla geográfica que marca como tardío todo pedido entre estados distintos. La mejora se mide con indicadores orientados a la clase minoritaria: AUC, precisión, exhaustividad y F1 de la entrega tardía. La lista de nodos está en el Anexo D.
+Se comparan dos algoritmos, regresión logística (Hosmer et al., 2013) y Random Forest (Breiman, 2001), con dos líneas base: predecir siempre «a tiempo» y una regla geográfica que marca como tardío todo pedido entre estados distintos. La mejora se mide con indicadores orientados a la clase minoritaria: AUC, el área bajo la curva ROC (Fawcett, 2006), precisión, exhaustividad y F1 de la entrega tardía. La lista de nodos está en el Anexo D.
 
 \textbf{Variables de entrada (13):} \texttt{total\_\allowbreak{}precio}, \texttt{total\_\allowbreak{}flete}, \texttt{num\_\allowbreak{}items}, \texttt{max\_\allowbreak{}cuotas}, \texttt{relacion\_\allowbreak{}precio\_\allowbreak{}flete}, \texttt{product\_\allowbreak{}weight\_\allowbreak{}g}, \texttt{volumen\_\allowbreak{}cm3}, \texttt{plazo\_\allowbreak{}estimado\_\allowbreak{}dias}, \texttt{mismo\_\allowbreak{}estado}, \texttt{customer\_\allowbreak{}state}, \texttt{seller\_\allowbreak{}state}, \texttt{product\_\allowbreak{}category\_\allowbreak{}name\_\allowbreak{}english} y el día de la semana de la compra. Se excluyen todas las variables que solo se conocen después de la compra (fechas de aprobación, despacho y entrega, días de entrega, retraso y calificación). También se excluyó el mes de compra: con solo 20 meses de datos, el modelo aprendía los picos de retraso de un único año (en las pruebas era la variable más importante del Random Forest), un patrón que no se puede asumir que se repita.
 
@@ -627,7 +627,7 @@ relacion\_\allowbreak{}precio\_\allowbreak{}flete & 3 \\ \hline
 num\_\allowbreak{}items, max\_\allowbreak{}cuotas, dia\_\allowbreak{}semana & 0 \\ \hline
 \end{longtable}
 }
-Es una aproximación a la importancia, no una medida como la reducción media de impureza que calcula scikit-learn. Además, con el criterio de Gini las variables con muchas categorías, como el estado del cliente o la categoría del producto, tienden a salir arriba porque ofrecen más formas de dividir los datos. Con esa salvedad, el estado del cliente, el costo del flete y si cliente y vendedor están en el mismo estado son las señales que el modelo usa primero; el número de ítems, las cuotas y el día de la semana nunca abren un árbol.
+Es una aproximación a la importancia, no una medida como la reducción media de impureza que calcula scikit-learn (Pedregosa et al., 2011). Además, con el criterio de Gini las variables con muchas categorías, como el estado del cliente o la categoría del producto, tienden a salir arriba porque ofrecen más formas de dividir los datos. Con esa salvedad, el estado del cliente, el costo del flete y si cliente y vendedor están en el mismo estado son las señales que el modelo usa primero; el número de ítems, las cuotas y el día de la semana nunca abren un árbol.
 
 La Línea base 1 acierta el 94.1~\% de los pedidos (30~214 de 32~092) sin detectar ningún tardío: la exactitud global es engañosa con clases desbalanceadas, por eso se evalúa con AUC, exhaustividad y F1 de la clase tardía.
 
@@ -720,7 +720,7 @@ En la página 5, el segmento sale de la columna \texttt{segmento} de \texttt{ped
 
 La parte de riesgo de esa página necesita dos aclaraciones. La primera es que las probabilidades del Modelo 2 están infladas: los modelos se entrenaron con datos balanceados, mitad tardíos y mitad puntuales, cuando en realidad llegó tarde el 9.2~\% de los pedidos del entrenamiento y el 5.85~\% de los de la prueba. En la prueba, la probabilidad promedio es 0.486 en la regresión logística y 0.425 en el Random Forest, muy por encima de esa tasa. Por eso no se presentan como una frecuencia («60~\% de riesgo»), sino como un nivel de riesgo relativo, definido con percentiles de \texttt{prob\_\allowbreak{}tardio\_\allowbreak{}logistica} sobre los 32~092 pedidos con \texttt{en\_\allowbreak{}prueba} = 1; por ejemplo, riesgo alto es el 10~\% de pedidos con mayor probabilidad, riesgo medio va del percentil 75 al 90 y riesgo bajo es el 75~\% restante. La columna \texttt{nivel\_\allowbreak{}riesgo} se calcula en Power Query con esos percentiles. El grupo de riesgo alto funciona: de sus 3~210 pedidos llegó tarde el 13.3~\%, 2.3 veces la tasa de la prueba, y en él está el 22.8~\% de todos los pedidos tardíos. En el nivel medio (4~813 pedidos) llegó tarde el 11.3~\% y en el bajo (24~069 pedidos), el 3.8~\%; es decir, el grupo de riesgo alto llega tarde 3.5 veces más que el de riesgo bajo. La leyenda lo advierte: las probabilidades sirven para ordenar los pedidos por riesgo, no para estimar la frecuencia real de retraso. La segunda es que solo hay predicciones para los 32~092 pedidos de la prueba (abril a agosto de 2018), y la leyenda también lo indica.
 
-Las medidas DAX de los KPI están en el Anexo C. Usan \texttt{pedidos\_\allowbreak{}kpi.csv} y \texttt{clientes\_\allowbreak{}kpi.csv}, que equivalen a las vistas v\_\allowbreak{}pedidos\_\allowbreak{}base y v\_\allowbreak{}clientes del Anexo A.
+Las medidas DAX (Microsoft, s. f.-b) de los KPI están en el Anexo C. Usan \texttt{pedidos\_\allowbreak{}kpi.csv} y \texttt{clientes\_\allowbreak{}kpi.csv}, que equivalen a las vistas v\_\allowbreak{}pedidos\_\allowbreak{}base y v\_\allowbreak{}clientes del Anexo A.
 
 \Needspace{7\baselineskip}
 \subsection{4.4 Hallazgos principales}
@@ -745,10 +745,10 @@ Las medidas DAX de los KPI están en el Anexo C. Usan \texttt{pedidos\_\allowbre
 \hline
 \textbf{Hipótesis} & \textbf{Qué se compara} & \textbf{Prueba propuesta} & \textbf{Resultado y conclusión} \\ \hline
 \endhead
-H1 & Calificación de pedidos puntuales vs. tardíos & Mann-Whitney U; chi-cuadrado para \% de reseñas negativas & Se confirma. Calificación 4.30 frente a 2.57 (Mann-Whitney U = 149~338~900, p < 0.001; correlación biserial de rangos 0.55, efecto grande). Reseñas negativas 9.2~\% frente a 53.9~\% ($\chi$² = 12~589, gl = 1, p < 0.001; V de Cramér 0.36). \\ \hline
+H1 & Calificación de pedidos puntuales vs. tardíos & Mann-Whitney U (Mann y Whitney, 1947); chi-cuadrado para \% de reseñas negativas & Se confirma. Calificación 4.30 frente a 2.57 (Mann-Whitney U = 149~338~900, p < 0.001; correlación biserial de rangos 0.55, efecto grande). Reseñas negativas 9.2~\% frente a 53.9~\% ($\chi$² = 12~589, gl = 1, p < 0.001; V de Cramér 0.36). \\ \hline
 H2 & \% de entregas tardías por región y por mismo estado / estados distintos & Chi-cuadrado de independencia & Se confirma para el periodo completo, con un matiz temporal. Por estado del cliente: $\chi$² = 1~621, gl = 26, p < 0.001 (V = 0.13). Mismo estado frente a distinto: 6.0~\% frente a 9.2~\% de tardíos ($\chi$² = 301, gl = 1, p < 0.001; V = 0.06, efecto pequeño). La dirección no es estable: hasta marzo de 2018, 5.7~\% frente a 11.0~\%; de abril a agosto de 2018 se invierte, 6.6~\% frente a 5.3~\% ($\chi$² = 22.8, p < 0.001). \\ \hline
 H3 & Desempeño del modelo vs. línea base & AUC, precisión, exhaustividad y F1 de la clase tardía & Se confirma. La regresión logística obtiene AUC 0.72 en la prueba temporal, frente a 0.50 y 0.47 de las líneas base, y supera el umbral de 0.60. Su precisión es baja (0.10). Confirmado con la salida de KNIME (AUC 0.719). El Random Forest queda en 0.59. \\ \hline
-H4 & Calificación promedio entre los grupos del Modelo 1 & Kruskal-Wallis o ANOVA & Se confirma, con una advertencia. Las calificaciones de los cuatro grupos van de 2.59 a 4.32 (Kruskal-Wallis H = 7~767, gl = 3, p < 0.001, sobre la asignación de KNIME). La diferencia se debe sobre todo al grupo de entregas problemáticas, que se forma con las variables de retraso; con solo las variables de compra la diferencia es pequeña (de 4.00 a 4.29; H = 507). En KNIME, el One-way ANOVA sobre los 95~502 pedidos con reseña da F = 4~477.7 (3 y 95~498 grados de libertad, p < 0.001) y un tamaño de efecto de 0.12 (suma de cuadrados entre grupos 19~358 sobre un total de 156~979). El grupo de entregas problemáticas (7~357 pedidos, 77~\% tardíos) promedia 2.59 y los otros tres entre 4.16 y 4.32. Como la calificación es ordinal, Kruskal-Wallis es la prueba más adecuada, y ambas concluyen lo mismo. \\ \hline
+H4 & Calificación promedio entre los grupos del Modelo 1 & Kruskal-Wallis (Kruskal y Wallis, 1952) o ANOVA & Se confirma, con una advertencia. Las calificaciones de los cuatro grupos van de 2.59 a 4.32 (Kruskal-Wallis H = 7~767, gl = 3, p < 0.001, sobre la asignación de KNIME). La diferencia se debe sobre todo al grupo de entregas problemáticas, que se forma con las variables de retraso; con solo las variables de compra la diferencia es pequeña (de 4.00 a 4.29; H = 507). En KNIME, el One-way ANOVA sobre los 95~502 pedidos con reseña da F = 4~477.7 (3 y 95~498 grados de libertad, p < 0.001) y un tamaño de efecto de 0.12 (suma de cuadrados entre grupos 19~358 sobre un total de 156~979). El grupo de entregas problemáticas (7~357 pedidos, 77~\% tardíos) promedia 2.59 y los otros tres entre 4.16 y 4.32. Como la calificación es ordinal, Kruskal-Wallis es la prueba más adecuada, y ambas concluyen lo mismo. \\ \hline
 \end{longtable}
 }
 Los valores de las pruebas se calcularon en Python sobre \texttt{knime/\allowbreak{}datos/\allowbreak{}ordenes\_\allowbreak{}etl.csv}, excluyendo los 642 pedidos sin reseña en las pruebas de calificación.
@@ -784,7 +784,21 @@ Los valores de las pruebas se calcularon en Python sobre \texttt{knime/\allowbre
 \item Trabajo futuro: actualización y monitoreo de los modelos, nuevas variables, análisis del texto de los comentarios (en portugués) y prueba de otros algoritmos.
 \end{itemize}
 \section{7. Referencias y anexos}
+{\hangindent=0.5in\hangafter=1\noindent Breiman, L. (2001). Random forests. \emph{Machine Learning, 45}(1), 5--32. \url{https://doi.org/10.1023/A:1010933404324}\par}
+
+{\hangindent=0.5in\hangafter=1\noindent Fawcett, T. (2006). An introduction to ROC analysis. \emph{Pattern Recognition Letters, 27}(8), 861--874. \url{https://doi.org/10.1016/j.patrec.2005.10.010}\par}
+
+{\hangindent=0.5in\hangafter=1\noindent Hosmer, D. W., Lemeshow, S., y Sturdivant, R. X. (2013). \emph{Applied logistic regression} (3.\textsuperscript{a} ed.). Wiley. \url{https://doi.org/10.1002/9781118548387}\par}
+
+{\hangindent=0.5in\hangafter=1\noindent James, G., Witten, D., Hastie, T., y Tibshirani, R. (2021). \emph{An introduction to statistical learning: With applications in R} (2.\textsuperscript{a} ed.). Springer. \url{https://doi.org/10.1007/978-1-0716-1418-1}\par}
+
 {\hangindent=0.5in\hangafter=1\noindent KNIME AG. (2026). \emph{KNIME Analytics Platform} (Versión 5.12) [Software]. \url{https://www.knime.com/}\par}
+
+{\hangindent=0.5in\hangafter=1\noindent Kruskal, W. H., y Wallis, W. A. (1952). Use of ranks in one-criterion variance analysis. \emph{Journal of the American Statistical Association, 47}(260), 583--621. \url{https://doi.org/10.1080/01621459.1952.10483441}\par}
+
+{\hangindent=0.5in\hangafter=1\noindent MacQueen, J. (1967). Some methods for classification and analysis of multivariate observations. En L. M. Le Cam y J. Neyman (Eds.), \emph{Proceedings of the Fifth Berkeley Symposium on Mathematical Statistics and Probability} (Vol. 1, pp. 281--297). University of California Press.\par}
+
+{\hangindent=0.5in\hangafter=1\noindent Mann, H. B., y Whitney, D. R. (1947). On a test of whether one of two random variables is stochastically larger than the other. \emph{The Annals of Mathematical Statistics, 18}(1), 50--60. \url{https://doi.org/10.1214/aoms/1177730491}\par}
 
 {\hangindent=0.5in\hangafter=1\noindent Microsoft. (s. f.-a). \emph{Power BI Desktop} [Software]. \url{https://powerbi.microsoft.com/}\par}
 
@@ -795,6 +809,8 @@ Los valores de las pruebas se calcularon en Python sobre \texttt{knime/\allowbre
 {\hangindent=0.5in\hangafter=1\noindent Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., Blondel, M., Prettenhofer, P., Weiss, R., Dubourg, V., Vanderplas, J., Passos, A., Cournapeau, D., Brucher, M., Perrot, M., y Duchesnay, É. (2011). Scikit-learn: Machine learning in Python. \emph{Journal of Machine Learning Research, 12}, 2825-2830.\par}
 
 {\hangindent=0.5in\hangafter=1\noindent The PostgreSQL Global Development Group. (s. f.). \emph{PostgreSQL 16 documentation}. \url{https://www.postgresql.org/docs/16/}\par}
+
+{\hangindent=0.5in\hangafter=1\noindent Rousseeuw, P. J. (1987). Silhouettes: A graphical aid to the interpretation and validation of cluster analysis. \emph{Journal of Computational and Applied Mathematics, 20}, 53--65. \url{https://doi.org/10.1016/0377-0427(87)90125-7}\par}
 
 \medskip\noindent\rule{\linewidth}{0.4pt}\medskip
 \section{Anexos}
