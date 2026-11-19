@@ -10,9 +10,9 @@ Cada parte empieza con una diapositiva divisoria y el pie de página dice quién
 | Parte | Diapositivas | Expone | Contenido |
 | --- | --- | --- | --- |
 | Inicio | 1–2 | Marcos | Portada y contenido |
-| 1 | 3–9 | Marcos | Olist, problema, objetivos e hipótesis, CRISP-DM, modelo relacional y carga en PostgreSQL, workflow 01-ETL |
-| 2 | 10–14 | Moya | Modelo 1: planteamiento y workflow 02, elección de k, segmentos y prueba de H4 |
-| 3 | 15–19 | Sebastián | Modelo 2: planteamiento y workflow 03, resultados (AUC), uso por niveles de riesgo y cambio geográfico |
+| 1 | 3–9 | Marcos | Olist, problema, objetivos e hipótesis, CRISP-DM, modelo relacional y carga en PostgreSQL, flujo de limpieza de datos |
+| 2 | 10–14 | Moya | Modelo 1: planteamiento y flujo de agrupación de pedidos, elección de k, segmentos y prueba de H4 |
+| 3 | 15–19 | Sebastián | Modelo 2: planteamiento y flujo de predicción de retrasos, resultados (AUC), uso por niveles de riesgo y cambio geográfico |
 | 4 | 20–26 | Kendall | 11 KPI, dashboard, contraste de hipótesis, conclusiones y recomendaciones, referencias y preguntas |
 
 ## Cómo usarla

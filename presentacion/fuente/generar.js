@@ -113,7 +113,7 @@ pres.addSection({ title: 'Inicio' });
     { text: 'Prof. Manfred Mejías Acevedo', options: { breakLine: true } },
     { text: 'II Ciclo 2026' },
   ], { x: 7.4, y: 4.8, w: 5, h: 1.2, fontSize: 16, color: 'C9D1E0', paraSpaceAfter: 4, objectName: nm(0, 'fade', 'curso') });
-  s.addNotes('Presentación del equipo y del tema.\n- Analizamos los datos públicos de Olist (comercio electrónico en Brasil).\n- Pregunta central: qué pasa cuando un pedido llega tarde y si se puede anticipar.\n- Cada uno presenta el workflow que construyó.');
+  s.addNotes('Presentación del equipo y del tema.\n- Analizamos los datos públicos de Olist (comercio electrónico en Brasil).\n- Pregunta central: qué pasa cuando un pedido llega tarde y si se puede anticipar.\n- Cada uno presenta el flujo de trabajo que construyó.');
 }
 
 // 2. CONTENIDO
@@ -221,7 +221,7 @@ divisor('1. Negocio y datos', 'Parte 1 · Marcos Ferreto Estrada', 'Comprensión
   const fases = [
     ['Comprensión del negocio', 'Olist, problema, objetivos'],
     ['Comprensión de los datos', '9 tablas en PostgreSQL'],
-    ['Preparación de los datos', 'Workflow 01-ETL'],
+    ['Preparación de los datos', 'Flujo de limpieza de datos'],
     ['Modelado', 'k-means y clasificación'],
     ['Evaluación', 'Validación e hipótesis'],
     ['Despliegue', 'KPI y dashboard'],
@@ -238,12 +238,12 @@ divisor('1. Negocio y datos', 'Parte 1 · Marcos Ferreto Estrada', 'Comprensión
   txt(s, 'Herramientas', { x: 7.9, y: 1.6, w: 4.8, h: 0.4, fontSize: 20, bold: true, color: H.navy, objectName: nm(2, 'fade', 'herr') });
   const herr = [
     ['PostgreSQL', 'guarda las 9 tablas de datos'],
-    ['KNIME', '4 flujos de trabajo, uno por integrante'],
+    ['KNIME', '4 flujos: limpieza, agrupación, predicción e indicadores'],
     ['Power BI', 'el dashboard con los indicadores'],
     ['GitHub', 'donde compartimos todo el proyecto'],
   ];
   herr.forEach((h, i) => txt(s, [{ text: h[0], options: { bold: true, breakLine: true } }, { text: h[1], options: { color: H.suave, fontSize: 14 } }], { x: 7.9, y: 2.1 + i * 0.85, w: 4.8, h: 0.8, fontSize: 16, objectName: nm(2, 'fade', 'herr' + i) }));
-  ejemplo(s, 7.9, 5.6, 4.85, 1.2, 'Cada fase dejó un producto en el repositorio: la base de datos, los cuatro workflows y el dashboard.', 1, 14);
+  ejemplo(s, 7.9, 5.6, 4.85, 1.2, 'Cada fase dejó un producto en el repositorio: la base de datos, los cuatro flujos de KNIME y el dashboard.', 1, 14);
   s.addNotes('- CRISP-DM: seis fases en ciclo; cada parte de la exposición corresponde a una.\n- Herramientas: PostgreSQL, KNIME, Power BI y GitHub.');
 }
 
@@ -288,7 +288,7 @@ divisor('1. Negocio y datos', 'Parte 1 · Marcos Ferreto Estrada', 'Comprensión
 
 // 9. Workflow 01-ETL
 {
-  const s = nuevo('M', 'Limpiar y unir los datos: workflow 01-ETL', '1. Negocio y datos');
+  const s = nuevo('M', 'Limpiar y unir los datos en KNIME', '1. Negocio y datos');
   const nodos = [
     ['CSV Reader', '9 archivos', 'F0A54A'],
     ['GroupBy', 'resume por pedido', 'F4D35E'],
@@ -305,14 +305,14 @@ divisor('1. Negocio y datos', 'Parte 1 · Marcos Ferreto Estrada', 'Comprensión
     nodo(s, x, y, d[0], d[1], d[2], 1, i);
   });
   txt(s, 'El flujo tiene 40 nodos; estos son los pasos principales', { x: 0.6, y: 1.45, w: 8, h: 0.35, fontSize: 13, color: H.suave, objectName: nm(0, 'fade', 'nota') });
-  ejemplo(s, 0.6, 4.05, 12.15, 0.75, 'La información de cada pedido estaba repartida en varios archivos; el workflow deja una sola fila por pedido, lista para los modelos.', 2, 15);
+  ejemplo(s, 0.6, 4.05, 12.15, 0.75, 'La información de cada pedido estaba repartida en varios archivos; el flujo deja una sola fila por pedido, lista para los modelos.', 2, 15);
   tarjeta(s, 0.6, 5.0, 3.9, 1.75, 3, 'r1');
   dato(s, 0.85, 5.15, 3.5, '96 144', 'pedidos listos para analizar', H.navy, 3, 1);
   tarjeta(s, 4.75, 5.0, 3.9, 1.75, 3, 'r2');
   dato(s, 5.0, 5.15, 3.5, '✓ Cuadra', 'el mismo número que da PostgreSQL', H.teal, 3, 2);
   tarjeta(s, 8.9, 5.0, 3.85, 1.75, 3, 'r3');
   dato(s, 9.15, 5.15, 3.4, '8.07 %', 'de esos pedidos llegó tarde', H.coral, 3, 3);
-  s.addNotes('- Workflow 01-ETL: 40 nodos; mostrar los pasos principales.\n- Agrupar ítems, pagos y reseñas por pedido; unir; filtrar entregados 2017–2018; calcular días y es_tardio.\n- Resultado: 96 144 pedidos, igual que la vista de control en PostgreSQL; 8.07 % tardíos.\n- Pasar la palabra a Moya.');
+  s.addNotes('- Flujo de limpieza de datos: 40 nodos; mostrar los pasos principales.\n- Agrupar ítems, pagos y reseñas por pedido; unir; filtrar entregados 2017–2018; calcular días y es_tardio.\n- Resultado: 96 144 pedidos, igual que la vista de control en PostgreSQL; 8.07 % tardíos.\n- Pasar la palabra a Moya.');
 }
 
 // ---------- PARTE 2: MOYA ----------
@@ -347,8 +347,8 @@ divisor('2. Modelo 1', 'Parte 2 · David Moya Correas', 'Modelo 1: ¿qué tipos 
     s.addShape(pres.shapes.LINE, { x: x + 1.1, y: y1, w: 0, h: y2 - y1, line: { color: H.slate, width: 1.5 }, objectName: nm(1, 'wipeU', 'codo2') });
     s.addShape(pres.shapes.LINE, { x: x + 0.65, y: y2, w: 0.45, h: 0, flipH: true, line: { color: H.slate, width: 1.5, endArrowType: 'triangle' }, objectName: nm(1, 'fade', 'codo3') });
   }
-  txt(s, 'Workflow 02-Clustering en KNIME (14 nodos)', { x: 6.75, y: 6.35, w: 6, h: 0.35, fontSize: 12, color: H.suave, objectName: nm(1, 'fade', 'nn') });
-  s.addNotes('- k-means agrupa pedidos parecidos sin etiquetas previas.\n- Seis variables; precio y flete con logaritmo; todo estandarizado.\n- La calificación queda fuera para no hacer circular la prueba de H4.\n- Recorrer el workflow 02.');
+  txt(s, 'Flujo de agrupación de pedidos en KNIME (14 nodos)', { x: 6.75, y: 6.35, w: 6, h: 0.35, fontSize: 12, color: H.suave, objectName: nm(1, 'fade', 'nn') });
+  s.addNotes('- k-means agrupa pedidos parecidos sin etiquetas previas.\n- Seis variables; precio y flete con logaritmo; todo estandarizado.\n- La calificación queda fuera para no hacer circular la prueba de H4.\n- Recorrer el flujo de agrupación de pedidos.');
 }
 
 // 12. Elección de k
@@ -442,7 +442,7 @@ divisor('3. Modelo 2', 'Parte 3 · Sebastián Sánchez Vega', 'Modelo 2: ¿se pu
     nodo(s, x, yy, d[0], d[1], d[2], 3, i);
   });
   ejemplo(s, 0.6, 6.0, 12.15, 0.8, 'El modelo no responde sí o no: da una probabilidad de retraso para cada pedido, y con ella se ordenan los pedidos por riesgo.', 4, 15);
-  s.addNotes('- Objetivo: estimar el riesgo de retraso al momento de la compra.\n- Solo 13 variables conocidas al comprar (evitar fuga de información).\n- Partición temporal: entrenamiento hasta marzo de 2018, prueba abril–agosto (5.85 % vs 9.19 % tardíos).\n- Recorrer el workflow 03.');
+  s.addNotes('- Objetivo: estimar el riesgo de retraso al momento de la compra.\n- Solo 13 variables conocidas al comprar (evitar fuga de información).\n- Partición temporal: entrenamiento hasta marzo de 2018, prueba abril–agosto (5.85 % vs 9.19 % tardíos).\n- Recorrer el flujo de predicción de retrasos.');
 }
 
 // 17. Resultados AUC
@@ -520,7 +520,7 @@ divisor('4. KPI y conclusiones', 'Parte 4 · Kendall Alvarado Artavia', 'Indicad
     });
   });
   txt(s, 'En naranja, los indicadores que tienen meta: hoy ninguno la alcanza.', { x: 0.6, y: 6.66, w: 8, h: 0.3, fontSize: 12, color: H.suave, objectName: nm(3, 'fade', 'nota') });
-  s.addNotes('- 11 indicadores en tres preguntas: ¿llegan a tiempo?, ¿están contentos?, ¿vuelven?\n- Calculados en el workflow 04 y verificados con SQL.\n- Los cuatro que tienen meta no la cumplen hoy.');
+  s.addNotes('- 11 indicadores en tres preguntas: ¿llegan a tiempo?, ¿están contentos?, ¿vuelven?\n- Calculados en el flujo de indicadores y verificados con SQL.\n- Los cuatro que tienen meta no la cumplen hoy.');
 }
 
 // 22. Dashboard
