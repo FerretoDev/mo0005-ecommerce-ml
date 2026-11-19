@@ -131,7 +131,7 @@ pres.addSection({ title: 'Inicio' });
   const s = nuevo('M', 'Contenido de la exposición', 'Inicio');
   const partes = [
     ['1', 'Marcos Ferreto', 'El problema, cómo trabajamos y cómo preparamos los datos'],
-    ['2', 'David Moya', 'Modelo 1: qué tipos de pedidos hay'],
+    ['2', 'David Moya', 'Modelo 1: qué perfiles de pedidos hay'],
     ['3', 'Sebastián Sánchez', 'Modelo 2: anticipar qué pedidos llegarán tarde'],
     ['4', 'Kendall Alvarado', 'Indicadores, dashboard y conclusiones'],
   ];
@@ -218,7 +218,7 @@ divisor('1. Negocio y datos', 'Parte 1 · Marcos Ferreto Estrada', 'Comprensión
     ['H1', '¿Los pedidos que llegan tarde reciben menos estrellas?'],
     ['H2', '¿Importa a qué estado va el pedido?'],
     ['H3', '¿Un modelo puede anticipar el retraso mejor que una regla simple?'],
-    ['H4', '¿Hay tipos de compra que quedan peor calificados?'],
+    ['H4', '¿Existen perfiles de pedidos con diferencias en su calificación?'],
   ];
   hip.forEach((h, i) => {
     const y = 1.6 + i * 1.15;
@@ -316,7 +316,7 @@ divisor('1. Negocio y datos', 'Parte 1 · Marcos Ferreto Estrada', 'Comprensión
 }
 
 // ---------- PARTE 2: MOYA ----------
-divisor('2. Modelo 1', 'Parte 2 · David Moya Correas', 'Modelo 1: ¿qué tipos de pedidos hay?', 'Agrupamos los pedidos parecidos y vimos a cuál grupo le va peor', '- Modelo 1: segmentación de pedidos con k-means.', ['Planteamiento y flujo en KNIME', 'Cuántos grupos formar', 'Los cuatro grupos', 'Resultado de H4']);
+divisor('2. Modelo 1', 'Parte 2 · David Moya Correas', 'Modelo 1: ¿qué perfiles de pedidos hay?', 'Agrupamos los pedidos parecidos y comparamos la calificación de cada grupo', '- Modelo 1: segmentación de pedidos con k-means.', ['Planteamiento y flujo en KNIME', 'Cuántos grupos formar', 'Los cuatro grupos', 'Resultado de H4']);
 
 // 11. Planteamiento + workflow 02
 {
@@ -400,9 +400,9 @@ divisor('2. Modelo 1', 'Parte 2 · David Moya Correas', 'Modelo 1: ¿qué tipos 
     x: 0.6, y: 4.2, w: 6.2, h: 2.65, barDir: 'bar', chartColors: ['9AA5B8', H.teal, H.navy, H.coral], varyColors: true, catAxisOrientation: 'maxMin', showValue: true, dataLabelPosition: 'outEnd', dataLabelFormatCode: '0.00',
     valAxisMinVal: 0, valAxisMaxVal: 5, valAxisHidden: true, valGridLine: { style: 'none' }, showTitle: true, title: 'Estrellas promedio por grupo', showLegend: false, barGapWidthPct: 45, objectName: nm(1, 'wipeL', 'est'),
   }));
-  txt(s, [{ text: 'H4: sí, hay grupos peor calificados', options: { bold: true, fontSize: 18, color: H.teal, breakLine: true } }, { text: 'La diferencia de estrellas entre grupos no es casualidad: One-way ANOVA en KNIME (F = 4 477.7) y Kruskal-Wallis en Python (H = 7 767), ambas con p < 0.001.', options: { fontSize: 15 } }], { x: 7.2, y: 4.3, w: 5.55, h: 1.3, objectName: nm(2, 'fade', 'h4t') });
-  txt(s, [{ text: 'Pero lo que pesa es la entrega', options: { bold: true, fontSize: 18, color: 'C25E1C', breakLine: true } }, { text: 'Si agrupamos solo por lo que se compró, las estrellas casi no cambian (de 4.02 a 4.29).', options: { fontSize: 15 } }], { x: 7.2, y: 5.75, w: 5.55, h: 1.1, objectName: nm(3, 'fade', 'senst') });
-  s.addNotes('- Fila naranja: entregas problemáticas (7.7 %): 35 días, 77 % tardías, 2.59 estrellas.\n- H4 se confirma. En KNIME corrimos One-way ANOVA (F = 4 477.7) porque el nodo de Kruskal-Wallis no estaba instalado; en Python, Kruskal-Wallis (H = 7 767), más adecuada para una calificación ordinal. Ambas: p < 0.001.\n- Advertencia: ese grupo se forma con el retraso; con variables de compra la calificación casi no cambia (4.02–4.29).\n- Pasar la palabra a Sebastián.');
+  txt(s, [{ text: 'H4: sí, los perfiles difieren en calificación', options: { bold: true, fontSize: 18, color: H.teal, breakLine: true } }, { text: 'La diferencia de estrellas entre grupos no es casualidad: One-way ANOVA en KNIME (F = 4 477.7) y Kruskal-Wallis en Python (H = 7 767), ambas con p < 0.001.', options: { fontSize: 15 } }], { x: 7.2, y: 4.3, w: 5.55, h: 1.3, objectName: nm(2, 'fade', 'h4t') });
+  txt(s, [{ text: 'Lo que distingue al grupo es la entrega', options: { bold: true, fontSize: 18, color: 'C25E1C', breakLine: true } }, { text: 'Los grupos combinan rasgos de compra y de entrega. Si se agrupa solo por lo que se compró, la calificación casi no cambia (de 4.02 a 4.29).', options: { fontSize: 15 } }], { x: 7.2, y: 5.75, w: 5.55, h: 1.1, objectName: nm(3, 'fade', 'senst') });
+  s.addNotes('- Fila naranja: entregas problemáticas (7.7 %): 35 días, 77 % tardías, 2.59 estrellas.\n- H4 se confirma. En KNIME corrimos One-way ANOVA (F = 4 477.7) porque el nodo de Kruskal-Wallis no estaba instalado; en Python, Kruskal-Wallis (H = 7 767), más adecuada para una calificación ordinal. Ambas sobre los mismos 95 502 pedidos con reseña y la misma variable (calificación promedio); son dos pruebas distintas, no una repetida. Ambas: p < 0.001.\n- Advertencia: ese grupo se forma con el retraso; con variables de compra la calificación casi no cambia (4.02–4.29).\n- Pasar la palabra a Sebastián.');
 }
 
 // ---------- PARTE 3: SEBASTIÁN ----------
@@ -510,7 +510,7 @@ divisor('4. KPI y conclusiones', 'Parte 4 · Kendall Alvarado Artavia', 'Indicad
   txt(s, 'Indicadores de referencia', { x: 7.4, y: 1.45, w: 5.4, h: 0.4, fontSize: 18, bold: true, color: H.navy, objectName: nm(5, 'fade', 'rt') });
   const refs = [
     ['12.5 días', 'tiempo promedio de entrega'], ['9.4 días', 'de atraso, cuando hay retraso'], ['15.1 vs 7.9 días', 'entrega a otro estado vs. al mismo'], ['1.24 %', 'de pedidos que no se completan'],
-    ['1.72 estrellas', 'que se pierden al llegar tarde'], ['4.34 vs 2.97 %', 'recompra si el primer pedido llegó a tiempo vs. tarde'], ['4.32 vs 3.73 %', 'recompra sin vs. con reseña mala'],
+    ['1.72 estrellas', 'de diferencia entre pedidos a tiempo y tardíos'], ['4.34 vs 2.97 %', 'recompra si el primer pedido llegó a tiempo vs. tarde'], ['4.32 vs 3.73 %', 'recompra sin vs. con reseña mala'],
   ];
   refs.forEach((r, i) => txt(s, [{ text: r[0], options: { bold: true, fontSize: 16, color: H.navy, breakLine: true } }, { text: r[1], options: { fontSize: 13, color: H.texto } }], { x: 7.4, y: 1.95 + i * 0.68, w: 5.4, h: 0.65, objectName: nm(5, 'fade', 'r' + i) }));
   s.addNotes('- 11 indicadores en tres preguntas: ¿llegan a tiempo?, ¿están contentos?, ¿vuelven?\n- Calculados en el flujo de indicadores y verificados con SQL.\n- Los cuatro que tienen meta no la cumplen hoy.');
@@ -518,7 +518,7 @@ divisor('4. KPI y conclusiones', 'Parte 4 · Kendall Alvarado Artavia', 'Indicad
 
 // 22. Dashboard
 {
-  const s = nuevo('K', 'Dashboard: cuando suben los retrasos, baja la calificación', '4. KPI y conclusiones');
+  const s = nuevo('K', 'Dashboard: los meses con más retrasos tienen menor calificación', '4. KPI y conclusiones');
   const meses = ['ene 17', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic', 'ene 18', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago'];
   const tarde = [3.07, 3.21, 5.58, 7.86, 3.61, 3.86, 3.43, 3.32, 5.20, 5.29, 14.31, 8.38, 6.56, 15.97, 21.36, 5.31, 8.22, 1.31, 4.20, 9.88];
   const cal = [4.20, 4.20, 4.19, 4.14, 4.24, 4.22, 4.26, 4.31, 4.27, 4.21, 3.99, 4.09, 4.11, 3.88, 3.81, 4.21, 4.24, 4.31, 4.32, 4.32];
@@ -545,7 +545,7 @@ divisor('4. KPI y conclusiones', 'Parte 4 · Kendall Alvarado Artavia', 'Indicad
     ['H1', '¿Tarde = menos estrellas?', 'Sí', '4.30 a tiempo vs 2.57 tarde (Mann-Whitney, p < 0.001)', H.teal],
     ['H2', '¿Importa a qué estado va?', 'Sí, pero cambió en 2018', 'Diferencia clara en todo el periodo (χ², p < 0.001)', H.amber],
     ['H3', '¿Se puede anticipar el retraso?', 'Sí, para priorizar', 'Regresión logística: AUC 0.72, arriba de la meta de 0.60', H.teal],
-    ['H4', '¿Hay compras peor calificadas?', 'Sí, por la entrega', 'Diferencia real entre grupos (ANOVA y Kruskal-Wallis, p < 0.001)', H.amber],
+    ['H4', '¿Los perfiles de pedidos difieren en calificación?', 'Sí, ligado a la entrega', 'ANOVA (KNIME) y Kruskal-Wallis (Python), p < 0.001', H.amber],
   ];
   hip.forEach((h, i) => {
     const y = 1.55 + i * 1.3;
@@ -556,7 +556,7 @@ divisor('4. KPI y conclusiones', 'Parte 4 · Kendall Alvarado Artavia', 'Indicad
     txt(s, h[2], { x: 6.6, y: y + 0.12, w: 2.3, h: 0.85, fontSize: 16, bold: true, color: h[4] === H.teal ? H.teal : 'C25E1C', valign: 'middle', objectName: nm(i, 'fade', 'r' + i) });
     txt(s, h[3], { x: 9.0, y: y + 0.12, w: 3.55, h: 0.85, fontSize: 13, color: H.suave, valign: 'middle', objectName: nm(i, 'fade', 'e' + i) });
   });
-  s.addNotes('- H1 sí (efecto grande).\n- H2 sí, pero cambia en 2018.\n- H3 sí (AUC 0.72).\n- H4 sí, con la advertencia de la logística.');
+  s.addNotes('- H1 sí (efecto grande).\n- H2 sí, pero cambia en 2018.\n- H3 sí (AUC 0.72).\n- H4 sí: los perfiles difieren en calificación; la diferencia está ligada a la entrega, no al tipo de compra.');
 }
 
 // 24. Conclusiones y recomendaciones
@@ -564,7 +564,7 @@ divisor('4. KPI y conclusiones', 'Parte 4 · Kendall Alvarado Artavia', 'Indicad
   const s = nuevo('K', 'Conclusiones y qué le recomendamos a Olist', '4. KPI y conclusiones');
   txt(s, 'Conclusiones', { x: 0.6, y: 1.5, w: 5.6, h: 0.45, fontSize: 20, bold: true, color: H.navy, objectName: nm(0, 'fade', 'ct') });
   txt(s, [
-    { text: 'Llegar tarde es lo que más baja la calificación: cuesta casi 2 estrellas.', options: { bullet: true, breakLine: true } },
+    { text: 'Los pedidos tardíos tienen una calificación promedio casi dos estrellas menor que los entregados a tiempo.', options: { bullet: true, breakLine: true } },
     { text: 'Se puede anticipar lo suficiente para saber qué pedidos vigilar.', options: { bullet: true, breakLine: true } },
     { text: 'Dónde se atrasan los pedidos cambia con el tiempo: hay que revisar seguido.', options: { bullet: true, breakLine: true } },
     { text: 'Que el cliente vuelva depende de más cosas que la entrega.', options: { bullet: true } },
@@ -583,7 +583,7 @@ divisor('4. KPI y conclusiones', 'Parte 4 · Kendall Alvarado Artavia', 'Indicad
     txt(s, [{ text: r[0], options: { bold: true, fontSize: 17, color: H.navy, breakLine: true } }, { text: r[1], options: { fontSize: 15 } }], { x: 7.65, y: y - 0.05, w: 5.1, h: 0.95, objectName: nm(i + 1, 'fade', 'rt' + i) });
   });
   txt(s, 'Meta propuesta: bajar las entregas tardías de 8.07 % a menos de 6 %.', { x: 6.9, y: 6.4, w: 6, h: 0.4, fontSize: 15, bold: true, color: H.navy, objectName: nm(5, 'fade', 'meta') });
-  s.addNotes('- El retraso es lo que más baja la calificación.\n- Se puede anticipar lo suficiente para priorizar.\n- La recompra depende de más factores.\n- Recomendaciones: priorizar, avisar, corregir rutas, monitorear. Meta: < 6 % tardías.');
+  s.addNotes('- Los pedidos tardíos tienen casi dos estrellas menos en promedio (asociación, no prueba de causa).\n- Se puede anticipar lo suficiente para priorizar.\n- La recompra depende de más factores.\n- Recomendaciones: priorizar, avisar, corregir rutas, monitorear. Meta: < 6 % tardías.');
 }
 
 // 25. Referencias
