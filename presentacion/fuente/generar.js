@@ -7,16 +7,16 @@ const fs = require('fs');
 
 const THEME = {
   name: 'Entregas Olist',
-  headFontFace: 'Cambria',
+  headFontFace: 'Calibri',
   bodyFontFace: 'Calibri',
   colors: {
     dk1: '1F2433', lt1: 'FFFFFF', dk2: '1F2A44', lt2: 'EEF1F6',
-    accent1: '1F2A44', accent2: '2A8C82', accent3: 'D1495B', accent4: 'E3A72F', accent5: '5B6B8C', accent6: '9AA5B8',
+    accent1: '1F2A44', accent2: '2A8C82', accent3: 'E8772E', accent4: 'E8772E', accent5: '5B6B8C', accent6: '9AA5B8',
     hlink: '2A8C82', folHlink: '5B6B8C',
   },
 };
 // Colores en hex para opciones que solo aceptan hex
-const H = { navy: '1F2A44', teal: '2A8C82', coral: 'D1495B', amber: 'E3A72F', slate: '5B6B8C', gris: '9AA5B8', claro: 'EEF1F6', texto: '1F2433', linea: 'D5DAE3', blanco: 'FFFFFF', suave: '5B6475' };
+const H = { navy: '1F2A44', teal: '2A8C82', coral: 'E8772E', amber: 'E8772E', slate: '5B6B8C', gris: '9AA5B8', claro: 'EEF1F6', texto: '1F2433', linea: 'D5DAE3', blanco: 'FFFFFF', suave: '5B6475' };
 
 const pres = new pptxgen();
 pres.layout = 'LAYOUT_WIDE'; // 13.333 x 7.5
@@ -36,7 +36,7 @@ pres.defineSlideMaster({
   title: 'DIVISOR', background: { color: H.navy },
   objects: [
     { placeholder: { options: { name: 'parte', type: 'body', x: 0.9, y: 2.2, w: 11.5, h: 0.5, fontSize: 18, color: 'C9D1E0', margin: 0 }, text: '' } },
-    { placeholder: { options: { name: 'title', type: 'title', x: 0.9, y: 2.8, w: 11.5, h: 1.9, fontSize: 40, bold: true, color: H.blanco, fontFace: 'Cambria', margin: 0, valign: 'top', align: 'left' }, text: '' } },
+    { placeholder: { options: { name: 'title', type: 'title', x: 0.9, y: 2.8, w: 11.5, h: 1.9, fontSize: 40, bold: true, color: H.blanco, fontFace: 'Calibri', margin: 0, valign: 'top', align: 'left' }, text: '' } },
     { placeholder: { options: { name: 'body', type: 'body', x: 0.9, y: 4.85, w: 11.5, h: 1.4, fontSize: 18, color: 'C9D1E0', margin: 0, valign: 'top' }, text: '' } },
   ],
 });
@@ -46,7 +46,7 @@ for (const [k, nombre] of Object.entries(PRES)) {
     title: 'CONTENIDO_' + k, background: { color: H.blanco },
     margin: [0.5, 0.6, 0.7, 0.6],
     objects: [
-      { placeholder: { options: { name: 'title', type: 'title', x: 0.6, y: 0.35, w: 12.1, h: 0.9, fontSize: 30, bold: true, color: H.navy, fontFace: 'Cambria', margin: 0, valign: 'middle', align: 'left' }, text: '' } },
+      { placeholder: { options: { name: 'title', type: 'title', x: 0.6, y: 0.35, w: 12.1, h: 0.9, fontSize: 30, bold: true, color: H.navy, fontFace: 'Calibri', margin: 0, valign: 'middle', align: 'left' }, text: '' } },
       { text: { text: 'MO-0005 Análisis de Algoritmos · UCR, Sede de Occidente', options: { x: 0.6, y: 7.02, w: 7, h: 0.3, fontSize: 10, color: H.suave, margin: 0 } } },
       { text: { text: 'Expone: ' + nombre, options: { x: 7.4, y: 7.02, w: 4.6, h: 0.3, fontSize: 10, color: H.suave, align: 'right', margin: 0 } } },
     ],
@@ -65,17 +65,17 @@ function nuevo(k, titulo, seccion) {
 }
 function dato(s, x, y, w, cifra, etiqueta, color, click, orden) {
   s.addText([
-    { text: cifra, options: { fontSize: 40, bold: true, color: color || H.navy, fontFace: 'Cambria', breakLine: true } },
+    { text: cifra, options: { fontSize: 40, bold: true, color: color || H.navy, fontFace: 'Calibri', breakLine: true } },
     { text: etiqueta, options: { fontSize: 15, color: H.suave } },
   ], { x, y, w, h: 1.4, isTextBox: true, margin: 0, valign: 'top', objectName: nm(click, 'fade', 'dato' + (orden || '')) });
 }
 function tarjeta(s, x, y, w, h, click, desc, fill) {
   s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y, w, h, rectRadius: 0.08, fill: { color: fill || H.claro }, line: { color: fill || H.claro }, objectName: nm(click, 'fade', desc) });
 }
-// recuadro "En palabras simples" con un ejemplo cotidiano
+// recuadro de interpretación: qué significa lo que se muestra
 function ejemplo(s, x, y, w, h, texto, click, fs) {
-  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y, w, h, rectRadius: 0.08, fill: { color: 'FDF3DC' }, line: { color: 'EBCB85', width: 1 }, objectName: nm(click, 'fade', 'ej') });
-  s.addText([{ text: 'En palabras simples: ', options: { bold: true, color: '8A6410' } }, { text: texto, options: { color: H.texto } }], { x: x + 0.2, y: y + 0.1, w: w - 0.4, h: h - 0.2, fontSize: fs || 15, valign: 'middle', isTextBox: true, margin: 0, objectName: nm(click, 'fade', 'ejt') });
+  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y, w, h, rectRadius: 0.06, fill: { color: H.claro }, line: { color: H.claro }, objectName: nm(click, 'fade', 'ej') });
+  s.addText(texto, { x: x + 0.2, y: y + 0.1, w: w - 0.4, h: h - 0.2, fontSize: fs || 15, color: H.navy, valign: 'middle', isTextBox: true, margin: 0, objectName: nm(click, 'fade', 'ejt') });
 }
 const axis = { catAxisLabelColor: H.suave, valAxisLabelColor: H.suave, catAxisLabelFontFace: '+mn-lt', valAxisLabelFontFace: '+mn-lt', catAxisLabelFontSize: 12, valAxisLabelFontSize: 12, valGridLine: { color: 'E3E7EE', size: 0.75 }, catGridLine: { style: 'none' }, catAxisLineShow: true, valAxisLineShow: false, dataLabelFontFace: '+mn-lt', dataLabelFontSize: 12, dataLabelColor: H.texto, titleFontFace: '+mn-lt', titleFontSize: 14, titleColor: H.texto, legendFontFace: '+mn-lt', legendFontSize: 12, legendColor: H.texto };
 
@@ -99,7 +99,7 @@ pres.addSection({ title: 'Inicio' });
 {
   const s = pres.addSlide({ masterName: 'PORTADA', sectionTitle: 'Inicio' });
   txt(s, 'Universidad de Costa Rica · Sede de Occidente · Recinto de Grecia', { x: 0.9, y: 0.8, w: 11.5, h: 0.4, fontSize: 16, color: 'C9D1E0' });
-  s.addText('Entregas tardías, satisfacción y fidelización de clientes en Olist', { x: 0.9, y: 1.6, w: 11, h: 1.9, fontSize: 40, bold: true, color: H.blanco, fontFace: 'Cambria', isTextBox: true, margin: 0, valign: 'top', objectName: nm(0, 'fade', 'titulo') });
+  s.addText('Entregas tardías, satisfacción y fidelización de clientes en Olist', { x: 0.9, y: 1.6, w: 11, h: 1.9, fontSize: 40, bold: true, color: H.blanco, fontFace: 'Calibri', isTextBox: true, margin: 0, valign: 'top', objectName: nm(0, 'fade', 'titulo') });
   txt(s, 'Modelos de aprendizaje automático e indicadores analíticos', { x: 0.9, y: 3.55, w: 11, h: 0.5, fontSize: 22, color: 'E3E8F2', objectName: nm(0, 'fade', 'sub') });
   s.addShape(pres.shapes.LINE, { x: 0.9, y: 4.45, w: 2.2, h: 0, line: { color: H.amber, width: 2.5 }, objectName: nm(0, 'wipeL', 'regla') });
   txt(s, [
@@ -113,7 +113,7 @@ pres.addSection({ title: 'Inicio' });
     { text: 'Prof. Manfred Mejías Acevedo', options: { breakLine: true } },
     { text: 'II Ciclo 2026' },
   ], { x: 7.4, y: 4.8, w: 5, h: 1.2, fontSize: 16, color: 'C9D1E0', paraSpaceAfter: 4, objectName: nm(0, 'fade', 'curso') });
-  s.addNotes('Buenos días. Somos Marcos, Moya, Sebastián y Kendall. Les vamos a presentar el proyecto del curso: analizamos los datos públicos de Olist, una tienda en línea de Brasil, para entender qué pasa cuando un pedido llega tarde, cómo afecta eso a la satisfacción y a la recompra, y si se puede anticipar. Cada uno va a presentar la parte del trabajo que construyó.');
+  s.addNotes('Presentación del equipo y del tema.\n- Analizamos los datos públicos de Olist (comercio electrónico en Brasil).\n- Pregunta central: qué pasa cuando un pedido llega tarde y si se puede anticipar.\n- Cada uno presenta el workflow que construyó.');
 }
 
 // 2. CONTENIDO
@@ -128,10 +128,10 @@ pres.addSection({ title: 'Inicio' });
   partes.forEach((p, i) => {
     const y = 1.65 + i * 1.25;
     s.addShape(pres.shapes.OVAL, { x: 0.8, y, w: 0.8, h: 0.8, fill: { color: i === 0 ? H.navy : H.claro }, line: { color: H.navy, width: 1.25 }, objectName: nm(0, 'fade', 'num' + i) });
-    s.addText(p[0], { x: 0.8, y, w: 0.8, h: 0.8, align: 'center', valign: 'middle', fontSize: 24, bold: true, fontFace: 'Cambria', color: i === 0 ? H.blanco : H.navy, isTextBox: true, margin: 0, objectName: nm(0, 'fade', 'numt' + i) });
+    s.addText(p[0], { x: 0.8, y, w: 0.8, h: 0.8, align: 'center', valign: 'middle', fontSize: 24, bold: true, fontFace: 'Calibri', color: i === 0 ? H.blanco : H.navy, isTextBox: true, margin: 0, objectName: nm(0, 'fade', 'numt' + i) });
     txt(s, [{ text: p[1], options: { bold: true, fontSize: 20, color: H.navy, breakLine: true } }, { text: p[2], options: { fontSize: 16, color: H.suave } }], { x: 1.9, y: y - 0.02, w: 10.5, h: 0.95, objectName: nm(0, 'fade', 'parte' + i) });
   });
-  s.addNotes('La exposición sigue el mismo orden en que trabajamos los datos: primero yo presento el contexto, la metodología y cómo preparamos los datos; luego Moya presenta la segmentación, Sebastián la predicción del retraso y Kendall cierra con los indicadores, el dashboard y las conclusiones. Cada parte corresponde a un workflow de KNIME que hizo esa persona.');
+  s.addNotes('- Orden de la exposición = orden en que fluyen los datos.\n- Marcos: problema, datos y ETL. Moya: Modelo 1. Sebastián: Modelo 2. Kendall: KPI, dashboard y conclusiones.');
 }
 
 // ---------- PARTE 1: MARCOS ----------
@@ -144,7 +144,7 @@ function divisor(sec, parte, titulo, cuerpo, notas) {
   s.addNotes(notas);
   return s;
 }
-divisor('1. Negocio y datos', 'Parte 1 · Marcos Ferreto Estrada', 'Comprensión del negocio y de los datos', 'Qué es Olist, cuál es el problema y cómo preparamos los datos', 'Arranco con la primera parte: qué es Olist, cuál es el problema que estudiamos y cómo preparamos los datos para que el resto del equipo pudiera trabajar.');
+divisor('1. Negocio y datos', 'Parte 1 · Marcos Ferreto Estrada', 'Comprensión del negocio y de los datos', 'Qué es Olist, cuál es el problema y cómo preparamos los datos', '- Primera parte: el problema y cómo preparamos los datos.');
 
 // 4. Contexto
 {
@@ -157,14 +157,14 @@ divisor('1. Negocio y datos', 'Parte 1 · Marcos Ferreto Estrada', 'Comprensión
     s.addText(p[0], { x: 0.6, y, w: 0.55, h: 0.55, align: 'center', valign: 'middle', bold: true, fontSize: 16, color: H.blanco, isTextBox: true, margin: 0, objectName: nm(0, 'fade', 'pason' + i) });
     txt(s, [{ text: p[1], options: { bold: true, fontSize: 16, breakLine: true } }, { text: p[2], options: { fontSize: 13, color: H.suave } }], { x: 1.35, y: y - 0.04, w: 5.4, h: 0.7, objectName: nm(0, 'fade', 'pasot' + i) });
   });
-  ejemplo(s, 0.6, 5.75, 6.3, 1.05, 'es como si una pulpería pudiera vender en Amazon: Olist la pone ahí, pero el envío no lo hace Olist. Si llega tarde, la mala reseña igual le cae a Olist.', 1, 14);
+  ejemplo(s, 0.6, 5.75, 6.3, 1.05, 'Olist no controla el envío, pero el cliente lo califica a él: un retraso de la transportista termina afectando la reputación de Olist.', 1, 14);
   const d = [['99 441', 'pedidos, sep. 2016 – oct. 2018'], ['3 095', 'tiendas vendedoras'], ['27', 'estados de Brasil'], ['9', 'tablas relacionadas (127 MB)']];
   d.forEach((v, i) => {
     const x = 7.3 + (i % 2) * 2.85, y = 1.6 + Math.floor(i / 2) * 2.1;
     tarjeta(s, x, y, 2.6, 1.8, 2, 'tarj' + i);
     dato(s, x + 0.25, y + 0.25, 2.2, v[0], v[1], H.navy, 2, i);
   });
-  s.addNotes('Olist es una empresa brasileña que le permite a tiendas pequeñas vender en plataformas grandes como Mercado Libre o Amazon. Así viaja un pedido: el cliente compra, la tienda empaca, una transportista lo lleva y el cliente califica. (Clic) Es como si una pulpería pudiera vender en Amazon: Olist la pone ahí, pero no maneja el envío, y aun así la mala reseña le cae a Olist. (Clic) Trabajamos con su conjunto de datos público: casi cien mil pedidos, tres mil tiendas, los 27 estados y nueve tablas relacionadas. ');
+  s.addNotes('- Olist pone a tiendas pequeñas a vender en marketplaces grandes.\n- No tiene bodega ni transporte; aun así promete la fecha y recibe la reseña.\n- Datos: 99 441 pedidos, 3 095 tiendas, 27 estados, 9 tablas.');
 }
 
 // 5. Problema
@@ -182,12 +182,12 @@ divisor('1. Negocio y datos', 'Parte 1 · Marcos Ferreto Estrada', 'Comprensión
   ];
   filas.forEach((f, i) => {
     const y = 1.6 + i * 1.5;
-    txt(s, f[0], { x: 6.6, y, w: 2.1, h: 0.8, fontSize: 32, bold: true, fontFace: 'Cambria', color: f[2], objectName: nm(i === 0 ? 0 : i + 1, 'fade', 'cifra' + i) });
+    txt(s, f[0], { x: 6.6, y, w: 2.1, h: 0.8, fontSize: 32, bold: true, fontFace: 'Calibri', color: f[2], objectName: nm(i === 0 ? 0 : i + 1, 'fade', 'cifra' + i) });
     txt(s, f[1], { x: 8.8, y: y + 0.05, w: 4.0, h: 1.2, fontSize: 16, color: H.texto, objectName: nm(i === 0 ? 0 : i + 1, 'fade', 'desc' + i) });
   });
-  ejemplo(s, 0.6, 5.35, 5.4, 1.45, 'usted pide unos tenis para un cumpleaños, le prometen 10 días y llegan en 19. ¿Cuántas estrellas les pone? Eso mismo pasa en 8 de cada 100 pedidos.', 1, 14);
+  ejemplo(s, 0.6, 5.35, 5.4, 1.45, 'Cuando un pedido llega tarde, llega en promedio 9.4 días después de lo prometido, y más de la mitad de esos clientes deja una reseña negativa.', 1, 14);
   txt(s, 'Pregunta del proyecto: ¿podemos medir esta cadena, identificar dónde ocurre y anticipar el retraso al momento de la compra?', { x: 6.6, y: 6.05, w: 6.2, h: 0.7, fontSize: 15, italic: true, color: H.navy, objectName: nm(4, 'fade', 'pregunta') });
-  s.addNotes('El problema en tres datos. Primero, el 8 % de los pedidos llega tarde. (Clic) Cuando eso pasa, la calificación cae de 4.30 a 2.57 estrellas, y más de la mitad deja una reseña negativa. (Clic) Y la recompra ya es baja: 3 de cada 100 clientes vuelven; un poco más si su primer pedido llegó a tiempo. Ojo: el efecto sobre la satisfacción es fuerte; sobre la recompra es pequeño, y lo vamos a decir así. (Clic) De ahí sale la pregunta del proyecto.');
+  s.addNotes('- 8.07 % de los pedidos llega tarde.\n- Calificación: 4.30 a tiempo vs 2.57 tarde; 53.9 % de reseñas negativas con retraso.\n- Recompra 3.12 % (4.34 % vs 2.97 % según el primer pedido): efecto pequeño, decirlo así.\n- Cerrar con la pregunta del proyecto.');
 }
 
 // 6. Objetivos e hipótesis
@@ -212,7 +212,7 @@ divisor('1. Negocio y datos', 'Parte 1 · Marcos Ferreto Estrada', 'Comprensión
     s.addText(h[0], { x: 7.5, y, w: 0.75, h: 0.75, align: 'center', valign: 'middle', bold: true, fontSize: 18, color: H.navy, isTextBox: true, margin: 0, objectName: nm(i + 1, 'fade', 'ht' + i) });
     txt(s, h[1], { x: 8.45, y: y + 0.05, w: 4.3, h: 0.9, fontSize: 16, objectName: nm(i + 1, 'fade', 'hd' + i) });
   });
-  s.addNotes('Definimos tres objetivos estratégicos para Olist, con su valor actual y una meta propuesta por nosotros: bajar las entregas tardías a menos de 6 %, subir la calificación a 4.30 y la recompra a 4 %. (Clics) Y planteamos cuatro hipótesis, que aquí escribimos como preguntas, para confirmar o rechazar con los datos. Al final Kendall presenta el resultado de cada una.');
+  s.addNotes('- Tres objetivos con su meta: < 6 % tardías, calificación 4.30, recompra 4 %.\n- Cuatro hipótesis; Kendall presenta el resultado al final.');
 }
 
 // 7. CRISP-DM
@@ -243,8 +243,8 @@ divisor('1. Negocio y datos', 'Parte 1 · Marcos Ferreto Estrada', 'Comprensión
     ['GitHub', 'donde compartimos todo el proyecto'],
   ];
   herr.forEach((h, i) => txt(s, [{ text: h[0], options: { bold: true, breakLine: true } }, { text: h[1], options: { color: H.suave, fontSize: 14 } }], { x: 7.9, y: 2.1 + i * 0.85, w: 4.8, h: 0.8, fontSize: 16, objectName: nm(2, 'fade', 'herr' + i) }));
-  ejemplo(s, 7.9, 5.6, 4.85, 1.2, 'CRISP-DM es como una receta: entender qué se quiere cocinar, conseguir y lavar los ingredientes, cocinar, probar y servir.', 1, 14);
-  s.addNotes('Seguimos CRISP-DM, el proceso estándar para proyectos de minería de datos. Tiene seis fases en ciclo, y cada parte de la exposición corresponde a una: negocio y datos, preparación, modelado, evaluación y despliegue en el dashboard. (Clic) Las herramientas: PostgreSQL para guardar los datos, KNIME para los flujos de trabajo, Power BI para el dashboard y GitHub para compartir todo el proyecto.');
+  ejemplo(s, 7.9, 5.6, 4.85, 1.2, 'Cada fase dejó un producto en el repositorio: la base de datos, los cuatro workflows y el dashboard.', 1, 14);
+  s.addNotes('- CRISP-DM: seis fases en ciclo; cada parte de la exposición corresponde a una.\n- Herramientas: PostgreSQL, KNIME, Power BI y GitHub.');
 }
 
 // 8. Modelo E-R y PostgreSQL
@@ -279,11 +279,11 @@ divisor('1. Negocio y datos', 'Parte 1 · Marcos Ferreto Estrada', 'Comprensión
     { text: 'Un script carga los 9 archivos en PostgreSQL.', options: { bullet: true, breakLine: true } },
     { text: 'Luego comparamos cuántas filas tiene cada tabla contra su archivo original.', options: { bullet: true } },
   ], { x: 9.2, y: 2.1, w: 3.6, h: 2.7, fontSize: 15, paraSpaceAfter: 8, objectName: nm(2, 'fade', 'vtx') });
-  ejemplo(s, 9.2, 3.25, 3.55, 1.55, 'como un expediente: cada pedido tiene su cliente, sus productos, su pago y su reseña, cada cosa en una tabla.', 1, 13);
+  ejemplo(s, 9.2, 3.25, 3.55, 1.55, 'El pedido (orders) es el centro: desde él se llega al cliente, los productos, el pago y la reseña.', 1, 13);
   s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 9.2, y: 5.0, w: 3.5, h: 1.3, rectRadius: 0.08, fill: { color: 'E3F1EF' }, line: { color: H.teal, width: 1.25 }, objectName: nm(3, 'fade', 'ok') });
-  txt(s, [{ text: '9 de 9', options: { fontSize: 32, bold: true, fontFace: 'Cambria', color: H.teal, breakLine: true } }, { text: 'tablas coinciden fila por fila', options: { fontSize: 14, color: H.texto } }], { x: 9.4, y: 5.1, w: 3.2, h: 1.1, objectName: nm(3, 'fade', 'okt') });
+  txt(s, [{ text: '9 de 9', options: { fontSize: 32, bold: true, fontFace: 'Calibri', color: H.teal, breakLine: true } }, { text: 'tablas coinciden fila por fila', options: { fontSize: 14, color: H.texto } }], { x: 9.4, y: 5.1, w: 3.2, h: 1.1, objectName: nm(3, 'fade', 'okt') });
   txt(s, 'En el centro, el pedido (orders). Las líneas muestran cómo se conectan las tablas.', { x: 0.6, y: 6.62, w: 8.3, h: 0.3, fontSize: 11, color: H.suave, objectName: nm(1, 'fade', 'ley') });
-  s.addNotes('Esta es mi parte de infraestructura. Los datos vienen en nueve tablas: en el centro está orders, el pedido, que se relaciona con el cliente, los ítems, los pagos y las reseñas; los ítems a su vez apuntan al producto y a la tienda. (Clic) Las líneas discontinuas son relaciones lógicas que no se pueden imponer como llave, como el código postal. (Clic) Monté PostgreSQL en Docker con un script que crea el esquema, carga todo y compara los conteos. (Clic) Las nueve tablas coinciden fila por fila con los CSV originales.');
+  s.addNotes('- 9 tablas; orders es la central.\n- Líneas discontinuas: relaciones lógicas (código postal, traducción de categorías).\n- Script de carga + comparación de conteos: 9 de 9 tablas coinciden.');
 }
 
 // 9. Workflow 01-ETL
@@ -305,18 +305,18 @@ divisor('1. Negocio y datos', 'Parte 1 · Marcos Ferreto Estrada', 'Comprensión
     nodo(s, x, y, d[0], d[1], d[2], 1, i);
   });
   txt(s, 'El flujo tiene 40 nodos; estos son los pasos principales', { x: 0.6, y: 1.45, w: 8, h: 0.35, fontSize: 13, color: H.suave, objectName: nm(0, 'fade', 'nota') });
-  ejemplo(s, 0.6, 4.05, 12.15, 0.75, 'como armar un rompecabezas: cada pieza del pedido estaba en un archivo distinto, y el flujo las junta en una sola fila por pedido.', 2, 15);
+  ejemplo(s, 0.6, 4.05, 12.15, 0.75, 'La información de cada pedido estaba repartida en varios archivos; el workflow deja una sola fila por pedido, lista para los modelos.', 2, 15);
   tarjeta(s, 0.6, 5.0, 3.9, 1.75, 3, 'r1');
   dato(s, 0.85, 5.15, 3.5, '96 144', 'pedidos listos para analizar', H.navy, 3, 1);
   tarjeta(s, 4.75, 5.0, 3.9, 1.75, 3, 'r2');
   dato(s, 5.0, 5.15, 3.5, '✓ Cuadra', 'el mismo número que da PostgreSQL', H.teal, 3, 2);
   tarjeta(s, 8.9, 5.0, 3.85, 1.75, 3, 'r3');
   dato(s, 9.15, 5.15, 3.4, '8.07 %', 'de esos pedidos llegó tarde', H.coral, 3, 3);
-  s.addNotes('Este es el workflow 01-ETL que construí en KNIME, con 40 nodos; aquí van los pasos principales. (Clic: los nodos se ejecutan) Leo los nueve CSV, resumo ítems, pagos y reseñas por pedido, uno todo con cuatro Joiner, filtro los pedidos entregados entre enero de 2017 y agosto de 2018, calculo en días el plazo prometido, la entrega y el retraso, y creo las variables es_tardio y mismo_estado. (Clic) El resultado son 96 144 pedidos, exactamente el mismo número que da la base de datos en PostgreSQL, con 8.07 % de entregas tardías. Esta tabla es la entrada de los otros tres workflows. Le paso la palabra a Moya.');
+  s.addNotes('- Workflow 01-ETL: 40 nodos; mostrar los pasos principales.\n- Agrupar ítems, pagos y reseñas por pedido; unir; filtrar entregados 2017–2018; calcular días y es_tardio.\n- Resultado: 96 144 pedidos, igual que la vista de control en PostgreSQL; 8.07 % tardíos.\n- Pasar la palabra a Moya.');
 }
 
 // ---------- PARTE 2: MOYA ----------
-divisor('2. Modelo 1', 'Parte 2 · David Moya Correas', 'Modelo 1: ¿qué tipos de pedidos hay?', 'Agrupamos los pedidos parecidos y vimos a cuál grupo le va peor', 'Gracias, Marcos. Mi parte es el primer modelo, que es no supervisado: buscamos grupos de pedidos con experiencias de compra y entrega parecidas.');
+divisor('2. Modelo 1', 'Parte 2 · David Moya Correas', 'Modelo 1: ¿qué tipos de pedidos hay?', 'Agrupamos los pedidos parecidos y vimos a cuál grupo le va peor', '- Modelo 1: segmentación de pedidos con k-means.');
 
 // 11. Planteamiento + workflow 02
 {
@@ -330,7 +330,7 @@ divisor('2. Modelo 1', 'Parte 2 · David Moya Correas', 'Modelo 1: ¿qué tipos 
     ['Precio'], ['Costo del envío'], ['Número de cuotas'], ['Días que tardó en llegar'], ['Días de retraso'], ['Si iba al mismo estado de la tienda'],
   ];
   s.addTable(filas, { x: 0.6, y: 2.2, w: 5.4, colW: [5.4], fontSize: 15, color: H.texto, border: { type: 'solid', pt: 0.75, color: H.linea }, rowH: 0.42, objectName: nm(0, 'fade', 'tabla') });
-  ejemplo(s, 0.6, 5.2, 5.4, 1.6, 'como ordenar la ropa sin que nadie le diga cómo: se junta lo que se parece. Las estrellas no se le muestran al modelo; las usamos después para ver a qué grupo le va peor.', 0, 14);
+  ejemplo(s, 0.6, 5.2, 5.4, 1.6, 'La calificación no entra al modelo. Se usa después para comprobar si algún grupo queda peor calificado (H4).', 0, 14);
   const nodos = [['CSV Reader', 'ordenes_etl.csv', 'F0A54A'], ['Math Formula', 'ajusta precio y envío', 'F4D35E'], ['Normalizer', 'pone todo en la misma escala', 'F4D35E'], ['k-Means', 'forma 4 grupos', '4FA36B'], ['GroupBy', 'describe cada grupo', 'F4D35E'], ['One-way ANOVA', 'compara las estrellas', '4FA36B']];
   nodos.forEach((d, i) => {
     const fila = Math.floor(i / 3), col = fila === 0 ? i % 3 : 2 - (i % 3);
@@ -348,7 +348,7 @@ divisor('2. Modelo 1', 'Parte 2 · David Moya Correas', 'Modelo 1: ¿qué tipos 
     s.addShape(pres.shapes.LINE, { x: x + 0.65, y: y2, w: 0.45, h: 0, flipH: true, line: { color: H.slate, width: 1.5, endArrowType: 'triangle' }, objectName: nm(1, 'fade', 'codo3') });
   }
   txt(s, 'Workflow 02-Clustering en KNIME (14 nodos)', { x: 6.75, y: 6.35, w: 6, h: 0.35, fontSize: 12, color: H.suave, objectName: nm(1, 'fade', 'nn') });
-  s.addNotes('La pregunta es qué tipos de pedidos hay. Es como ordenar la ropa sin que nadie le diga cómo: el algoritmo junta lo que se parece. Usamos seis variables de cada pedido: precio, flete, cuotas, días de entrega, días de retraso y si cliente y tienda están en el mismo estado. Precio y flete van con logaritmo porque tienen colas muy largas, y todo se estandariza para que ninguna variable pese más que otra en la distancia. Importante: la calificación no entra al modelo, así la prueba de H4 no es circular. (Clic) Así quedó el workflow 02 en KNIME: lectura, logaritmos, normalización, k-means con k igual a 4, el perfil de cada grupo y la prueba de la calificación.');
+  s.addNotes('- k-means agrupa pedidos parecidos sin etiquetas previas.\n- Seis variables; precio y flete con logaritmo; todo estandarizado.\n- La calificación queda fuera para no hacer circular la prueba de H4.\n- Recorrer el workflow 02.');
 }
 
 // 12. Elección de k
@@ -363,8 +363,8 @@ divisor('2. Modelo 1', 'Parte 2 · David Moya Correas', 'Modelo 1: ¿qué tipos 
     x: 6.9, y: 1.5, w: 5.9, h: 4.0, chartColors: [H.slate], lineSize: 2.5, lineDataSymbol: 'circle', lineDataSymbolSize: 9, valAxisLabelFormatCode: '#,##0', valAxisMinVal: 200000,
     showTitle: true, title: 'Qué tan compactos quedan (el «codo» marca dónde deja de mejorar)', showLegend: false, catAxisTitle: 'número de grupos', showCatAxisTitle: true, catAxisTitleFontSize: 12, catAxisTitleColor: H.suave, objectName: nm(1, 'wipeL', 'codo'),
   }));
-  ejemplo(s, 0.6, 5.65, 12.15, 1.15, 'es como decidir en cuántas cajas ordenar la ropa: con 2 queda todo revuelto y con 8 hay cajas casi iguales. Con 4 cada caja tiene sentido: es la mejor separación (0.305) y ahí está el codo. Al repetirlo, salen los mismos grupos.', 2, 15);
-  s.addNotes('Para elegir cuántos grupos probamos k de 2 a 8. A la izquierda, la silueta mide qué tan separados quedan los grupos: el máximo está en 4. (Clic) A la derecha, la inercia baja siempre, pero a partir de 4 baja mucho más despacio: ese es el codo. (Clic) Además repetimos con cinco semillas y salió la misma agrupación. Una silueta de 0.3 es moderada: los grupos existen pero sus bordes son difusos, así que los usamos para describir, no como categorías rígidas.');
+  ejemplo(s, 0.6, 5.65, 12.15, 1.15, 'Con 4 grupos la separación es máxima (silueta 0.305) y coincide con el codo. Al repetirlo con 5 semillas distintas se obtienen los mismos grupos.', 2, 15);
+  s.addNotes('- Probamos k de 2 a 8.\n- Silueta máxima en k = 4 (0.305; 0.297 en KNIME); el codo coincide.\n- Estable con 5 semillas (ARI ≥ 0.999).\n- Silueta moderada: grupos útiles para describir, no categorías rígidas.');
 }
 
 // 13. Dispersión de segmentos (muestra real)
@@ -383,9 +383,9 @@ divisor('2. Modelo 1', 'Parte 2 · David Moya Correas', 'Modelo 1: ¿qué tipos 
   const r = 0.075;
   pts.forEach(p => s.addShape(pres.shapes.OVAL, { x: xs(p[0]) - r, y: ys(p[1]) - r, w: 2 * r, h: 2 * r, fill: { color: 'C3C9D4' }, line: { color: 'C3C9D4', width: 0.25 }, objectName: 'punto_gris' }));
   const grupos = [
-    ['Estándar entre estados', H.slate, '43.2 % · 0.7 % tardías · 4.31'],
+    ['Estándar entre estados', '9AA5B8', '43.2 % · 0.7 % tardías · 4.31'],
     ['Locales rápidas', H.teal, '31.7 % · 4.5 % tardías · 4.32'],
-    ['Compras grandes a plazos', H.amber, '17.4 % · 2.6 % tardías · 4.16'],
+    ['Compras grandes a plazos', H.navy, '17.4 % · 2.6 % tardías · 4.16'],
     ['Entregas problemáticas', H.coral, '7.7 % · 77.4 % tardías · 2.59'],
   ];
   grupos.forEach((g, i) => {
@@ -396,7 +396,7 @@ divisor('2. Modelo 1', 'Parte 2 · David Moya Correas', 'Modelo 1: ¿qué tipos 
     txt(s, [{ text: g[0], options: { bold: true, fontSize: 16, color: H.texto, breakLine: true } }, { text: g[2], options: { fontSize: 13, color: H.suave } }], { x: 9.45, y, w: 3.4, h: 0.9, objectName: nm(click, 'fade', 'leyt') });
   });
   txt(s, '260 pedidos reales al azar. Debajo de cada grupo: tamaño · % que llega tarde · estrellas.', { x: 9.0, y: 6.15, w: 3.85, h: 0.75, fontSize: 11, color: H.suave, objectName: nm(0, 'fade', 'nota') });
-  s.addNotes('Para verlo, tomamos 260 pedidos reales al azar y los ubicamos por días de entrega y precio. Al principio son solo puntos grises: el algoritmo no sabe nada de grupos. (Clic) El grupo más grande: compras baratas entre estados distintos, que casi nunca llegan tarde. (Clic) Las compras locales, cliente y tienda en el mismo estado: las más rápidas. (Clic) Las compras grandes pagadas a plazos, arriba porque son más caras. (Clic) Y las entregas problemáticas, a la derecha: 7.7 % de los pedidos, 77 % llega tarde y la calificación cae a 2.59. Ojo: el modelo usa seis variables y aquí solo se ven dos, por eso algunos grupos se traslapan.');
+  s.addNotes('- Muestra de 260 pedidos reales; ejes: días de entrega y precio.\n- Mostrar los grupos uno por uno con cada clic.\n- Aclarar: el modelo usa 6 variables y aquí se ven 2.');
 }
 
 // 14. Perfil y H4
@@ -414,12 +414,12 @@ divisor('2. Modelo 1', 'Parte 2 · David Moya Correas', 'Modelo 1: ¿qué tipos 
   tarjeta(s, 0.6, 4.4, 5.85, 2.3, 1, 'h4');
   txt(s, [{ text: 'H4: sí, hay grupos peor calificados', options: { bold: true, fontSize: 20, color: H.teal, breakLine: true } }, { text: 'La diferencia de estrellas entre grupos es real, no casualidad (prueba de Kruskal-Wallis, p < 0.001).', options: { fontSize: 16 } }], { x: 0.85, y: 4.6, w: 5.4, h: 1.9, objectName: nm(1, 'fade', 'h4t') });
   tarjeta(s, 6.85, 4.4, 5.85, 2.3, 2, 'sens');
-  txt(s, [{ text: 'Pero lo que pesa es la entrega', options: { bold: true, fontSize: 20, color: 'A97A12', breakLine: true } }, { text: 'Si agrupamos solo por lo que se compró, las estrellas casi no cambian (de 4.02 a 4.29). Lo que baja la calificación es el retraso.', options: { fontSize: 16 } }], { x: 7.1, y: 4.6, w: 5.4, h: 1.95, objectName: nm(2, 'fade', 'senst') });
-  s.addNotes('Esta tabla es el perfil de cada segmento con los resultados de KNIME. La fila en rojo es el grupo de entregas problemáticas: 35 días de entrega, 77 % tardíos y más de la mitad con reseña negativa. (Clic) La prueba de Kruskal-Wallis confirma que la calificación difiere entre grupos, así que H4 se cumple. (Clic) Pero con una advertencia honesta: ese grupo se forma justamente con los días de retraso. Por eso repetimos el modelo solo con lo que se sabe al comprar, y ahí la calificación casi no cambia. Conclusión: lo que mueve la satisfacción es la logística, no el tipo de compra. Le paso a Sebastián.');
+  txt(s, [{ text: 'Pero lo que pesa es la entrega', options: { bold: true, fontSize: 20, color: 'C25E1C', breakLine: true } }, { text: 'Si agrupamos solo por lo que se compró, las estrellas casi no cambian (de 4.02 a 4.29). Lo que baja la calificación es el retraso.', options: { fontSize: 16 } }], { x: 7.1, y: 4.6, w: 5.4, h: 1.95, objectName: nm(2, 'fade', 'senst') });
+  s.addNotes('- Fila naranja: entregas problemáticas (7.7 %): 35 días, 77 % tardías, 2.59 estrellas.\n- H4 se confirma (Kruskal-Wallis H = 7 767, p < 0.001).\n- Advertencia: ese grupo se forma con el retraso; con variables de compra la calificación casi no cambia (4.02–4.29).\n- Pasar la palabra a Sebastián.');
 }
 
 // ---------- PARTE 3: SEBASTIÁN ----------
-divisor('3. Modelo 2', 'Parte 3 · Sebastián Sánchez Vega', 'Modelo 2: ¿se puede anticipar el retraso?', 'Un modelo que, al momento de la compra, estima si el pedido llegará tarde', 'Gracias, Moya. Mi parte es el segundo modelo, que es supervisado: queremos predecir si un pedido va a llegar tarde en el momento en que se compra.');
+divisor('3. Modelo 2', 'Parte 3 · Sebastián Sánchez Vega', 'Modelo 2: ¿se puede anticipar el retraso?', 'Un modelo que, al momento de la compra, estima si el pedido llegará tarde', '- Modelo 2: predicción del retraso al comprar.');
 
 // 16. Planteamiento + partición + workflow
 {
@@ -441,8 +441,8 @@ divisor('3. Modelo 2', 'Parte 3 · Sebastián Sánchez Vega', 'Modelo 2: ¿se pu
     if (i > 0) flecha(s, x - 1.45, yy + 0.31, x - 0.03, yy + 0.31, 3);
     nodo(s, x, yy, d[0], d[1], d[2], 3, i);
   });
-  ejemplo(s, 0.6, 6.0, 12.15, 0.8, 'como el pronóstico del tiempo: no sabe con certeza si va a llover, pero da una probabilidad para decidir si llevar sombrilla.', 4, 15);
-  s.addNotes('La idea es avisar en el momento de la compra, cuando todavía se puede hacer algo. Por eso el modelo solo usa 13 variables conocidas al comprar; usar algo posterior sería hacer trampa. (Clic) Para evaluarlo como en la vida real partimos los datos en el tiempo: entrenamos con compras hasta marzo de 2018… (Clic) …y probamos con abril a agosto. Ojo: en la prueba hay menos tardíos, 5.85 contra 9.19 %. (Clic) Este es el workflow 03: partición, balanceo de clases solo en entrenamiento, los dos algoritmos, sus predicciones y la evaluación. (Clic) Es como el pronóstico del tiempo: no dice si va a llover, da una probabilidad.');
+  ejemplo(s, 0.6, 6.0, 12.15, 0.8, 'El modelo no responde sí o no: da una probabilidad de retraso para cada pedido, y con ella se ordenan los pedidos por riesgo.', 4, 15);
+  s.addNotes('- Objetivo: estimar el riesgo de retraso al momento de la compra.\n- Solo 13 variables conocidas al comprar (evitar fuga de información).\n- Partición temporal: entrenamiento hasta marzo de 2018, prueba abril–agosto (5.85 % vs 9.19 % tardíos).\n- Recorrer el workflow 03.');
 }
 
 // 17. Resultados AUC
@@ -461,8 +461,8 @@ divisor('3. Modelo 2', 'Parte 3 · Sebastián Sánchez Vega', 'Modelo 2: ¿se pu
     { text: ' ', options: { breakLine: true, fontSize: 10 } },
     { text: 'Comparamos 2 modelos contra 2 reglas de sentido común.', options: { color: H.suave } },
   ], { x: 8.2, y: 1.8, w: 4.6, h: 3.0, fontSize: 17, objectName: nm(1, 'fade', 'concl') });
-  ejemplo(s, 8.2, 5.0, 4.6, 1.75, 'un puntaje de 0.5 es lo mismo que tirar una moneda. Las reglas de sentido común no le ganan a la moneda; el modelo sí.', 2, 15);
-  s.addNotes('Comparamos los dos algoritmos con dos reglas simples, usando el AUC, que va de 0.5, como tirar una moneda, a 1, perfecto. Decir siempre "a tiempo" da 0.5. La regla de "si va a otro estado, llega tarde" queda incluso debajo, 0.47; ya explico por qué. El Random Forest llega a 0.59 y la regresión logística a 0.72. (Clic) La regresión logística es la única que pasa el criterio de 0.60 y supera las reglas, así que H3 se confirma.');
+  ejemplo(s, 8.2, 5.0, 4.6, 1.75, 'Las dos reglas simples no superan el 0.5 del azar. La regresión logística sí, y pasa la meta de 0.60.', 2, 15);
+  s.addNotes('- AUC: 0.5 equivale al azar.\n- Reglas simples: 0.50 y 0.47. Random Forest: 0.59. Regresión logística: 0.72.\n- H3 se confirma.\n- Un modelo lineal puede ganar cuando la señal es débil.');
 }
 
 // 18. Uso: niveles de riesgo
@@ -470,13 +470,13 @@ divisor('3. Modelo 2', 'Parte 3 · Sebastián Sánchez Vega', 'Modelo 2: ¿se pu
   const s = nuevo('S', 'Para qué sirve: saber qué pedidos vigilar primero', '3. Modelo 2');
   dato(s, 0.6, 1.6, 5, '79 de 100', 'pedidos que llegaron tarde, el modelo los había marcado', H.teal, 0, 1);
   dato(s, 0.6, 3.25, 5, '1 de 10', 'alertas termina en retraso: avisa de más, por eso no sirve para decidir solo', H.coral, 1, 2);
-  ejemplo(s, 0.6, 4.9, 5.4, 1.85, 'como el detector de metales del aeropuerto: suena más de la cuenta, pero casi nada se le escapa. Sirve para decidir qué pedidos revisar primero.', 2, 15);
+  ejemplo(s, 0.6, 4.9, 5.4, 1.85, 'Detecta la mayoría de los retrasos a cambio de muchas falsas alarmas: sirve para decidir qué pedidos revisar primero, no para decidir solo.', 2, 15);
   s.addChart(pres.charts.BAR, [{ name: '% tardías', labels: ['Riesgo alto\n3 210 pedidos', 'Riesgo medio\n4 813', 'Riesgo bajo\n24 069'], values: [13.3, 11.3, 3.8] }], Object.assign({}, axis, {
     x: 6.4, y: 1.5, w: 6.4, h: 4.6, barDir: 'col', chartColors: [H.coral], showValue: true, dataLabelPosition: 'outEnd', dataLabelFormatCode: '0.0"%"', dataLabelFontSize: 14, dataLabelFontBold: true,
     valAxisMinVal: 0, valAxisMaxVal: 16, valAxisLabelFormatCode: '0"%"', showTitle: true, title: '% que llega tarde según el riesgo que dio el modelo', showLegend: false, barGapWidthPct: 60, objectName: nm(2, 'wipeU', 'riesgo'),
   }));
   txt(s, 'El grupo de riesgo alto llega tarde 3.5 veces más que el de riesgo bajo y concentra el 22.8 % de todos los retrasos.', { x: 6.4, y: 6.2, w: 6.4, h: 0.6, fontSize: 13, color: H.suave, objectName: nm(2, 'fade', 'nota') });
-  s.addNotes('¿Cómo se usa? El modelo detecta 79 de cada 100 pedidos que van a llegar tarde. (Clic) Pero genera muchas falsas alarmas: de cada 10 alertas, solo una termina en retraso. Por eso no lo proponemos para decisiones automáticas. (Clic) Lo proponemos para priorizar: si dividimos los pedidos en tres niveles de riesgo, el nivel alto llega tarde 3.5 veces más que el bajo y concentra casi una cuarta parte de los retrasos.');
+  s.addNotes('- Exhaustividad 0.787: detecta 79 de cada 100 tardíos.\n- Precisión 0.100: 1 de cada 10 alertas es un retraso real.\n- Uso: priorizar. Riesgo alto: 13.3 % tardías vs 3.8 % en riesgo bajo; concentra el 22.8 % de los retrasos.');
 }
 
 // 19. Geografía
@@ -495,12 +495,12 @@ divisor('3. Modelo 2', 'Parte 3 · Sebastián Sánchez Vega', 'Modelo 2: ¿se pu
     { text: 'Por eso la regla «otro estado = tarde» falló en el examen.', options: { bullet: true } },
   ], { x: 8.2, y: 1.6, w: 4.6, h: 3.3, fontSize: 16, paraSpaceAfter: 10, objectName: nm(1, 'fade', 'txt') });
   tarjeta(s, 8.2, 5.05, 4.6, 1.6, 2, 'lec');
-  txt(s, [{ text: 'Lección', options: { bold: true, color: H.navy, breakLine: true } }, { text: 'Como el GPS: si una calle con presa se despeja y el mapa no se actualiza, se equivoca. El modelo hay que reentrenarlo.', options: {} }], { x: 8.4, y: 5.2, w: 4.25, h: 1.35, fontSize: 15, objectName: nm(2, 'fade', 'lect') });
-  s.addNotes('Y este fue un hallazgo inesperado. En el periodo de entrenamiento, los pedidos entre estados distintos llegaban tarde casi el doble: 11 contra 5.7 %. (Clic) Pero de abril a agosto de 2018 se invierte. Por eso la regla geográfica queda por debajo del azar. (Clic) La lección para Olist es que un modelo así hay que monitorearlo y reentrenarlo, y para H2: se confirma en el periodo completo, pero no es estable en el tiempo. Le paso a Kendall.');
+  txt(s, [{ text: 'Lección', options: { bold: true, color: H.navy, breakLine: true } }, { text: 'Una relación que se cumplía en 2017 dejó de cumplirse en 2018: el modelo hay que revisarlo y reentrenarlo periódicamente.', options: {} }], { x: 8.4, y: 5.2, w: 4.25, h: 1.35, fontSize: 15, objectName: nm(2, 'fade', 'lect') });
+  s.addNotes('- Entrenamiento: entre estados 11.0 % vs mismo estado 5.7 %.\n- Prueba: se invierte (5.3 % vs 6.6 %); por eso la regla geográfica da AUC 0.47.\n- H2: se confirma en el periodo completo, pero no es estable.\n- Pasar la palabra a Kendall.');
 }
 
 // ---------- PARTE 4: KENDALL ----------
-divisor('4. KPI y conclusiones', 'Parte 4 · Kendall Alvarado Artavia', 'Indicadores, dashboard y conclusiones', 'Cómo medir la mejora, qué comprobamos y qué recomendamos', 'Gracias, Sebastián. Mi parte es convertir todo esto en indicadores que Olist pueda seguir y cerrar con las conclusiones.');
+divisor('4. KPI y conclusiones', 'Parte 4 · Kendall Alvarado Artavia', 'Indicadores, dashboard y conclusiones', 'Cómo medir la mejora, qué comprobamos y qué recomendamos', '- Indicadores, dashboard y conclusiones.');
 
 // 21. KPI
 {
@@ -516,11 +516,11 @@ divisor('4. KPI y conclusiones', 'Parte 4 · Kendall Alvarado Artavia', 'Indicad
     txt(s, g[0], { x: x + 0.25, y: 1.7, w: 3.4, h: 0.5, fontSize: 18, bold: true, color: H.navy, objectName: nm(gi, 'fade', 'kt' + gi) });
     g[1].forEach((k, i) => {
       const y = 2.35 + i * 0.86;
-      txt(s, [{ text: k[1], options: { fontSize: 20, bold: true, fontFace: 'Cambria', color: k[2] ? H.coral : H.navy, breakLine: true } }, { text: k[0] + (k[2] ? ' (' + k[2] + ')' : ''), options: { fontSize: 12, color: H.texto } }], { x: x + 0.25, y, w: 3.45, h: 0.8, objectName: nm(gi, 'fade', 'k' + gi + i) });
+      txt(s, [{ text: k[1], options: { fontSize: 20, bold: true, fontFace: 'Calibri', color: k[2] ? H.coral : H.navy, breakLine: true } }, { text: k[0] + (k[2] ? ' (' + k[2] + ')' : ''), options: { fontSize: 12, color: H.texto } }], { x: x + 0.25, y, w: 3.45, h: 0.8, objectName: nm(gi, 'fade', 'k' + gi + i) });
     });
   });
-  txt(s, 'Como el marcador de un partido: en rojo, los indicadores con meta, y hoy ninguno la alcanza.', { x: 0.6, y: 6.66, w: 8, h: 0.3, fontSize: 12, color: H.suave, objectName: nm(3, 'fade', 'nota') });
-  s.addNotes('Estos son los 11 indicadores, agrupados en tres preguntas: ¿llegan a tiempo?, ¿están contentos?, ¿vuelven a comprar? Los calculé en el workflow 04 y los verificamos contra consultas SQL. (Clics: aparece cada grupo) Los que tienen meta hoy no la cumplen: 8 % de tardíos frente a menos de 6, 4.16 de calificación frente a 4.30, 12.7 % de reseñas negativas y 3.12 % de recompra. Los demás son de referencia y ayudan a explicar: por ejemplo, un envío entre estados tarda casi el doble, y un pedido tarde pierde 1.72 estrellas.');
+  txt(s, 'En naranja, los indicadores que tienen meta: hoy ninguno la alcanza.', { x: 0.6, y: 6.66, w: 8, h: 0.3, fontSize: 12, color: H.suave, objectName: nm(3, 'fade', 'nota') });
+  s.addNotes('- 11 indicadores en tres preguntas: ¿llegan a tiempo?, ¿están contentos?, ¿vuelven?\n- Calculados en el workflow 04 y verificados con SQL.\n- Los cuatro que tienen meta no la cumplen hoy.');
 }
 
 // 22. Dashboard
@@ -542,7 +542,7 @@ divisor('4. KPI y conclusiones', 'Parte 4 · Kendall Alvarado Artavia', 'Indicad
     showTitle: true, title: '% tardías por estado del cliente', showLegend: false, barGapWidthPct: 50, objectName: nm(2, 'wipeL', 'estados'),
   }));
   txt(s, 'Noviembre de 2017, mes del Black Friday, tuvo el récord de pedidos y un pico de retrasos (14.3 %); en marzo de 2018 llegaron a 21.4 %. Esos meses bajan las estrellas.', { x: 8.3, y: 5.9, w: 4.5, h: 1.0, fontSize: 13, color: H.suave, objectName: nm(2, 'fade', 'nota') });
-  s.addNotes('El dashboard de Power BI tiene cinco páginas: un resumen con filtro por estado, una por cada objetivo y una con los segmentos y el riesgo del Modelo 2; sus medidas se verificaron con consultas DAX. Aquí lo principal: los retrasos por mes tienen picos en noviembre de 2017 y en febrero y marzo de 2018… (Clic) …y justo en esos meses cae la calificación; las dos curvas son como un espejo. (Clic) Por estado, Alagoas y Maranhão tienen entre 20 y 24 % de tardíos, contra 6 % en São Paulo.');
+  s.addNotes('- Dashboard de Power BI: cinco páginas; medidas verificadas con DAX.\n- Retrasos por mes con picos en noviembre de 2017 y febrero–marzo de 2018; la calificación cae en esos meses.\n- Por estado: Alagoas 23.8 %, Maranhão 19.6 %, São Paulo 5.9 %.');
 }
 
 // 23. Hipótesis
@@ -560,10 +560,10 @@ divisor('4. KPI y conclusiones', 'Parte 4 · Kendall Alvarado Artavia', 'Indicad
     s.addShape(pres.shapes.OVAL, { x: 0.85, y: y + 0.17, w: 0.76, h: 0.76, fill: { color: h[4] }, line: { color: h[4] }, objectName: nm(i, 'fade', 'c' + i) });
     s.addText(h[0], { x: 0.85, y: y + 0.17, w: 0.76, h: 0.76, align: 'center', valign: 'middle', bold: true, fontSize: 18, color: H.blanco, isTextBox: true, margin: 0, objectName: nm(i, 'fade', 'ct' + i) });
     txt(s, h[1], { x: 1.9, y: y + 0.12, w: 4.6, h: 0.85, fontSize: 16, bold: true, valign: 'middle', objectName: nm(i, 'fade', 'd' + i) });
-    txt(s, h[2], { x: 6.6, y: y + 0.12, w: 2.3, h: 0.85, fontSize: 16, bold: true, color: h[4] === H.teal ? H.teal : 'A97A12', valign: 'middle', objectName: nm(i, 'fade', 'r' + i) });
+    txt(s, h[2], { x: 6.6, y: y + 0.12, w: 2.3, h: 0.85, fontSize: 16, bold: true, color: h[4] === H.teal ? H.teal : 'C25E1C', valign: 'middle', objectName: nm(i, 'fade', 'r' + i) });
     txt(s, h[3], { x: 9.0, y: y + 0.12, w: 3.55, h: 0.85, fontSize: 13, color: H.suave, valign: 'middle', objectName: nm(i, 'fade', 'e' + i) });
   });
-  s.addNotes('Volvemos a las cuatro hipótesis. H1 se confirma con un efecto grande. (Clic) H2 se confirma para el periodo completo, pero vimos que la relación cambia en 2018. (Clic) H3 se confirma: la regresión logística supera el criterio y las reglas simples. (Clic) Y H4 se confirma, con la advertencia de que la diferencia viene de la logística.');
+  s.addNotes('- H1 sí (efecto grande).\n- H2 sí, pero cambia en 2018.\n- H3 sí (AUC 0.72).\n- H4 sí, con la advertencia de la logística.');
 }
 
 // 24. Conclusiones y recomendaciones
@@ -578,7 +578,7 @@ divisor('4. KPI y conclusiones', 'Parte 4 · Kendall Alvarado Artavia', 'Indicad
   ], { x: 0.6, y: 2.05, w: 5.6, h: 4.3, fontSize: 16, paraSpaceAfter: 12, objectName: nm(0, 'fade', 'c') });
   const rec = [
     ['Priorizar', 'Seguir primero los pedidos de riesgo alto del Modelo 2.'],
-    ['Avisar', 'Escribirle al cliente si el pedido viene atrasado, como hacen las apps de delivery.'],
+    ['Avisar', 'Avisar al cliente cuando el pedido viene atrasado, antes de que reclame.'],
     ['Corregir rutas', 'Revisar la logística en Alagoas y Maranhão y los plazos entre estados.'],
     ['Monitorear', 'Revisar los KPI por región cada mes y reentrenar el modelo.'],
   ];
@@ -588,7 +588,7 @@ divisor('4. KPI y conclusiones', 'Parte 4 · Kendall Alvarado Artavia', 'Indicad
     txt(s, [{ text: r[0], options: { bold: true, fontSize: 18, color: H.teal, breakLine: true } }, { text: r[1], options: { fontSize: 15 } }], { x: x + 0.2, y: y + 0.2, w: 2.45, h: 1.85, objectName: nm(i + 1, 'fade', 'rect' + i) });
   });
   txt(s, 'Meta propuesta: bajar las entregas tardías de 8.07 % a menos de 6 %.', { x: 6.75, y: 6.45, w: 6, h: 0.4, fontSize: 15, bold: true, color: H.navy, objectName: nm(5, 'fade', 'meta') });
-  s.addNotes('En conclusión: el retraso es el principal enemigo de la satisfacción en Olist; se puede anticipar lo suficiente para priorizar; la relación con la geografía cambia en el tiempo; y la recompra depende de más cosas que la entrega. (Clics) Por eso recomendamos cuatro acciones: priorizar con el modelo, avisar al cliente antes, corregir las rutas en los estados críticos y monitorear cada mes. La meta: bajar de 8 a menos de 6 % de entregas tardías.');
+  s.addNotes('- El retraso es lo que más baja la calificación.\n- Se puede anticipar lo suficiente para priorizar.\n- La recompra depende de más factores.\n- Recomendaciones: priorizar, avisar, corregir rutas, monitorear. Meta: < 6 % tardías.');
 }
 
 // 25. Referencias
@@ -606,17 +606,17 @@ divisor('4. KPI y conclusiones', 'Parte 4 · Kendall Alvarado Artavia', 'Indicad
     'Rousseeuw, P. J. (1987). Silhouettes: A graphical aid to the interpretation and validation of cluster analysis. J. Comput. Appl. Math., 20, 53–65.',
   ];
   txt(s, refs.map((r, i) => ({ text: r, options: { breakLine: i < refs.length - 1, indentLevel: 0 } })), { x: 0.6, y: 1.5, w: 12.1, h: 5.3, fontSize: 16, paraSpaceAfter: 9, color: H.texto, objectName: nm(0, 'fade', 'refs') });
-  s.addNotes('Estas son las referencias principales; la lista completa en formato APA está en el documento.');
+  s.addNotes('- Referencias principales; la lista completa en APA está en el documento.');
 }
 
 // 26. Preguntas
 {
   const s = pres.addSlide({ masterName: 'PORTADA', sectionTitle: '4. KPI y conclusiones' });
-  s.addText('Gracias', { x: 0.9, y: 2.3, w: 11.5, h: 1.2, fontSize: 54, bold: true, color: H.blanco, fontFace: 'Cambria', isTextBox: true, margin: 0, objectName: nm(0, 'fade', 'g') });
+  s.addText('Gracias', { x: 0.9, y: 2.3, w: 11.5, h: 1.2, fontSize: 54, bold: true, color: H.blanco, fontFace: 'Calibri', isTextBox: true, margin: 0, objectName: nm(0, 'fade', 'g') });
   txt(s, '¿Preguntas?', { x: 0.9, y: 3.5, w: 11.5, h: 0.8, fontSize: 30, color: 'E3E8F2', objectName: nm(0, 'fade', 'p') });
   s.addShape(pres.shapes.LINE, { x: 0.9, y: 4.6, w: 2.2, h: 0, line: { color: H.amber, width: 2.5 }, objectName: nm(0, 'wipeL', 'regla') });
   txt(s, 'Repositorio del proyecto: github.com/FerretoDev/mo0005-ecommerce-ml', { x: 0.9, y: 4.9, w: 11.5, h: 0.5, fontSize: 16, color: 'C9D1E0', objectName: nm(0, 'fade', 'repo') });
-  s.addNotes('Muchas gracias. Con gusto respondemos preguntas: Marcos sobre los datos y PostgreSQL, Moya sobre la segmentación, Sebastián sobre la predicción y Kendall sobre los indicadores y el dashboard.');
+  s.addNotes('- Abrir preguntas. Cada uno responde sobre su parte.');
 }
 
 const salida = path.join(__dirname, '..', 'presentacion.pptx');
