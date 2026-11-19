@@ -1,4 +1,4 @@
-\documentclass[a4paper,stu,12pt,donotrepeattitle]{apa7}
+\documentclass[a4paper,stu,12pt,donotrepeattitle,floatsintext]{apa7}
 \usepackage{fontspec}
 \usepackage{polyglossia}
 \setdefaultlanguage{spanish}
@@ -37,8 +37,8 @@
 \title{Entregas tardías, satisfacción y fidelización de clientes en Olist: modelo de aprendizaje automático e indicadores analíticos}
 \shorttitle{Entregas tardías y satisfacción en Olist}
 \author{Marcos Ferreto Estrada -- C5F092; Kendall Alvarado Artavia -- C5C322; David Moya Correas -- C4H773; Sebastián Sánchez Vega -- C4J823}
-\affiliation{Milla Labs, laboratorio interno de analítica de Olist\\ Universidad de Costa Rica, Sede de Occidente, Recinto de Tacares\\ Entregable 1 — Documental (10 \% de la nota final)\\ Empresa de estudio: Olist (Brasil). Repositorio: mo0005-ecommerce-ml}
-\course{MO-0005 Análisis de Algoritmos, Grupo 01, II Ciclo 2026}
+\affiliation{Equipo Milla Labs\\ Universidad de Costa Rica, Sede de Occidente, Recinto de Tacares}
+\course{MO-0005 Análisis de Algoritmos, Grupo 01, II Ciclo 2026. Entregable 1 — Documental (10 \% de la nota final)}
 \professor{Prof. Manfred Mejías Acevedo}
 \duedate{24 de noviembre de 2026}
 \begin{document}
@@ -89,6 +89,8 @@ OE2 & Elevar la satisfacción del cliente. Mejorar la experiencia de compra, med
 OE3 & Fortalecer la fidelización. Favorecer que los clientes que compran por primera vez regresen a comprar en la plataforma. & Tasa de nueva compra y recompra según la experiencia del primer pedido. \\ \hline
 \end{longtable}
 }
+\textbf{Metas propuestas.} Como Olist no publica metas, el equipo propone las siguientes para el año siguiente al periodo analizado, a partir de los valores actuales de los KPI (sección 4.2): para OE1, bajar las entregas tardías del 8.07~\% a menos del 6~\%, el nivel de los estados con mejor desempeño; para OE2, subir la calificación promedio de 4.16 a 4.30 o más, el nivel actual de los pedidos puntuales, y bajar las reseñas negativas del 12.73~\% a menos del 10~\%; y para OE3, subir la recompra del 3.12~\% al 4~\%, cercana a la que ya logran los clientes con un primer pedido puntual (4.34~\%).
+
 \subsection{2.3 Problema y necesidad del negocio}
 \subsubsection{2.3.1 Descripción del problema}
 El problema central es que una parte de los pedidos llega después de la fecha estimada de entrega, que esas entregas tardías se asocian con una caída marcada en la satisfacción de los clientes y que se concentran en regiones determinadas del país, en un contexto donde pocos clientes regresan a comprar. Se considera entrega tardía aquella cuya fecha de entrega al cliente es posterior a la fecha estimada.
@@ -97,9 +99,9 @@ La exploración se hizo en PostgreSQL sobre los pedidos entregados con fecha de 
 
 \begin{itemize}
 \item \textbf{Entregas.} El 8.07~\% de los pedidos llegó tarde. Cuando el vendedor y el cliente están en el mismo estado, la entrega tardó en promedio 7.9 días; cuando están en estados distintos, 15.1 días.
-\item \textbf{Geografía.} El porcentaje de entregas tardías varía mucho según el estado del cliente: los más altos son Alagoas (23.8~\%), Maranhão (19.6~\%), Piauí (16.0~\%) y Sergipe (15.4~\%), y los más bajos São Paulo (5.9~\%), Minas Gerais (5.6~\%) y Paraná (5.0~\%).
+\item \textbf{Geografía.} El porcentaje de entregas tardías varía mucho según el estado del cliente: los más altos son Alagoas (23.8~\%), Maranhão (19.6~\%), Piauí (16.0~\%) y Sergipe (15.4~\%), y, entre los estados con más pedidos, los más bajos son São Paulo (5.9~\%), Minas Gerais (5.6~\%) y Paraná (5.0~\%). Algunos estados con muy pocos pedidos tienen porcentajes aún menores, como Rondônia (2.9~\% de 243 pedidos).
 \item \textbf{Satisfacción.} La calificación promedio general es de 4.16: 4.30 en los pedidos puntuales y 2.57 en los que llegaron tarde. Recibió una reseña de 1 o 2 estrellas el 9.2~\% de los pedidos puntuales, frente al 53.9~\% de los tardíos.
-\item \textbf{Fidelización.} Solo el 3.12~\% de los clientes realizó más de un pedido. Volvió a comprar el 4.34~\% de quienes recibieron a tiempo su primer pedido, frente al 2.97~\% de quienes lo recibieron tarde.
+\item \textbf{Fidelización.} Solo el 3.12~\% de los clientes realizó más de un pedido. Entre los clientes cuyo primer pedido fue en 2017, volvió a comprar el 4.34~\% de quienes lo recibieron a tiempo, frente al 2.97~\% de quienes lo recibieron tarde.
 \end{itemize}
 Estos resultados evidencian asociaciones y no demuestran por sí mismos que el retraso cause la insatisfacción o la falta de recompra. Tampoco se dispone de información sobre las posibles causas de los retrasos, como el transporte o la ruta utilizada.
 
@@ -117,7 +119,7 @@ De esta hipótesis central se derivan las siguientes hipótesis específicas:
 \begin{itemize}
 \item \textbf{H1.} Los pedidos entregados después de la fecha estimada presentan calificaciones menores que los entregados a tiempo.
 \item \textbf{H2.} La proporción de entregas tardías varía según la región del cliente y según si el vendedor y el cliente se encuentran en el mismo estado.
-\item \textbf{H3.} Un modelo de clasificación entrenado con información disponible al momento de la compra identifica los pedidos con riesgo de retraso con un desempeño superior al de una línea base simple.
+\item \textbf{H3.} Un modelo de clasificación entrenado con información disponible al momento de la compra identifica los pedidos con riesgo de retraso con un desempeño superior al de una línea base simple. Se considera que la hipótesis se cumple si el modelo obtiene en la prueba temporal un AUC mayor que 0.60 y mayor que el de las líneas base.
 \item \textbf{H4.} Existen grupos diferenciados de pedidos o clientes, según su valor, ubicación, forma de pago y experiencia de entrega, que presentan niveles distintos de satisfacción.
 \end{itemize}
 Las hipótesis se formulan en términos de asociación y no de causalidad. Surgen de una exploración preliminar de los datos y se contrastarán formalmente en el análisis (sección 4.5).
@@ -433,8 +435,8 @@ La figura siguiente muestra el diagrama entidad-relación del modelo relacional 
 
 \begin{itemize}
 \item Línea continua: relación que puede imponerse como llave foránea.
-\item Línea punteada: relación lógica, de tres tipos: la traducción de categorías hacia products y las dos relaciones por código postal con geolocation (no pueden imponerse porque existen prefijos sin coincidencia).
-\item Cardinalidades: orders y customers son 1 a 1, porque cada pedido genera su propio customer\_\allowbreak{}id. orders se relaciona 1 a muchos, con posibles ceros, con ítems, pagos y reseñas, porque hay pedidos sin ítems, sin pago o sin reseña. products y sellers aparecen en muchos ítems.
+\item Línea punteada: tres relaciones lógicas: la traducción de categorías hacia products y las dos relaciones por código postal con geolocation (no pueden imponerse porque existen prefijos sin coincidencia).
+\item Cardinalidades: orders y customers son 1 a 1, porque cada pedido genera su propio customer\_\allowbreak{}id. La tabla orders se relaciona 1 a muchos, con posibles ceros, con ítems, pagos y reseñas, porque hay pedidos sin ítems, sin pago o sin reseña. products y sellers aparecen en muchos ítems.
 \item Llaves compuestas: order\_\allowbreak{}items, order\_\allowbreak{}payments y order\_\allowbreak{}reviews combinan order\_\allowbreak{}id con otro campo.
 \end{itemize}
 \medskip\noindent\rule{\linewidth}{0.4pt}\medskip
@@ -447,7 +449,7 @@ El análisis se desarrolla como un flujo por etapas en KNIME, desde la obtenció
 {\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*1693/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*5437/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*2868/10000\relax}|}
 \hline
-\textbf{Etapa} & \textbf{Qué se hace} & \textbf{Workflow group} \\ \hline
+\textbf{Etapa} & \textbf{Qué se hace} & \textbf{Grupo de workflows} \\ \hline
 \endhead
 1. Obtención & Lectura de los nueve archivos con un nodo CSV Reader por archivo, desde la copia versionada en \texttt{knime/\allowbreak{}datos/\allowbreak{}} (ruta relativa al workflow). Si se usa la base de datos del proyecto, solo cambia el nodo de entrada (PostgreSQL Connector + DB Table Selector); el resto del flujo es igual. & 01-ETL \\ \hline
 2. Calidad & Perfilado de los datos (nulos, duplicados, rangos y consistencia de fechas) y aplicación de reglas (3.2). & 01-ETL \\ \hline
@@ -473,15 +475,15 @@ Más de una reseña por pedido & order\_\allowbreak{}reviews & Se usa una califi
 Códigos postales con ceros a la izquierda & customers, sellers, geolocation & Se leen como texto (String) y no como número. & Un prefijo como \texttt{01037} leído como entero pasa a \texttt{1037} y no coincidiría en los cruces por código postal. \\ \hline
 Pedidos entregados sin fecha de entrega & orders & 8 pedidos con \texttt{order\_\allowbreak{}status = delivered} no tienen \texttt{order\_\allowbreak{}delivered\_\allowbreak{}customer\_\allowbreak{}date}; la ventana de fechas de entrega los excluye. & No se puede medir la puntualidad sin fecha real de entrega. \\ \hline
 Categoría de producto sin traducción & products, traducción & 1~376 pedidos (1.43~\%) quedan sin \texttt{product\_\allowbreak{}category\_\allowbreak{}name\_\allowbreak{}english}; un nodo Missing Value los rellena con «desconocida». & Conservar los pedidos sin perder registros. \\ \hline
-Atributos de producto ausentes & products & Se tratan como categoría «desconocida». & Conservar los pedidos sin perder registros. \\ \hline
-Valores atípicos e inconsistencias & Varias tablas & Se documentan, limitan o excluyen según el caso. & Mantener la calidad analítica sin perder la población del estudio. \\ \hline
+Categoría de producto ausente; peso y medidas ausentes & products & La categoría ausente se reemplaza por «desconocida» (1~376 pedidos). Los 16 pesos y volúmenes ausentes se imputan con la mediana del entrenamiento en el Modelo 2 (sección 3.5.2). & Conservar los pedidos sin perder registros. \\ \hline
+Valores extremos y fechas incoherentes & orders, order\_\allowbreak{}items & No se excluye ningún pedido. Se verificó que no hay tiempos de entrega negativos, plazos estimados nulos ni precios en cero. El precio y el flete, con colas muy largas, se transforman con logaritmo en el Modelo 1. & Mantener toda la población del estudio sin que unos pocos pedidos dominen los modelos. \\ \hline
 \end{longtable}
 }
 La población de análisis se concentra en pedidos entregados en el periodo observado, con foco en la comparación entre puntualidad, satisfacción y recompra.
 
 \Needspace{7\baselineskip}
 \subsection{3.3 Transformación de los datos}
-Se integraron las tablas a nivel de pedido y se crearon las siguientes variables derivadas. Las categorías se traducen y agrupan, las variables categóricas se codifican y las numéricas se normalizan cuando se requiere.
+Se integraron las tablas a nivel de pedido y se crearon las siguientes variables derivadas. La categoría del producto se traduce al inglés con la tabla de traducción de Olist. Las variables categóricas (estados y categoría) las codifican los propios nodos de aprendizaje de KNIME, y las numéricas se normalizan en los modelos que lo requieren (k-means y regresión logística).
 
 {\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*2086/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*3956/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*3956/10000\relax}|}
@@ -496,15 +498,15 @@ mismo\_\allowbreak{}estado & 1 si customer\_\allowbreak{}state = seller\_\allowb
 relacion\_\allowbreak{}precio\_\allowbreak{}flete & freight\_\allowbreak{}value $\div$ price & Variable explicativa. \\ \hline
 peso, volumen & product\_\allowbreak{}weight\_\allowbreak{}g; largo $\times$ alto $\times$ ancho & Variables explicativas. \\ \hline
 num\_\allowbreak{}items, cuotas, dia\_\allowbreak{}semana & Conteo de ítems; payment\_\allowbreak{}installments; día de la semana de la compra (se calcula en 03-Prediccion) & Variables explicativas del Modelo 2. El mes de compra se probó y se descartó (sección 3.5). \\ \hline
-review\_\allowbreak{}score\_\allowbreak{}pedido & Promedio de review\_\allowbreak{}score por pedido & Satisfacción; no se usa como entrada de los modelos. \\ \hline
-review\_\allowbreak{}negativa & 1 si review\_\allowbreak{}score\_\allowbreak{}pedido $\leq$ 2; 0 en caso contrario & KPI de reseñas negativas. \\ \hline
-num\_\allowbreak{}pedidos\_\allowbreak{}cliente, recompra & Conteo de pedidos por customer\_\allowbreak{}unique\_\allowbreak{}id; 1 si es mayor que 1 & KPI de fidelización. \\ \hline
+review\_\allowbreak{}promedio & Promedio de review\_\allowbreak{}score por pedido & Satisfacción; no se usa como entrada de los modelos. \\ \hline
+resena\_\allowbreak{}negativa & 1 si review\_\allowbreak{}promedio $\leq$ 2; 0 en caso contrario & KPI de reseñas negativas. \\ \hline
+total\_\allowbreak{}pedidos, recompra & Conteo de pedidos por customer\_\allowbreak{}unique\_\allowbreak{}id; 1 si es mayor que 1 & KPI de fidelización. \\ \hline
 primer\_\allowbreak{}pedido\_\allowbreak{}tardio & es\_\allowbreak{}tardio del primer pedido de cada cliente & KPI de recompra según puntualidad. \\ \hline
 \end{longtable}
 }
 La vista base mantiene una fila por pedido, con agregación del valor total y del flete, y con una única referencia de vendedor y producto basada en el primer ítem del pedido. Esta decisión evita duplicar el pedido al integrar las tablas de ítems, pagos y reseñas.
 
-\textbf{Implementación en KNIME (workflow 01-ETL, 40 nodos).} Los nueve CSV se leen con nodos CSV Reader, con los códigos postales como texto. Items, pagos y reseñas se agregan por \texttt{order\_\allowbreak{}id} con GroupBy (suma de precio y flete y máximo de \texttt{order\_\allowbreak{}item\_\allowbreak{}id} como número de ítems; suma de pagos y máximo de cuotas; promedio de calificación). Cuatro Joiner unen orders con customers y con esas tres agregaciones (Left Outer, para no perder pedidos) y un Row Filter conserva los pedidos \texttt{delivered}. Una rama aparte toma el primer ítem de cada pedido (\texttt{order\_\allowbreak{}item\_\allowbreak{}id = 1}) y lo une con sellers, products y la traducción de categorías para obtener \texttt{seller\_\allowbreak{}state}, el peso, las medidas y la categoría; esa rama se une al flujo principal por \texttt{order\_\allowbreak{}id}.
+\textbf{Implementación en KNIME (workflow 01-ETL, 40 nodos).} Los nueve CSV se leen con nodos CSV Reader, con los códigos postales como texto. Ítems, pagos y reseñas se agregan por \texttt{order\_\allowbreak{}id} con GroupBy (suma de precio y flete y máximo de \texttt{order\_\allowbreak{}item\_\allowbreak{}id} como número de ítems; suma de pagos y máximo de cuotas; promedio de calificación). Cuatro Joiner unen orders con customers y con esas tres agregaciones (Left Outer, para no perder pedidos) y un Row Filter conserva los pedidos \texttt{delivered}. Una rama aparte toma el primer ítem de cada pedido (\texttt{order\_\allowbreak{}item\_\allowbreak{}id = 1}) y lo une con sellers, products y la traducción de categorías para obtener \texttt{seller\_\allowbreak{}state}, el peso, las medidas y la categoría; esa rama se une al flujo principal por \texttt{order\_\allowbreak{}id}.
 
 Las variables derivadas se calculan así: un Rule Engine crea \texttt{mismo\_\allowbreak{}estado} (1 si \texttt{customer\_\allowbreak{}state = seller\_\allowbreak{}state}); String to Date\&Time convierte las fechas conservando la hora; un Row Filter aplica la ventana de entrega (enero de 2017 a agosto de 2018); tres nodos Date\&Time Difference miden en segundos el plazo estimado, el tiempo de entrega y el retraso, y tres Math Formula los pasan a días con decimales (\texttt{plazo\_\allowbreak{}estimado\_\allowbreak{}dias}, \texttt{dias\_\allowbreak{}entrega}, \texttt{dias\_\allowbreak{}retraso}); un Rule Engine crea \texttt{es\_\allowbreak{}tardio} (1 si el retraso en segundos es mayor que 0) y dos Math Formula calculan \texttt{relacion\_\allowbreak{}precio\_\allowbreak{}flete} y \texttt{volumen\_\allowbreak{}cm3}. Se mide en segundos porque los Date\&Time Difference solo permiten decimales con granularidad de tiempo, no con días, y así un pedido entregado el día estimado, pero después de las 00:00, cuenta como tardío. Un Column Filter deja 29 columnas, un Missing Value rellena la categoría ausente con «desconocida», un nodo Statistics resume la tabla final, un nodo Date\&Time to String deja las fechas con formato fijo \texttt{yyyy-MM-dd HH:mm:ss} y un CSV Writer la guarda en \texttt{knime/\allowbreak{}datos/\allowbreak{}ordenes\_\allowbreak{}etl.csv} para los workflows 02 y 03.
 
@@ -528,7 +530,7 @@ El peso, el volumen y la categoría se toman del primer ítem del pedido, igual 
 \subsection{3.4 Modelo 1 — No supervisado: segmentación con k-means}
 El modelo no supervisado agrupa los pedidos según su experiencia de compra y entrega, con k-means (MacQueen, 1967) sobre seis variables: valor del pedido (\texttt{total\_\allowbreak{}precio}), costo del flete (\texttt{total\_\allowbreak{}flete}), número de cuotas (\texttt{max\_\allowbreak{}cuotas}), tiempo de entrega (\texttt{dias\_\allowbreak{}entrega}), retraso respecto de la fecha estimada (\texttt{dias\_\allowbreak{}retraso}) y si el cliente y el vendedor están en el mismo estado (\texttt{mismo\_\allowbreak{}estado}). La calificación no se usa como entrada, para que la comparación de satisfacción entre grupos (H4) no sea circular. El precio y el flete se transforman con logaritmo, porque tienen colas muy largas, y las seis variables se normalizan con puntuación z para que todas pesen lo mismo en la distancia. Ninguna de las seis tiene valores ausentes. La lista de nodos está en el Anexo D.
 
-\textbf{Origen de las cifras.} El perfil de los segmentos (3.4.2), la prueba de H4 y la silueta de k = 4 salen del workflow de KNIME (\texttt{02-Clustering}, k = 4, semilla 2; la asignación está en \texttt{knime/\allowbreak{}datos/\allowbreak{}segmentos\_\allowbreak{}modelo1.csv}). La tabla de k de 2 a 8 (3.4.1) y el análisis de sensibilidad se calcularon en Python (scikit-learn) con los mismos datos y variables. Las diferencias pequeñas con KNIME, por ejemplo 7~357 frente a 7~423 pedidos en el grupo problemático, se deben a la inicialización aleatoria del k-means.
+\textbf{Origen de las cifras.} El perfil de los segmentos (3.4.2), la prueba de H4 y la silueta de k = 4 salen del workflow de KNIME (\texttt{02-Clustering}, k = 4, semilla 2; la asignación está en \texttt{knime/\allowbreak{}datos/\allowbreak{}segmentos\_\allowbreak{}modelo1.csv}). La tabla de k de 2 a 8 (3.4.1) y el análisis de sensibilidad se calcularon en Python (scikit-learn) con los mismos datos y variables, con el script \texttt{analisis/\allowbreak{}pruebas\_\allowbreak{}estadisticas.py}. Las diferencias pequeñas con KNIME, por ejemplo 7~357 frente a 7~423 pedidos en el grupo problemático, se deben a la inicialización aleatoria del k-means.
 
 \Needspace{7\baselineskip}
 \subsubsection{3.4.1 Resultados y validación}
@@ -548,9 +550,9 @@ Se probaron valores de k entre 2 y 8 y se compararon con dos criterios: la inerc
 8 & 222~060 & 0.221 \\ \hline
 \end{longtable}
 }
-Se eligió \textbf{k = 4}: tiene la silueta más alta y coincide con el codo, porque de 4 a 5 grupos la inercia baja mucho menos que de 3 a 4. El agrupamiento es estable: con cinco semillas distintas se obtiene prácticamente la misma asignación (índice de Rand ajustado de 0.999 o más). Una silueta de 0.30 indica una estructura moderada: los grupos existen, pero sus fronteras no son nítidas, por lo que se usan para describir y priorizar, no como categorías rígidas. En KNIME, con el nodo Silhouette Coefficient sobre las primeras 10~000 filas de la tabla, la silueta global de k = 4 es 0.297, casi igual que la de referencia (0.305); por grupo va de 0.11 a 0.36, así que hay un grupo que se separa con claridad y otros que se solapan más.
+Se eligió \textbf{k = 4}: tiene la silueta más alta y coincide con el codo, porque de 4 a 5 grupos la inercia baja mucho menos que de 3 a 4. El agrupamiento es estable: con cinco semillas distintas se obtiene prácticamente la misma asignación (índice de Rand ajustado de 0.999 o más; Hubert y Arabie, 1985). Una silueta de 0.30 indica una estructura moderada: los grupos existen, pero sus fronteras no son nítidas, por lo que se usan para describir y priorizar, no como categorías rígidas. En KNIME, con el nodo Silhouette Coefficient sobre las primeras 10~000 filas de la tabla, la silueta global de k = 4 es 0.297, casi igual que la de referencia (0.305); por grupo va de 0.11 a 0.36, así que hay un grupo que se separa con claridad y otros que se solapan más.
 
-\textbf{Análisis de sensibilidad.} Como \texttt{dias\_\allowbreak{}entrega} y \texttt{dias\_\allowbreak{}retraso} solo se conocen después de la entrega, se repitió el modelo con las cuatro variables disponibles al momento de la compra (precio, flete, cuotas y mismo estado). En ese caso el mejor valor es k = 3 (silueta 0.391), pero las calificaciones de los grupos apenas varían, entre 4.00 y 4.29. Es decir, la segmentación comercial casi no distingue la satisfacción; lo que la distingue es la experiencia de entrega.
+\textbf{Análisis de sensibilidad.} Como \texttt{dias\_\allowbreak{}entrega} y \texttt{dias\_\allowbreak{}retraso} solo se conocen después de la entrega, se repitió el modelo con las cuatro variables disponibles al momento de la compra (precio, flete, cuotas y mismo estado). En ese caso el mejor valor es k = 3 (silueta 0.391), pero las calificaciones de los grupos apenas varían, entre 4.02 y 4.29. Es decir, la segmentación comercial casi no distingue la satisfacción; lo que la distingue es la experiencia de entrega.
 
 \Needspace{7\baselineskip}
 \subsubsection{3.4.2 Perfil e interpretación de los segmentos}
@@ -574,19 +576,19 @@ Entregas problemáticas & 7~357 (7.7~\%) & 98.00 & 2.8 & 35.1 & 9~\% & 77.4~\% &
 Este último segmento coincide en gran parte con los pedidos tardíos, porque el retraso es una de las variables de entrada. Por eso el modelo debe leerse como una segmentación de la experiencia de entrega: confirma y dimensiona el patrón de H1, más que descubrir un factor nuevo.
 
 \subsection{3.5 Modelo 2 — Supervisado: predicción de la entrega tardía}
-El modelo supervisado clasifica si un pedido llegará tarde o a tiempo usando únicamente variables conocidas al momento de la compra, siguiendo el esquema habitual de aprendizaje supervisado con datos de entrenamiento y de prueba (James et al., 2021). Este enfoque evita filtrado de información futura y permite evaluar la utilidad del modelo para actuar de forma preventiva antes de que se produzca la entrega.
+El modelo supervisado clasifica si un pedido llegará tarde o a tiempo usando únicamente variables conocidas al momento de la compra, siguiendo el esquema habitual de aprendizaje supervisado con datos de entrenamiento y de prueba (James et al., 2021). Este enfoque evita la fuga de información y permite evaluar la utilidad del modelo para actuar de forma preventiva antes de que se produzca la entrega.
 
 Se comparan dos algoritmos, regresión logística (Hosmer et al., 2013) y Random Forest (Breiman, 2001), con dos líneas base: predecir siempre «a tiempo» y una regla geográfica que marca como tardío todo pedido entre estados distintos. La mejora se mide con indicadores orientados a la clase minoritaria: AUC, el área bajo la curva ROC (Fawcett, 2006), precisión, exhaustividad y F1 de la entrega tardía. La lista de nodos está en el Anexo D.
 
 \textbf{Variables de entrada (13):} \texttt{total\_\allowbreak{}precio}, \texttt{total\_\allowbreak{}flete}, \texttt{num\_\allowbreak{}items}, \texttt{max\_\allowbreak{}cuotas}, \texttt{relacion\_\allowbreak{}precio\_\allowbreak{}flete}, \texttt{product\_\allowbreak{}weight\_\allowbreak{}g}, \texttt{volumen\_\allowbreak{}cm3}, \texttt{plazo\_\allowbreak{}estimado\_\allowbreak{}dias}, \texttt{mismo\_\allowbreak{}estado}, \texttt{customer\_\allowbreak{}state}, \texttt{seller\_\allowbreak{}state}, \texttt{product\_\allowbreak{}category\_\allowbreak{}name\_\allowbreak{}english} y el día de la semana de la compra. Se excluyen todas las variables que solo se conocen después de la compra (fechas de aprobación, despacho y entrega, días de entrega, retraso y calificación). También se excluyó el mes de compra: con solo 20 meses de datos, el modelo aprendía los picos de retraso de un único año (en las pruebas era la variable más importante del Random Forest), un patrón que no se puede asumir que se repita.
 
 \subsubsection{3.5.1 Datos de entrenamiento y de prueba}
-La partición se define en forma temporal para evitar fuga de información: el conjunto de entrenamiento cubre el período inicial y la prueba cubre el período más reciente. La clase tardía se mantiene minoritaria, por lo que se prioriza la evaluación basada en sensibilidad y AUC sobre la exactitud.
+La partición se define en forma temporal para evitar fuga de información: el conjunto de entrenamiento cubre el periodo inicial y la prueba cubre el periodo más reciente. La clase tardía se mantiene minoritaria, por lo que se prioriza la evaluación basada en sensibilidad y AUC sobre la exactitud.
 
-Con un corte en el 1 de abril de 2018 sobre la fecha de compra, el entrenamiento reúne 64~052 pedidos con 9.19~\% de entregas tardías y la prueba 32~092 con 5.85~\%. La tasa de la prueba es menor porque el porcentaje de retrasos varió mucho entre meses: noviembre de 2017 (14.31~\%), febrero de 2018 (15.97~\%) y marzo de 2018 (21.36~\%) fueron meses atípicos y quedan en el entrenamiento, mientras que de abril a agosto de 2018 se mueve entre el 1.3~\% (junio) y el 9.9~\% (agosto). Por eso el AUC y las líneas base se evalúan sobre una clase tardía menos frecuente que en el entrenamiento, y las métricas de la prueba no son directamente comparables con las del entrenamiento. La partición no es inválida, pero esta diferencia se tiene en cuenta al interpretar los resultados.
+Con un corte en el 1 de abril de 2018 sobre la fecha de compra, el entrenamiento reúne 64~052 pedidos con 9.19~\% de entregas tardías y la prueba 32~092 con 5.85~\%. La tasa de la prueba es menor porque el porcentaje de retrasos varió mucho entre meses: noviembre de 2017 (14.31~\%), febrero de 2018 (15.97~\%) y marzo de 2018 (21.36~\%) fueron meses atípicos y quedan en el entrenamiento, mientras que de abril a agosto de 2018 se mueve entre el 1.3~\% (junio) y el 9.9~\% (agosto). Por eso el AUC y las líneas base se evalúan sobre una clase tardía menos frecuente que en el entrenamiento, y las métricas de la prueba no son directamente comparables con las del entrenamiento. La partición es válida, pero esta diferencia se tiene en cuenta al interpretar los resultados.
 
 \subsubsection{3.5.2 Preparación, parámetros e hiperparámetros}
-Todo lo que se aprende de los datos se calcula solo con el entrenamiento y se aplica después a la prueba: la imputación de los 16 valores ausentes de peso y volumen (mediana), la normalización de las variables numéricas para la regresión logística (puntuación z) y el balanceo de clases (muestreo de igual tamaño de tardíos y puntuales, solo en entrenamiento). En KNIME, el Random Forest se configuró con 200 árboles, criterio de Gini, raíz cuadrada del número de variables en cada división, muestreo de filas con reemplazo y semilla 42. El tamaño mínimo quedó en 20 filas por nodo hijo, y un nodo solo se divide si tiene al menos el doble (40): el diálogo de KNIME muestra un solo campo («Minimum node size» = 20) y guarda los dos valores, el segundo como el doble del primero. Con esta configuración se obtuvo el AUC de 0.590 de la sección 3.6. El desbalance se trató con muestreo de igual tamaño (en Python, con ponderación de clases). Para que el Random Forest use la categoría del producto hubo que recalcular el dominio de esa columna con un Domain Calculator (tiene más de 60 categorías). El tamaño mínimo se eligió con validación cruzada de 5 particiones, estratificada por \texttt{es\_\allowbreak{}tardio} y con semilla 42, sobre el entrenamiento ya balanceado. Se varió el campo «Minimum node size» del diálogo: con 10, 20, 40 y 80, el AUC de validación fue 0.6858, 0.6871, 0.6876 y 0.6855. Se mantuvo 20. Entre el mejor y el peor valor hay apenas 0.002, una diferencia que cabe en el ruido de la partición, así que el modelo es poco sensible a este parámetro y no hay razón para cambiar la configuración. El AUC de validación (cerca de 0.69) es mayor que el de la prueba (0.59) porque la validación cruzada mezcla pedidos del mismo período, mientras que la prueba mide el modelo en meses posteriores, cuando la relación entre las variables y el retraso ya había cambiado (sección 3.6). La prueba temporal se usa una sola vez, al final.
+Todo lo que se aprende de los datos se calcula solo con el entrenamiento y se aplica después a la prueba: la imputación de los 16 valores ausentes de peso y volumen (mediana), la normalización de las variables numéricas para la regresión logística (puntuación z) y el balanceo de clases (muestreo de igual tamaño de tardíos y puntuales, solo en entrenamiento). En KNIME, el Random Forest se configuró con 200 árboles, criterio de Gini, raíz cuadrada del número de variables en cada división, muestreo de filas con reemplazo y semilla 42. El tamaño mínimo quedó en 20 filas por nodo hijo, y un nodo solo se divide si tiene al menos el doble (40): el diálogo de KNIME muestra un solo campo («Minimum node size» = 20) y guarda los dos valores, el segundo como el doble del primero. Con esta configuración se obtuvo el AUC de 0.590 de la sección 3.6. El desbalance se trató con muestreo de igual tamaño (en Python, con ponderación de clases). Para que el Random Forest use la categoría del producto hubo que recalcular el dominio de esa columna con un Domain Calculator (tiene más de 60 categorías). El tamaño mínimo se eligió con validación cruzada de 5 particiones, estratificada por \texttt{es\_\allowbreak{}tardio} y con semilla 42, sobre el entrenamiento ya balanceado. Se varió el campo «Minimum node size» del diálogo: con 10, 20, 40 y 80, el AUC de validación fue 0.6858, 0.6871, 0.6876 y 0.6855. Se mantuvo 20. Entre el mejor y el peor valor hay apenas 0.002, una diferencia que cabe en el ruido de la partición, así que el modelo es poco sensible a este parámetro y no hay razón para cambiar la configuración. El AUC de validación (cerca de 0.69) es mayor que el de la prueba (0.59) porque la validación cruzada mezcla pedidos del mismo periodo, mientras que la prueba mide el modelo en meses posteriores, cuando la relación entre las variables y el retraso ya había cambiado (sección 3.6). La prueba temporal se usa una sola vez, al final.
 
 \Needspace{7\baselineskip}
 \subsection{3.6 Validación de ambos modelos}
@@ -643,8 +645,6 @@ La Línea base 1 acierta el 94.1~\% de los pedidos (30~214 de 32~092) sin detect
 No se incorporaron integraciones con terceros. El análisis se basa en variables estructuradas de los datos de Olist y en los modelos ejecutados dentro del flujo de KNIME, sin dependencia de servicios externos para la parte analítica principal.
 
 \subsection{3.8 Evidencia de ejecución del flujo}
-La evidencia del flujo requiere mostrar que la cadena completa corre de manera coherente desde la lectura de datos hasta la validación de resultados. En el proyecto, la prueba de ejecución se apoya en la propia validación relacional de tablas, las vistas analíticas y los resultados del cálculo de KPI, que son consistentes con la población de análisis y la lógica de negocio definida.
-
 \textbf{Ejecución del workflow 01-ETL.} El flujo se ejecutó completo en KNIME con sus 40 nodos. Tras los cuatro Joiner la tabla tiene 99~441 filas (una por pedido, igual que orders, sin duplicados). Después del filtro de pedidos entregados y de la ventana de fechas de entrega quedan 96~144 filas, que coinciden con el conteo de v\_\allowbreak{}pedidos\_\allowbreak{}base, y \texttt{order\_\allowbreak{}id} no se repite. El promedio de \texttt{es\_\allowbreak{}tardio} es 0.0807 (8.07~\%), igual al KPI 1. En la tabla final solo faltan valores en \texttt{review\_\allowbreak{}promedio} (642 pedidos sin reseña), en peso y medidas (16 pedidos), en \texttt{order\_\allowbreak{}approved\_\allowbreak{}at} (14) y en \texttt{order\_\allowbreak{}delivered\_\allowbreak{}carrier\_\allowbreak{}date} (1). El nodo Statistics advierte que no calcula frecuencias de las columnas con más de 1~000 valores distintos, como los identificadores y las fechas, lo que no afecta a las columnas analíticas. Las figuras 2 a 4 (Anexo G) muestran el flujo completo con sus 40 nodos ejecutados, la tabla final (96~144 filas y 29 columnas) y la salida del nodo Statistics.
 
 \textbf{Ejecución de los workflows 02-Clustering, 03-Prediccion y 04-KPIs.} Los tres se ejecutaron completos y sin errores. Para el Modelo 1 (figuras 5 a 8) hay una captura del workflow completo con sus 14 nodos, el perfil de los cuatro grupos (GroupBy), la prueba ANOVA de H4 (F = 4~477.7) y la silueta de k = 4 (0.297). Para el Modelo 2 (figuras 9 a 25) hay una captura del workflow completo, las matrices de confusión y las estadísticas por clase de los cuatro modelos (Scorer), las curvas ROC del Random Forest (AUC 0.590), de la regresión logística (0.719) y de la línea base 2 (0.472), el AUC de la validación cruzada con cada tamaño mínimo de nodo y la tabla de variables del Random Forest. Para los indicadores (figuras 26 a 36) hay una captura del workflow completo y una por grupo de KPI, con los mismos valores de la sección 4.2. Las figuras 37 a 45 muestran las cinco páginas del dashboard, la página 1 filtrada por un estado, la vista de modelo y dos consultas DAX de control cuyos resultados coinciden con KNIME. En 03-Prediccion, el único aviso es el de convergencia de la regresión logística, explicado en la sección 3.6.
@@ -685,7 +685,7 @@ Se definen once indicadores, organizados según el objetivo estratégico al que 
 \endhead
 6 & Calificación promedio & Promedio de la calificación de la reseña & Resume la satisfacción general. & 4.16 \\ \hline
 7 & Porcentaje de reseñas negativas & Pedidos con calificación de 1 o 2 $\div$ pedidos con reseña & Capta la proporción de clientes insatisfechos. & 12.73~\% \\ \hline
-8 & Brecha de calificación por puntualidad & Calificación promedio de los pedidos puntuales menos la de los tardíos & Cuantifica cuánto se asocia el retraso con una menor satisfacción. & 1.73 puntos (4.30 frente a 2.57) \\ \hline
+8 & Brecha de calificación por puntualidad & Calificación promedio de los pedidos puntuales menos la de los tardíos & Cuantifica cuánto se asocia el retraso con una menor satisfacción. & 1.72 puntos (4.30 frente a 2.57) \\ \hline
 \end{longtable}
 }
 \Needspace{7\baselineskip}
@@ -702,7 +702,7 @@ Se definen once indicadores, organizados según el objetivo estratégico al que 
 }
 \Needspace{7\baselineskip}
 \subsection{4.3 Dashboard}
-El dashboard está en \texttt{powerbi/\allowbreak{}dashboard\_\allowbreak{}olist.pbix} y tiene cinco páginas: un resumen, una por cada objetivo estratégico y una con los resultados de los dos modelos. La página de resumen incluye un filtro por estado del cliente. Antes de armar las páginas se verificaron todas las medidas con una consulta DAX dentro de Power BI, y los valores coinciden con los de KNIME (sección 4.2). Las capturas de cada página están en las figuras 37 a 42 (Anexo G). Con el filtro de estado, por ejemplo, la página de resumen muestra que en Alagoas llegó tarde el 23.80~\% de los pedidos, con calificación promedio de 3.86.
+El dashboard muestra los decimales con coma por la configuración regional de Power BI; en el texto se usa punto. El dashboard está en \texttt{powerbi/\allowbreak{}dashboard\_\allowbreak{}olist.pbix} y tiene cinco páginas: un resumen, una por cada objetivo estratégico y una con los resultados de los dos modelos. La página de resumen incluye un filtro por estado del cliente. Antes de armar las páginas se verificaron todas las medidas con una consulta DAX dentro de Power BI, y los valores coinciden con los de KNIME (sección 4.2). Las capturas de cada página están en las figuras 37 a 42 (Anexo G). Con el filtro de estado, por ejemplo, la página de resumen muestra que en Alagoas llegó tarde el 23.80~\% de los pedidos, con calificación promedio de 3.86.
 
 {\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*2441/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*1162/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep-4\arrayrulewidth)*6395/10000\relax}|}
@@ -743,15 +743,15 @@ Las medidas DAX (Microsoft, s. f.-b) de los KPI están en el Anexo C. Usan \text
 {\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*1225/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*2917/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*2923/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep-5\arrayrulewidth)*2932/10000\relax}|}
 \hline
-\textbf{Hipótesis} & \textbf{Qué se compara} & \textbf{Prueba propuesta} & \textbf{Resultado y conclusión} \\ \hline
+\textbf{Hipótesis} & \textbf{Qué se compara} & \textbf{Prueba aplicada} & \textbf{Resultado y conclusión} \\ \hline
 \endhead
-H1 & Calificación de pedidos puntuales vs. tardíos & Mann-Whitney U (Mann y Whitney, 1947); chi-cuadrado para \% de reseñas negativas & Se confirma. Calificación 4.30 frente a 2.57 (Mann-Whitney U = 149~338~900, p < 0.001; correlación biserial de rangos 0.55, efecto grande). Reseñas negativas 9.2~\% frente a 53.9~\% ($\chi$² = 12~589, gl = 1, p < 0.001; V de Cramér 0.36). \\ \hline
-H2 & \% de entregas tardías por región y por mismo estado / estados distintos & Chi-cuadrado de independencia & Se confirma para el periodo completo, con un matiz temporal. Por estado del cliente: $\chi$² = 1~621, gl = 26, p < 0.001 (V = 0.13). Mismo estado frente a distinto: 6.0~\% frente a 9.2~\% de tardíos ($\chi$² = 301, gl = 1, p < 0.001; V = 0.06, efecto pequeño). La dirección no es estable: hasta marzo de 2018, 5.7~\% frente a 11.0~\%; de abril a agosto de 2018 se invierte, 6.6~\% frente a 5.3~\% ($\chi$² = 22.8, p < 0.001). \\ \hline
+H1 & Calificación de pedidos puntuales vs. tardíos & Mann-Whitney U (Mann y Whitney, 1947); chi-cuadrado (Pearson, 1900) para \% de reseñas negativas & Se confirma. Calificación 4.30 frente a 2.57 (Mann-Whitney U = 149~338~900, p < 0.001; correlación biserial de rangos 0.55, efecto grande). Reseñas negativas 9.2~\% frente a 53.9~\% ($\chi$² = 12~593, gl = 1, p < 0.001; V de Cramér 0.36). \\ \hline
+H2 & \% de entregas tardías por región y por mismo estado / estados distintos & Chi-cuadrado de independencia & Se confirma para el periodo completo, con un matiz temporal. Por estado del cliente: $\chi$² = 1~620, gl = 26, p < 0.001 (V = 0.13). Mismo estado frente a distinto: 6.0~\% frente a 9.2~\% de tardíos ($\chi$² = 301, gl = 1, p < 0.001; V = 0.06, efecto pequeño). La dirección no es estable: hasta marzo de 2018, 5.7~\% frente a 11.0~\%; de abril a agosto de 2018 se invierte, 6.6~\% frente a 5.3~\% ($\chi$² = 22.8, p < 0.001). \\ \hline
 H3 & Desempeño del modelo vs. línea base & AUC, precisión, exhaustividad y F1 de la clase tardía & Se confirma. La regresión logística obtiene AUC 0.72 en la prueba temporal, frente a 0.50 y 0.47 de las líneas base, y supera el umbral de 0.60. Su precisión es baja (0.10). Confirmado con la salida de KNIME (AUC 0.719). El Random Forest queda en 0.59. \\ \hline
-H4 & Calificación promedio entre los grupos del Modelo 1 & Kruskal-Wallis (Kruskal y Wallis, 1952) o ANOVA & Se confirma, con una advertencia. Las calificaciones de los cuatro grupos van de 2.59 a 4.32 (Kruskal-Wallis H = 7~767, gl = 3, p < 0.001, sobre la asignación de KNIME). La diferencia se debe sobre todo al grupo de entregas problemáticas, que se forma con las variables de retraso; con solo las variables de compra la diferencia es pequeña (de 4.00 a 4.29; H = 507). En KNIME, el One-way ANOVA sobre los 95~502 pedidos con reseña da F = 4~477.7 (3 y 95~498 grados de libertad, p < 0.001) y un tamaño de efecto de 0.12 (suma de cuadrados entre grupos 19~358 sobre un total de 156~979). El grupo de entregas problemáticas (7~357 pedidos, 77~\% tardíos) promedia 2.59 y los otros tres entre 4.16 y 4.32. Como la calificación es ordinal, Kruskal-Wallis es la prueba más adecuada, y ambas concluyen lo mismo. \\ \hline
+H4 & Calificación promedio entre los grupos del Modelo 1 & Kruskal-Wallis (Kruskal y Wallis, 1952) o ANOVA & Se confirma, con una advertencia. Las calificaciones de los cuatro grupos van de 2.59 a 4.32 (Kruskal-Wallis H = 7~767, gl = 3, p < 0.001, sobre la asignación de KNIME). La diferencia se debe sobre todo al grupo de entregas problemáticas, que se forma con las variables de retraso; con solo las variables de compra la diferencia es pequeña (de 4.02 a 4.29 con k = 3; H = 422). En KNIME, el One-way ANOVA sobre los 95~502 pedidos con reseña da F = 4~477.7 (3 y 95~498 grados de libertad, p < 0.001) y un tamaño de efecto de 0.12 (suma de cuadrados entre grupos 19~358 sobre un total de 156~979). El grupo de entregas problemáticas (7~357 pedidos, 77~\% tardíos) promedia 2.59 y los otros tres entre 4.16 y 4.32. Como la calificación es ordinal, Kruskal-Wallis es la prueba más adecuada, y ambas concluyen lo mismo. \\ \hline
 \end{longtable}
 }
-Los valores de las pruebas se calcularon en Python sobre \texttt{knime/\allowbreak{}datos/\allowbreak{}ordenes\_\allowbreak{}etl.csv}, excluyendo los 642 pedidos sin reseña en las pruebas de calificación.
+Los valores de las pruebas se calcularon en Python con SciPy (The SciPy Community, s. f.) sobre \texttt{knime/\allowbreak{}datos/\allowbreak{}ordenes\_\allowbreak{}etl.csv}, excluyendo los 642 pedidos sin reseña en las pruebas de calificación. Las pruebas chi-cuadrado se calcularon sin corrección de continuidad, y su tamaño del efecto se mide con la V de Cramér (Cramér, 1946). El script que reproduce estas cifras y la tabla de k de la sección 3.4.1 está en \texttt{analisis/\allowbreak{}pruebas\_\allowbreak{}estadisticas.py} (Anexo F).
 
 \textbf{Recompra (KPI 10 y 11).} Volvió a comprar el 4.34~\% de los 39~283 clientes que recibieron a tiempo su primer pedido y el 2.97~\% de los 2~794 que lo recibieron tarde. La diferencia, de 1.37 puntos porcentuales, es estadísticamente significativa ($\chi$² = 12.0, gl = 1, p $\approx$ 0.0005), pero pequeña. Con la reseña del primer pedido la brecha se reduce a 0.59 puntos: recompró el 4.32~\% de los 36~716 clientes con reseña no negativa y el 3.73~\% de los 5~046 con reseña negativa, y esa diferencia no es significativa al 5~\% ($\chi$² = 3.81, gl = 1, p $\approx$ 0.051). Las dos pruebas usan los conteos exactos de \texttt{knime/\allowbreak{}datos/\allowbreak{}clientes\_\allowbreak{}kpi.csv}, sin corrección de continuidad. PostgreSQL da prácticamente lo mismo, con un cliente menos en el grupo tardío y en el de reseña negativa (2~793 y 5~045), probablemente por el desempate entre dos pedidos del mismo cliente hechos en el mismo instante.
 
@@ -759,7 +759,7 @@ Los valores de las pruebas se calcularon en Python sobre \texttt{knime/\allowbre
 
 \section{5. Conclusiones y recomendaciones}
 \begin{itemize}
-\item \textbf{Hipótesis central y H1.} Las entregas tardías se asocian con una caída de 1.73 puntos en la calificación promedio (4.30 frente a 2.57) y con una proporción mucho mayor de reseñas negativas (9.2~\% frente a 53.9~\%). La evidencia sugiere que la puntualidad no es solo un indicador operativo, sino un factor asociado con la percepción del servicio.
+\item \textbf{Hipótesis central y H1.} Las entregas tardías se asocian con una caída de 1.72 puntos en la calificación promedio (4.30 frente a 2.57) y con una proporción mucho mayor de reseñas negativas (9.2~\% frente a 53.9~\%). La evidencia sugiere que la puntualidad no es solo un indicador operativo, sino un factor asociado con la percepción del servicio.
 \item \textbf{H2.} El retraso se concentra en regiones específicas y, en el periodo completo, es mayor cuando cliente y vendedor están en estados distintos. Sin embargo, esa relación no fue estable: entre abril y agosto de 2018 se invirtió. La localización importa, pero su efecto cambia con el tiempo, por lo que las decisiones logísticas deben basarse en un monitoreo continuo y no en una regla fija.
 \item \textbf{Fidelización.} La recompra es baja (3.12~\%). La diferencia por puntualidad del primer pedido es estadísticamente significativa, pero pequeña (1.37 puntos porcentuales: 4.34~\% frente a 2.97~\%), y la que se observa según la reseña del primer pedido ni siquiera es significativa al 5~\%. La fidelización requiere un enfoque más amplio que solo la entrega a tiempo.
 \item \textbf{Modelos (H3 y H4).} La regresión logística anticipa el retraso al momento de la compra mejor que las líneas base (AUC 0.72), aunque con baja precisión, por lo que sirve para priorizar seguimiento y no para decisiones automáticas. La segmentación identifica un 7.7~\% de pedidos con muy mala experiencia de entrega; la satisfacción depende sobre todo de la logística, no del tipo de compra. Ninguno de los dos modelos establece causalidad.
@@ -783,12 +783,17 @@ Los valores de las pruebas se calcularon en Python sobre \texttt{knime/\allowbre
 \item El plazo estimado lo fija la empresa con sus propios criterios; es informativo para el modelo, pero no necesariamente es la causa del retraso.
 \item Trabajo futuro: actualización y monitoreo de los modelos, nuevas variables, análisis del texto de los comentarios (en portugués) y prueba de otros algoritmos.
 \end{itemize}
-\section{7. Referencias y anexos}
+\clearpage
+\section{7. Referencias}
 {\hangindent=0.5in\hangafter=1\noindent Breiman, L. (2001). Random forests. \emph{Machine Learning, 45}(1), 5--32. \url{https://doi.org/10.1023/A:1010933404324}\par}
+
+{\hangindent=0.5in\hangafter=1\noindent Cramér, H. (1946). \emph{Mathematical methods of statistics}. Princeton University Press.\par}
 
 {\hangindent=0.5in\hangafter=1\noindent Fawcett, T. (2006). An introduction to ROC analysis. \emph{Pattern Recognition Letters, 27}(8), 861--874. \url{https://doi.org/10.1016/j.patrec.2005.10.010}\par}
 
 {\hangindent=0.5in\hangafter=1\noindent Hosmer, D. W., Lemeshow, S., y Sturdivant, R. X. (2013). \emph{Applied logistic regression} (3.\textsuperscript{a} ed.). Wiley. \url{https://doi.org/10.1002/9781118548387}\par}
+
+{\hangindent=0.5in\hangafter=1\noindent Hubert, L., y Arabie, P. (1985). Comparing partitions. \emph{Journal of Classification, 2}(1), 193--218. \url{https://doi.org/10.1007/BF01908075}\par}
 
 {\hangindent=0.5in\hangafter=1\noindent James, G., Witten, D., Hastie, T., y Tibshirani, R. (2021). \emph{An introduction to statistical learning: With applications in R} (2.\textsuperscript{a} ed.). Springer. \url{https://doi.org/10.1007/978-1-0716-1418-1}\par}
 
@@ -806,11 +811,15 @@ Los valores de las pruebas se calcularon en Python sobre \texttt{knime/\allowbre
 
 {\hangindent=0.5in\hangafter=1\noindent Olist. (2018). \emph{Brazilian E-Commerce Public Dataset by Olist} [Conjunto de datos]. Kaggle. \url{https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce}\par}
 
-{\hangindent=0.5in\hangafter=1\noindent Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., Blondel, M., Prettenhofer, P., Weiss, R., Dubourg, V., Vanderplas, J., Passos, A., Cournapeau, D., Brucher, M., Perrot, M., y Duchesnay, É. (2011). Scikit-learn: Machine learning in Python. \emph{Journal of Machine Learning Research, 12}, 2825-2830.\par}
+{\hangindent=0.5in\hangafter=1\noindent Pearson, K. (1900). On the criterion that a given system of deviations from the probable in the case of a correlated system of variables is such that it can be reasonably supposed to have arisen from random sampling. \emph{The London, Edinburgh, and Dublin Philosophical Magazine and Journal of Science, 50}(302), 157--175. \url{https://doi.org/10.1080/14786440009463897}\par}
+
+{\hangindent=0.5in\hangafter=1\noindent Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., Blondel, M., Prettenhofer, P., Weiss, R., Dubourg, V., Vanderplas, J., Passos, A., Cournapeau, D., Brucher, M., Perrot, M., y Duchesnay, É. (2011). Scikit-learn: Machine learning in Python. \emph{Journal of Machine Learning Research, 12}, 2825--2830. \url{https://jmlr.org/papers/v12/pedregosa11a.html}\par}
 
 {\hangindent=0.5in\hangafter=1\noindent The PostgreSQL Global Development Group. (s. f.). \emph{PostgreSQL 16 documentation}. \url{https://www.postgresql.org/docs/16/}\par}
 
 {\hangindent=0.5in\hangafter=1\noindent Rousseeuw, P. J. (1987). Silhouettes: A graphical aid to the interpretation and validation of cluster analysis. \emph{Journal of Computational and Applied Mathematics, 20}, 53--65. \url{https://doi.org/10.1016/0377-0427(87)90125-7}\par}
+
+{\hangindent=0.5in\hangafter=1\noindent The SciPy Community. (s. f.). \emph{SciPy documentation}. \url{https://docs.scipy.org/doc/scipy/}\par}
 
 \medskip\noindent\rule{\linewidth}{0.4pt}\medskip
 \section{Anexos}
@@ -1166,7 +1175,7 @@ CALCULATE(AVERAGE(Pedidos[prob_tardio_logistica]), Pedidos[en_prueba] = 1)
 \hline
 \textbf{Etapa} & \textbf{Nodos principales} & \textbf{Notas} \\ \hline
 \endhead
-Obtención & PostgreSQL Connector $\rightarrow$ DB Table Selector $\rightarrow$ DB Reader (uno por tabla) & Los flujos usan un CSV Reader por archivo, con ruta \texttt{../\allowbreak{}datos/\allowbreak{}<archivo>.csv} (carpeta \texttt{knime/\allowbreak{}datos/\allowbreak{}}) y los códigos postales como String. Con la base de datos, la alternativa es una conexión compartida y un DB Reader por tabla. \\ \hline
+Obtención & CSV Reader (uno por archivo) & Los flujos usan un CSV Reader por archivo, con ruta \texttt{../\allowbreak{}datos/\allowbreak{}<archivo>.csv} (carpeta \texttt{knime/\allowbreak{}datos/\allowbreak{}}) y los códigos postales como String. Con la base de datos, la alternativa es una conexión compartida y un DB Reader por tabla. \\ \hline
 Calidad & Statistics, Missing Value, Row Filter, Rule Engine & Se documenta cada filtro con su conteo de filas antes y después (99~441, 96~478 y 96~144 pedidos en el ETL). \\ \hline
 Transformación & Joiner, GroupBy, Date\&Time Difference, Math Formula, Rule Engine, String Manipulation & Reproduce la vista v\_\allowbreak{}pedidos\_\allowbreak{}base (Anexo A); los conteos coinciden con los de la vista (96~144 pedidos). \\ \hline
 Preparación de modelos & Column Filter, Number To String (variable objetivo), Domain Calculator, Normalizer, Row Splitter por fecha & Partición temporal: entrenamiento hasta marzo de 2018, prueba de abril a agosto de 2018. \\ \hline
@@ -1202,6 +1211,7 @@ Partición temporal & Entrenar con datos más antiguos y probar con datos más r
 \subsection{Anexo F. Enlaces}
 \begin{itemize}
 \item Repositorio del proyecto: \url{https://github.com/FerretoDev/mo0005-ecommerce-ml}
+\item Script de las pruebas estadísticas y de la tabla de k: \url{https://github.com/FerretoDev/mo0005-ecommerce-ml/blob/main/analisis/pruebas_estadisticas.py}
 \item Diagrama entidad-relación: {\def\UrlBreaks{\do\/\do\-\do\?\do\=\do\.\do\_\do\a\do\b\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j\do\k\do\l\do\m\do\n\do\o\do\p\do\q\do\r\do\s\do\t\do\u\do\v\do\w\do\x\do\y\do\z\do\A\do\B\do\C\do\D\do\E\do\F\do\G\do\H\do\I\do\J\do\K\do\L\do\M\do\N\do\O\do\P\do\Q\do\R\do\S\do\T\do\U\do\V\do\W\do\X\do\Y\do\Z\do\0\do\1\do\2\do\3\do\4\do\5\do\6\do\7\do\8\do\9}\url{https://drive.google.com/file/d/1xBKpA89fh4JQ7KKysahj6yNuwq9vtR2d/view?usp=sharing}}
 \end{itemize}
 \subsection{Anexo G. Capturas de la ejecución en KNIME y Power BI}
@@ -1210,8 +1220,8 @@ Las capturas se tomaron con los workflows ya ejecutados y con el dashboard abier
 \subsubsection{G.1 Workflow 01-ETL}
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth,height=0.30\textheight,keepaspectratio]{../capturas/etl/workflow-01-etl-completo.png}
-\caption{Workflow 01-ETL completo y ejecutado, con sus 40 nodos en verde.}
+\includegraphics[width=\linewidth,height=0.45\textheight,keepaspectratio]{../capturas/etl/workflow-01-etl-completo.png}
+\caption{Workflow 01-ETL completo y ejecutado, con sus 40 nodos y sus indicadores de estado en verde.}
 \end{figure}
 \begin{figure}[H]
 \centering
@@ -1226,8 +1236,8 @@ Las capturas se tomaron con los workflows ya ejecutados y con el dashboard abier
 \subsubsection{G.2 Workflow 02-Clustering (Modelo 1)}
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth,height=0.30\textheight,keepaspectratio]{../capturas/modelo1/workflow-02-clustering-completo.png}
-\caption{Workflow 02-Clustering completo y ejecutado, con sus 14 nodos en verde.}
+\includegraphics[width=\linewidth,height=0.45\textheight,keepaspectratio]{../capturas/modelo1/workflow-02-clustering-completo.png}
+\caption{Workflow 02-Clustering completo y ejecutado, con sus 14 nodos y sus indicadores de estado en verde.}
 \end{figure}
 \begin{figure}[H]
 \centering
@@ -1247,7 +1257,7 @@ Las capturas se tomaron con los workflows ya ejecutados y con el dashboard abier
 \subsubsection{G.3 Workflow 03-Prediccion (Modelo 2)}
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth,height=0.30\textheight,keepaspectratio]{../capturas/modelo2/workflow-03-prediccion-completo.png}
+\includegraphics[width=\linewidth,height=0.45\textheight,keepaspectratio]{../capturas/modelo2/workflow-03-prediccion-completo.png}
 \caption{Workflow 03-Prediccion completo y ejecutado.}
 \end{figure}
 \begin{figure}[H]
@@ -1333,7 +1343,7 @@ Las capturas se tomaron con los workflows ya ejecutados y con el dashboard abier
 \subsubsection{G.4 Workflow 04-KPIs}
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth,height=0.30\textheight,keepaspectratio]{../capturas/kpis/workflow-04-kpis-completo.png}
+\includegraphics[width=\linewidth,height=0.45\textheight,keepaspectratio]{../capturas/kpis/workflow-04-kpis-completo.png}
 \caption{Workflow 04-KPIs completo y ejecutado.}
 \end{figure}
 \begin{figure}[H]
