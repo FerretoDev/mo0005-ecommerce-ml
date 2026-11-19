@@ -1,0 +1,14 @@
+                       List of relations
+ Schema |               Name                | Type  |  Owner   
+--------+-----------------------------------+-------+----------
+ olist  | customers                         | table | postgres
+ olist  | geolocation                       | table | postgres
+ olist  | order_items                       | table | postgres
+ olist  | order_payments                    | table | postgres
+ olist  | order_reviews                     | table | postgres
+ olist  | orders                            | table | postgres
+ olist  | product_category_name_translation | table | postgres
+ olist  | products                          | table | postgres
+ olist  | sellers                           | table | postgres
+(9 rows)
+
