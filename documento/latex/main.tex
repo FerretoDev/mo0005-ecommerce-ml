@@ -583,9 +583,9 @@ Se eligió \textbf{k = 4}: tiene la silueta más alta y coincide con el codo, po
 \subsubsection{3.4.2 Perfil e interpretación de los segmentos}
 {\footnotesize
 \begin{longtable}{|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*1549/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*957/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*1073/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*832/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*957/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*790/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*1083/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*1587/10000\relax}|>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-18\tabcolsep-10\arrayrulewidth)*1167/10000\relax}|}
-\caption{Perfil de los cuatro segmentos del Modelo 1}\\
+\caption{Perfil de los cuatro segmentos del Modelo 1 (las cuotas son el promedio por pedido)}\\
 \hline
-\textbf{Segmento} & \textbf{Pedidos} & \textbf{Precio (mediana, BRL)} & \textbf{Cuotas (prom.)} & \textbf{Entrega (días)} & \textbf{Mismo estado} & \textbf{Entregas tardías} & \textbf{Calificación} & \textbf{Reseñas negativas} \\ \hline
+\textbf{Segmento} & \textbf{Pedidos} & \textbf{Precio (mediana, BRL)} & \textbf{Cuotas} & \textbf{Entrega (días)} & \textbf{Mismo estado} & \textbf{Entregas tardías} & \textbf{Calificación} & \textbf{Reseñas negativas} \\ \hline
 \endhead
 Compras grandes a plazos & 16~767 (17.4~\%) & 219.00 & 7.1 & 12.4 & 22~\% & 2.6~\% & 4.16 & 12.7~\% \\ \hline
 Estándar entre estados & 41~511 (43.2~\%) & 69.90 & 1.9 & 12.4 & 0~\% & 0.7~\% & 4.31 & 8.6~\% \\ \hline
@@ -702,7 +702,7 @@ Se definen once indicadores, organizados según el objetivo estratégico al que 
 2 & Tiempo promedio de entrega & Promedio de días entre la compra y la entrega & Indica la velocidad general del servicio logístico. & 12.5 días \\ \hline
 3 & Retraso promedio de las entregas tardías & Promedio de días entre la fecha estimada y la fecha real, solo en pedidos tardíos & Mide la gravedad del incumplimiento y no solo su frecuencia. & 9.4 días \\ \hline
 4 & Brecha de entrega entre estados & Tiempo promedio de entrega cuando cliente y vendedor están en estados distintos, comparado con cuando están en el mismo & Identifica el efecto de la distancia geográfica sobre el plazo. & 15.1 días frente a 7.9 días \\ \hline
-5 & Tasa de pedidos no concretados & Pedidos cancelados o no disponibles $\div$ total de pedidos & Refleja los pedidos que no llegaron a entregarse. & 1.24~\% \\ \hline
+5 & Tasa de pedidos no concretados & Pedidos cancelados o no disponibles $\div$ total de pedidos & Un pedido cancelado o no disponible es el incumplimiento más grave de la promesa de entrega: el cliente no recibe nada. Por eso completa, dentro de OE1, a los KPI de puntualidad, que solo miden los pedidos que sí llegaron. & 1.24~\% \\ \hline
 \end{longtable}
 }
 \Needspace{7\baselineskip}
