@@ -19,6 +19,8 @@ La ruta de los CSV está en el parámetro `RutaDatos`. Si el repositorio está e
 | PedidosTodos | `olist_orders_dataset.csv` (99 441 filas) | KPI 5 (pedidos cancelados o no disponibles). |
 | Segmentos | `segmentos_modelo1.csv` | Quedó de la primera versión, relacionada con Pedidos por `order_id`. La página 5 ya usa la columna `segmento` de Pedidos. |
 
+En Pedidos hay además tres columnas calculadas para la página 3: `Puntualidad` ("A tiempo" o "Tardío" según `es_tardio`), `Retraso` (los tramos de `banda_retraso` con tildes) y `OrdenRetraso` (0 a 3), que fija el orden de `Retraso` de "A tiempo" a "Más de 7 días".
+
 Las medidas DAX son las del Anexo C de la plantilla. Se verificaron con una consulta DAX contra los valores de KNIME (sección 4.2) y coinciden.
 
 ## Páginas
