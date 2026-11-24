@@ -119,7 +119,7 @@ pres.addSection({ title: 'Inicio' });
     { text: 'Kendall Alvarado Artavia – C5C322' },
   ], { x: 0.9, y: 4.8, w: 6, h: 1.6, fontSize: 16, color: H.blanco, paraSpaceAfter: 4, objectName: nm(0, 'fade', 'autores') });
   txt(s, [
-    { text: 'MO-0005 Análisis de Algoritmos, Grupo 01', options: { breakLine: true } },
+    { text: 'MO-0005 Análisis de Algoritmos, Grupo 02', options: { breakLine: true } },
     { text: 'Prof. Manfred Mejías Acevedo', options: { breakLine: true } },
     { text: 'II Ciclo 2026' },
   ], { x: 7.4, y: 4.8, w: 5, h: 1.2, fontSize: 16, color: 'C9D1E0', paraSpaceAfter: 4, objectName: nm(0, 'fade', 'curso') });
