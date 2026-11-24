@@ -2,7 +2,7 @@
 
 Sede de Occidente · Recinto de Tacares
 
-MO-0005 Análisis de Algoritmos · Grupo 01 · II Ciclo 2026
+MO-0005 Análisis de Algoritmos · Grupo 02 · II Ciclo 2026
 
 Prof. Manfred Mejías Acevedo
 
