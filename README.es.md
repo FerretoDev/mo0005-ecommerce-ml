@@ -144,7 +144,7 @@ Las tablas analíticas están en las vistas `olist.v_pedidos_base` y `olist.v_cl
 
 ## Cómo abrir el dashboard de Power BI
 
-Abrir `powerbi/dashboard_olist.pbix` en Power BI Desktop. Lee los CSV que genera KNIME en `knime/datos/`. Si el repositorio está en otra carpeta, hay que actualizar el parámetro `RutaDatos` (Inicio, Transformar datos, Administrar parámetros). Las tablas del modelo y las páginas se describen en [`powerbi/LEER.md`](powerbi/LEER.md).
+Abrir `powerbi/dashboard_olist.pbix` en Power BI Desktop. Lee los CSV que genera KNIME en `knime/datos/`. Si el repositorio está en otra carpeta, hay que actualizar el parámetro `RutaDatos` (Inicio, Transformar datos, Administrar parámetros). Las tablas del modelo y las páginas se describen en [`powerbi/README.md`](powerbi/README.md).
 
 ## Cómo compilar el informe
 
