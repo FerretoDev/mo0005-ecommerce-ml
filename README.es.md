@@ -89,7 +89,7 @@ mo0005-ecommerce-ml/
 │   └── 04-KPIs/
 ├── kpis/                     # kpis.sql (consultas de los 11 KPI)
 ├── powerbi/                  # dashboard_olist.pbix
-└── presentacion/             # presentacion.pptx/.pdf y fuente/ (scripts de generación)
+└── presentacion/             # presentacion.pptx y presentacion.pdf
 ```
 
 KNIME no permite rutas relativas fuera de su workspace (`knime/`), por eso los CSV viven en `knime/datos/`; `cargar.sh` los lee desde esa misma carpeta.
