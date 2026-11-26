@@ -7,13 +7,38 @@
 [![Storage](https://img.shields.io/badge/Storage-PostgreSQL%20(Docker)-blue?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![Dataset](https://img.shields.io/badge/Dataset-Olist%20Kaggle-20BEFF?logo=kaggle&logoColor=white)](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)
 
-## Descripción
+## Resumen
 
 Proyecto del curso **MO-0005 Análisis de Algoritmos** (Grupo 02, II Ciclo 2026), Universidad de Costa Rica, Sede de Occidente, Recinto de Grecia. Profesor: Manfred Mejías Acevedo.
 
-El proyecto aplica análisis de datos y aprendizaje automático a clientes de e-commerce, con el dataset público de Olist, KNIME, PostgreSQL (Docker) y Power BI. Cubre el ciclo completo de los datos: extracción, limpieza e integración de varias fuentes, segmentación de pedidos, predicción de entregas tardías y presentación de indicadores en un dashboard interactivo.
+**Pregunta.** En Olist, un marketplace de Brasil, 8 de cada 100 pedidos llegan después de la fecha prometida. ¿Eso afecta la satisfacción y la recompra, y se puede anticipar el retraso al momento de la compra?
 
-**Equipo:** Marcos Ferreto Estrada, Kendall Alvarado Artavia, David Moya Correas y Sebastián Sánchez Vega.
+**Enfoque.** CRISP-DM sobre el dataset público de Olist (~100 000 pedidos, 9 tablas): los datos se cargan en PostgreSQL (Docker), se limpian y unen en KNIME, se analizan con dos modelos de aprendizaje automático (segmentación con k-means y clasificación del retraso) y se siguen con 11 KPI en un dashboard de Power BI. Los resultados están en un informe APA (LaTeX).
+
+## Resultados principales
+
+| Hallazgo | Valor |
+| :--- | :--- |
+| Entregas tardías | 8,07 % de 96 144 pedidos entregados |
+| Calificación promedio, a tiempo vs. tarde | 4,30 vs. 2,57 estrellas (53,9 % de los tardíos recibe reseña negativa) |
+| Recompra, primer pedido a tiempo vs. tarde | 4,34 % vs. 2,97 % |
+| Segmentos de pedidos (k-means, k = 4) | Un segmento (7,7 % de los pedidos) concentra 77 % de tardíos y una calificación de 2,59 |
+| Modelo de retraso (AUC en prueba) | Regresión logística 0,719 vs. Random Forest 0,590 y líneas base 0,500 / 0,472 |
+| Uso del modelo | Detecta 79 de cada 100 pedidos tardíos; los de riesgo alto llegan tarde 3,5 veces más que los de riesgo bajo |
+| Estabilidad | La relación entre estados y retraso se invirtió en 2018, por lo que el modelo debe reentrenarse |
+
+| Segmentos de pedidos | Comparación de modelos | Evolución mensual |
+| :---: | :---: | :---: |
+| ![Segmentos](.github/assets/segmentos.png) | ![AUC](.github/assets/modelos-auc.png) | ![Evolución mensual](.github/assets/evolucion-mensual.png) |
+
+## Equipo y aportes
+
+| Integrante | Aporte principal |
+| :--- | :--- |
+| Marcos Ferreto Estrada | Montaje del proyecto y del repositorio, PostgreSQL en Docker con el script de carga (`cargar.sh`), flujo `01-ETL` y coautor de `02-Clustering` |
+| David Moya Correas | Flujo `02-Clustering` (segmentación con k-means e hipótesis H4) |
+| Sebastián Sánchez Vega | Flujo `03-Prediccion` (clasificación del retraso) |
+| Kendall Alvarado Artavia | Flujo `04-KPIs` y dashboard de Power BI |
 
 ## Entregables
 
@@ -28,6 +53,8 @@ El proyecto aplica análisis de datos y aprendizaje automático a clientes de e-
 - **PostgreSQL (Docker):** almacenamiento relacional de las tablas del negocio. Se eligió PostgreSQL local en lugar de Snowflake por reproducibilidad: cualquiera levanta la misma base con un solo comando.
 - **Power BI:** dashboard con los resultados de los modelos y los KPI.
 - **Git / GitHub:** control de versiones.
+
+Versiones usadas: KNIME Analytics Platform 5.12, PostgreSQL 16 (imagen `postgres:16`), Python 3.11 o superior (ver `analisis/requirements.txt`), Power BI Desktop y XeLaTeX con la clase `apa7`.
 
 ## Flujos y resultados
 
@@ -47,7 +74,8 @@ mo0005-ecommerce-ml/
 ├── docker-compose.yml        # Servicio PostgreSQL (olist-db)
 ├── cargar.sh                 # Levanta la base, carga los CSV y valida conteos
 ├── analisis/
-│   └── pruebas_estadisticas.py   # Cálculos hechos en Python (tabla de k, pruebas de hipótesis)
+│   ├── pruebas_estadisticas.py   # Cálculos hechos en Python (tabla de k, pruebas de hipótesis)
+│   └── requirements.txt
 ├── datos/                    # schema.sql, views.sql y resultados_kpis.txt
 ├── diagrama-er/              # Diagrama entidad-relación (.drawio y .png)
 ├── documento/
@@ -132,6 +160,6 @@ python documento/latex/compilar.py --limpiar   # borra los auxiliares antes de c
 `analisis/pruebas_estadisticas.py` reproduce los cálculos del informe que se hicieron fuera de KNIME (tabla de k, estabilidad entre semillas, pruebas de hipótesis):
 
 ```bash
-pip install pandas numpy scipy scikit-learn
+pip install -r analisis/requirements.txt
 python analisis/pruebas_estadisticas.py
 ```

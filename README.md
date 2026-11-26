@@ -7,13 +7,38 @@
 
 > Spanish version: [README.es.md](README.es.md)
 
-## Description
+## Overview
 
 Course project for **MO-0005 Análisis de Algoritmos** (Group 02, second semester 2026), Universidad de Costa Rica, Sede de Occidente, Recinto de Grecia. Professor: Manfred Mejías Acevedo.
 
-The project applies data analysis and machine learning to e-commerce customers, using the public Olist dataset with KNIME, PostgreSQL (Docker) and Power BI. It covers the full data lifecycle: extracting, cleaning and joining several sources, segmenting orders, predicting late deliveries and presenting indicators in an interactive dashboard.
+**Question.** In Olist, a Brazilian marketplace, 8 of every 100 orders arrive after the promised date. Does that hurt customer satisfaction and repurchase, and can the delay be anticipated at purchase time?
 
-**Team:** Marcos Ferreto Estrada, Kendall Alvarado Artavia, David Moya Correas and Sebastián Sánchez Vega.
+**Approach.** CRISP-DM on the public Olist dataset (~100k orders, 9 tables): the data is loaded into PostgreSQL (Docker), cleaned and joined in KNIME, analysed with two machine learning models (k-means segmentation and late-delivery classification) and tracked with 11 KPIs in a Power BI dashboard. Results are written up in an APA report (LaTeX).
+
+## Key results
+
+| Finding | Value |
+| :--- | :--- |
+| Late deliveries | 8.07% of 96,144 delivered orders |
+| Average rating, on time vs. late | 4.30 vs. 2.57 stars (53.9% of late orders get a negative review) |
+| Repurchase, first order on time vs. late | 4.34% vs. 2.97% |
+| Order segments (k-means, k = 4) | One segment (7.7% of orders) holds 77% late deliveries and a 2.59 rating |
+| Late-delivery model (test AUC) | Logistic regression 0.719 vs. Random Forest 0.590 and baselines 0.500 / 0.472 |
+| Model use | Detects 79 of every 100 late orders; high-risk orders are late 3.5 times more often than low-risk ones |
+| Stability | The state-to-state delay pattern reversed in 2018, so the model needs periodic retraining |
+
+| Order segments | Model comparison | Monthly trend |
+| :---: | :---: | :---: |
+| ![Segments](.github/assets/segmentos.png) | ![AUC](.github/assets/modelos-auc.png) | ![Monthly trend](.github/assets/evolucion-mensual.png) |
+
+## Team and contributions
+
+| Member | Main contribution |
+| :--- | :--- |
+| Marcos Ferreto Estrada | Project setup and repository, PostgreSQL in Docker with the loading script (`cargar.sh`), `01-ETL` workflow, co-author of `02-Clustering` |
+| David Moya Correas | `02-Clustering` workflow (k-means segmentation and hypothesis H4) |
+| Sebastián Sánchez Vega | `03-Prediccion` workflow (late-delivery classification) |
+| Kendall Alvarado Artavia | `04-KPIs` workflow and the Power BI dashboard |
 
 ## Deliverables
 
@@ -28,6 +53,8 @@ The project applies data analysis and machine learning to e-commerce customers, 
 - **PostgreSQL (Docker):** relational storage for the business tables. A local PostgreSQL was chosen over Snowflake for reproducibility: anyone starts the same database with one command.
 - **Power BI:** dashboard with the model results and the KPIs.
 - **Git / GitHub:** version control.
+
+Versions used: KNIME Analytics Platform 5.12, PostgreSQL 16 (`postgres:16` image), Python 3.11+ (see `analisis/requirements.txt`), Power BI Desktop and XeLaTeX with the `apa7` class.
 
 ## Workflows and results
 
@@ -47,7 +74,8 @@ mo0005-ecommerce-ml/
 ├── docker-compose.yml        # PostgreSQL service (olist-db)
 ├── cargar.sh                 # Starts the database, loads the CSVs and validates row counts
 ├── analisis/
-│   └── pruebas_estadisticas.py   # Calculations done in Python (table of k, hypothesis tests)
+│   ├── pruebas_estadisticas.py   # Calculations done in Python (table of k, hypothesis tests)
+│   └── requirements.txt
 ├── datos/                    # schema.sql, views.sql and resultados_kpis.txt
 ├── diagrama-er/              # Entity-relationship diagram (.drawio and .png)
 ├── documento/
@@ -132,6 +160,6 @@ python documento/latex/compilar.py --limpiar   # removes auxiliary files first
 `analisis/pruebas_estadisticas.py` reproduces the calculations in the report that were done outside KNIME (table of k, stability between seeds, hypothesis tests):
 
 ```bash
-pip install pandas numpy scipy scikit-learn
+pip install -r analisis/requirements.txt
 python analisis/pruebas_estadisticas.py
 ```
