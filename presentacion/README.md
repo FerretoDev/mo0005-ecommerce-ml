@@ -23,7 +23,7 @@ Cada parte empieza con una diapositiva divisoria y el pie de página dice quién
 
 ## Regenerarla desde cero (opcional)
 
-Los archivos de `fuente/` generan la presentación desde los datos del proyecto. Si se edita a mano en PowerPoint, no hace falta regenerarla.
+Los archivos de `fuente/` (`generar.js`, `animar.py`, las imágenes de `img/` y `muestra_segmentos.json`) generan la presentación desde los datos del proyecto. Si se edita a mano en PowerPoint, no hace falta regenerarla.
 
 ```bash
 cd presentacion/fuente

@@ -6,29 +6,9 @@
 knime/Example Workflows/
 *.docx
 ~$*.docx
-/documento/plantilla-entregable.md
 # datos de ejecucion de nodos KNIME (se generan al ejecutar; resetear antes de guardar)
 knime/**/port_*/
 knime/**/internal/
-
-# AI assistant / agent configuration (local only)
-.gemini/
-.agents/
-.agent/
-.claude/
-.cursor/
-.windsurf/
-.codex/
-.continue/
-.roo/
-.clinerules
-.aider*
-.cursorrules
-.windsurfrules
-CLAUDE.md
-AGENTS.md
-GEMINI.md
-.github/copilot-instructions.md
 
 # auxiliares de LaTeX (se generan al compilar documento/latex/main.tex)
 documento/latex/*.aux

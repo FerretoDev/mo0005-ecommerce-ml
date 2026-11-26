@@ -1,2 +1,0 @@
-CONTAINER ID   IMAGE         COMMAND                  CREATED      STATUS                PORTS                      NAMES
-ffeb53ccdea9   postgres:16   "docker-entrypoint.s…"   9 days ago   Up 9 days (healthy)   127.0.0.1:5432->5432/tcp   olist-db

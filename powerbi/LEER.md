@@ -1,6 +1,6 @@
 # Carpeta /powerbi
 
-`dashboard_olist.pbix` es el dashboard del proyecto (sección 4.3 de la plantilla). Lee los CSV que genera KNIME en `knime/datos/`; no usa PostgreSQL.
+`dashboard_olist.pbix` es el dashboard del proyecto (sección 4.3 del informe, `documento/latex/main.tex`). Lee los CSV que genera KNIME en `knime/datos/`; no usa PostgreSQL.
 
 ## Antes de abrirlo en otra computadora
 
@@ -21,7 +21,7 @@ La ruta de los CSV está en el parámetro `RutaDatos`. Si el repositorio está e
 
 En Pedidos hay además tres columnas calculadas para la página 3: `Puntualidad` ("A tiempo" o "Tardío" según `es_tardio`), `Retraso` (los tramos de `banda_retraso` con tildes) y `OrdenRetraso` (0 a 3), que fija el orden de `Retraso` de "A tiempo" a "Más de 7 días".
 
-Las medidas DAX son las del Anexo C de la plantilla. Se verificaron con una consulta DAX contra los valores de KNIME (sección 4.2) y coinciden.
+Las medidas DAX están en el Anexo C del informe. Se verificaron con una consulta DAX contra los valores de KNIME (sección 4.2) y coinciden.
 
 ## Páginas
 
