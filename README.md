@@ -144,7 +144,7 @@ The analytical tables are the views `olist.v_pedidos_base` and `olist.v_clientes
 
 ## Open the Power BI dashboard
 
-Open `powerbi/dashboard_olist.pbix` in Power BI Desktop. It reads the CSV files that KNIME generates in `knime/datos/`. If the repository is in a different folder, update the `RutaDatos` parameter (Home, Transform data, Manage parameters). See [`powerbi/LEER.md`](powerbi/LEER.md) for the model tables and pages.
+Open `powerbi/dashboard_olist.pbix` in Power BI Desktop. It reads the CSV files that KNIME generates in `knime/datos/`. If the repository is in a different folder, update the `RutaDatos` parameter (Home, Transform data, Manage parameters). See [`powerbi/README.md`](powerbi/README.md) for the model tables and pages.
 
 ## Compile the report
 
